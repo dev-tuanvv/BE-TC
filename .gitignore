@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+**/*.log
+logs/
+LOG_PATH_IS_UNDEFINED/
+release/
+bin/
+.DS_Store
