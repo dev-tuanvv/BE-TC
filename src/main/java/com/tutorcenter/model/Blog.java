@@ -1,6 +1,6 @@
 package com.tutorcenter.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.sql.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,19 +12,27 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "tblUsers")
-public class User {
+@Table(name = "tblBlog")
+public class Blog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
-    private String email;
+    private int managerID;
     @Column
-    @JsonIgnore
-    private String password;
+    private String Thumbnail;
     @Column
-    private String fullname;
+    private String Category;
     @Column
-    private String role;
-
+    private String Title;
+    @Column
+    private String Content;
+    @Column
+    private String Status;
+    @Column
+    private Date dateCreate;
+    @Column
+    private int createdBy;
+    @Column
+    private int updatedBy;
 }

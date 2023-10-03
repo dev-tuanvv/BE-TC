@@ -1,7 +1,5 @@
 package com.tutorcenter.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -12,19 +10,15 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "tblUsers")
-public class User {
+@Table(name = "tblTutorApply")
+public class TutorApply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
-    private String email;
+    private int classID;
     @Column
-    @JsonIgnore
-    private String password;
+    private int tutorID;
     @Column
-    private String fullname;
-    @Column
-    private String role;
-
+    private String status;
 }

@@ -1,6 +1,6 @@
 package com.tutorcenter.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.ForeignKey;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,19 +12,15 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "tblUsers")
-public class User {
+@Table(name = "tblTutoringClass")
+public class TutoringClass {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
-    private String email;
+    private int requestID;
     @Column
-    @JsonIgnore
-    private String password;
+    private int tutorID;
     @Column
-    private String fullname;
-    @Column
-    private String role;
-
+    private String status;
 }
