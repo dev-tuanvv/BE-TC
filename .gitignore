@@ -1,5 +1,14 @@
 HELP.md
-target/
+target/classes/
+target/test-classes/
+target/annotations/
+target/test-annotations/
+target/maven-archiver/
+target/maven-compiler-plugin/
+target/maven-status/
+target/surefire-reports/
+target/tutorcenter/
+
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
