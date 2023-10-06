@@ -18,7 +18,7 @@ public class SystemVariable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
-    private String key;
+    private String keyVar;
     @Column
     private String value;
     @Column
