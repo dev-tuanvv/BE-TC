@@ -3,9 +3,9 @@ package com.tutorcenter.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.tutorcenter.model.Blog;
+import com.tutorcenter.model.Feedback;
 
 @Repository
-public interface FeedbackRepository extends JpaRepository<Blog, Integer> {
+public interface FeedbackRepository extends JpaRepository<Feedback, Integer> {
 
 }
