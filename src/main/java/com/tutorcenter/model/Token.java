@@ -1,5 +1,7 @@
 package com.tutorcenter.model;
 
+import com.tutorcenter.constant.TokenType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

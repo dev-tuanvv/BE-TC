@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tutorcenter.model.AuthenticationRequest;
 import com.tutorcenter.model.AuthenticationResponse;
 import com.tutorcenter.model.RegisterRequest;
-import com.tutorcenter.service.AuthenticationService;
+import com.tutorcenter.service.impl.AuthenticationService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import jakarta.servlet.http.HttpServletRequest;

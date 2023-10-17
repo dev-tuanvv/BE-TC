@@ -1,5 +1,21 @@
 package com.tutorcenter.configuration;
 
+import static com.tutorcenter.constant.Permission.ADMIN_CREATE;
+import static com.tutorcenter.constant.Permission.ADMIN_DELETE;
+import static com.tutorcenter.constant.Permission.ADMIN_READ;
+import static com.tutorcenter.constant.Permission.ADMIN_UPDATE;
+import static com.tutorcenter.constant.Permission.MANAGER_CREATE;
+import static com.tutorcenter.constant.Permission.MANAGER_DELETE;
+import static com.tutorcenter.constant.Permission.MANAGER_READ;
+import static com.tutorcenter.constant.Permission.MANAGER_UPDATE;
+import static com.tutorcenter.constant.Role.ADMIN;
+import static com.tutorcenter.constant.Role.MANAGER;
+import static org.springframework.http.HttpMethod.DELETE;
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
+import static org.springframework.http.HttpMethod.PUT;
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -12,21 +28,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
 
-import static com.tutorcenter.model.Permission.ADMIN_CREATE;
-import static com.tutorcenter.model.Permission.ADMIN_DELETE;
-import static com.tutorcenter.model.Permission.ADMIN_READ;
-import static com.tutorcenter.model.Permission.ADMIN_UPDATE;
-import static com.tutorcenter.model.Permission.MANAGER_CREATE;
-import static com.tutorcenter.model.Permission.MANAGER_DELETE;
-import static com.tutorcenter.model.Permission.MANAGER_READ;
-import static com.tutorcenter.model.Permission.MANAGER_UPDATE;
-import static com.tutorcenter.model.Role.ADMIN;
-import static com.tutorcenter.model.Role.MANAGER;
-import static org.springframework.http.HttpMethod.DELETE;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
-import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
 import lombok.RequiredArgsConstructor;
 
 @Configuration

@@ -1,5 +1,7 @@
 package com.tutorcenter.model;
 
+import com.tutorcenter.constant.Role;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -3,12 +3,11 @@ package com.tutorcenter.model;
 import java.util.Collection;
 import java.util.List;
 
-import org.springframework.security.config.core.GrantedAuthorityDefaults;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.tutorcenter.constant.Role;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

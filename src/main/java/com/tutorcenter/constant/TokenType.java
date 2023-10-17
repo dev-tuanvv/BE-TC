@@ -1,4 +1,4 @@
-package com.tutorcenter.model;
+package com.tutorcenter.constant;
 
 public enum TokenType {
     BEARER

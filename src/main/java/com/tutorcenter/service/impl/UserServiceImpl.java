@@ -1,19 +1,12 @@
 package com.tutorcenter.service.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.tutorcenter.model.CustomUserDetails;
 import com.tutorcenter.model.User;
 import com.tutorcenter.repository.UserRepository;
 import com.tutorcenter.service.UserService;

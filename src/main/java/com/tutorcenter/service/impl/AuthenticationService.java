@@ -1,12 +1,20 @@
-package com.tutorcenter.service;
+package com.tutorcenter.service.impl;
+
+import java.io.IOException;
+
+import org.springframework.http.HttpHeaders;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutorcenter.configuration.JwtService;
+import com.tutorcenter.constant.TokenType;
 import com.tutorcenter.model.AuthenticationRequest;
 import com.tutorcenter.model.AuthenticationResponse;
 import com.tutorcenter.model.RegisterRequest;
 import com.tutorcenter.model.Token;
-import com.tutorcenter.model.TokenType;
 import com.tutorcenter.model.User;
 import com.tutorcenter.repository.TokenRepository;
 import com.tutorcenter.repository.UserRepository;
@@ -14,16 +22,6 @@ import com.tutorcenter.repository.UserRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import org.springframework.stereotype.Service;
-
-import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor

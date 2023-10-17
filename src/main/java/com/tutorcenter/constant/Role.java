@@ -1,7 +1,16 @@
-package com.tutorcenter.model;
+package com.tutorcenter.constant;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import static com.tutorcenter.constant.Permission.ADMIN_CREATE;
+import static com.tutorcenter.constant.Permission.ADMIN_DELETE;
+import static com.tutorcenter.constant.Permission.ADMIN_READ;
+import static com.tutorcenter.constant.Permission.ADMIN_UPDATE;
+import static com.tutorcenter.constant.Permission.MANAGER_CREATE;
+import static com.tutorcenter.constant.Permission.MANAGER_DELETE;
+import static com.tutorcenter.constant.Permission.MANAGER_READ;
+import static com.tutorcenter.constant.Permission.MANAGER_UPDATE;
 
 import java.util.Collections;
 import java.util.List;
@@ -9,15 +18,6 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import static com.tutorcenter.model.Permission.ADMIN_CREATE;
-import static com.tutorcenter.model.Permission.ADMIN_DELETE;
-import static com.tutorcenter.model.Permission.ADMIN_READ;
-import static com.tutorcenter.model.Permission.ADMIN_UPDATE;
-import static com.tutorcenter.model.Permission.MANAGER_CREATE;
-import static com.tutorcenter.model.Permission.MANAGER_DELETE;
-import static com.tutorcenter.model.Permission.MANAGER_READ;
-import static com.tutorcenter.model.Permission.MANAGER_UPDATE;
 
 @RequiredArgsConstructor
 public enum Role {
