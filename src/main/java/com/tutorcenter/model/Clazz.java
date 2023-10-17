@@ -13,6 +13,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tblClass")
+
 public class Clazz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
