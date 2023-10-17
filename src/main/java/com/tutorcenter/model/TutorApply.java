@@ -18,11 +18,11 @@ public class TutorApply {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
-    @JoinColumn(name = "tutoringClassID")
-    private TutoringClass tutoringClass;
+    @JoinColumn(name = "ClassID")
+    private Clazz clazzId;
     @ManyToOne
     @JoinColumn(name = "tutorID")
-    private Tutor tutor;
+    private Tutor tutorId;
     @Column
     private String status;
 }

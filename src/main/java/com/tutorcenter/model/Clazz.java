@@ -12,14 +12,14 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "tblTutoringClass")
-public class TutoringClass {
+@Table(name = "tblClass")
+public class Clazz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @OneToOne
     @JoinColumn(name = "requestID")
-    private Requst request;
+    private Request request;
     @Column
     private int tutorID;
     @Column

@@ -3,9 +3,9 @@ package com.tutorcenter.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.tutorcenter.model.Requst;
+import com.tutorcenter.model.Request;
 
 @Repository
-public interface RequstRepository extends JpaRepository<Requst, Integer> {
+public interface RequestRepository extends JpaRepository<Request, Integer> {
 
 }

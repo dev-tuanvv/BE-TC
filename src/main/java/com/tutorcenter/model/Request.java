@@ -15,7 +15,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tblRequest")
-public class Requst {
+public class Request {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

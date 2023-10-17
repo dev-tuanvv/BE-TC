@@ -20,8 +20,8 @@ public class Attendance {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
-    @JoinColumn(name = "tutoringClassID")
-    private TutoringClass tutoringClass;
+    @JoinColumn(name = "ClassID")
+    private Clazz clazz;
     @Column
     private Date dateCreate;
     @Column
