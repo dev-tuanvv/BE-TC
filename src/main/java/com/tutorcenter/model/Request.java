@@ -20,8 +20,8 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
-    @JoinColumn(name = "parentsID")
-    private Parents parents;
+    @JoinColumn(name = "parentID")
+    private Parent parent;
     @ManyToOne
     @JoinColumn(name = "managerID")
     private Manager manager;

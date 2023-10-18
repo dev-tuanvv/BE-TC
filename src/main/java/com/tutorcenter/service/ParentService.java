@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.tutorcenter.model.Parents;
+import com.tutorcenter.model.Parent;
 
 @Service
-public interface ParentsService {
-    List<Parents> findAll();
+public interface ParentService {
+    List<Parent> findAll();
 }

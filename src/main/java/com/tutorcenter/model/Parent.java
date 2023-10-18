@@ -12,8 +12,8 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "tblPatrents")
-public class Parents {
+@Table(name = "tblParent")
+public class Parent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
