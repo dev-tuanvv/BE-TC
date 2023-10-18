@@ -7,5 +7,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SearchReqDto {
-    public String condition;
+    private String condition;
 }

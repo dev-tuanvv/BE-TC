@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.PaginRes;
 import com.tutorcenter.dto.clazz.SearchReqDto;
+import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.service.ClazzService;
 
@@ -28,14 +29,14 @@ public class ClazzController {
     }
 
     @PostMapping("/search")
-    public PaginRes<Clazz> search(
+    public PaginRes<SearchResDto> search(
             @RequestParam(defaultValue = "0") int offset,
             @RequestParam(defaultValue = "10") int limit,
             @RequestParam(defaultValue = "desc") String order,
             @RequestBody SearchReqDto searchDto) {
 
-        List<Clazz> data = clazzService.search(limit, offset, searchDto, order);
-        return PaginRes.<Clazz>builder().data(data).itemsPerPage(limit).page(offset).build();
+        List<SearchResDto> data = clazzService.search(limit, offset, searchDto, order);
+        return PaginRes.<SearchResDto>builder().data(data).itemsPerPage(limit).page(offset).build();
     }
 
 }
