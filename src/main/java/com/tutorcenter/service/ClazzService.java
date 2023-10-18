@@ -4,9 +4,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.tutorcenter.model.Requst;
+import com.tutorcenter.model.Clazz;
 
 @Service
-public interface RequstService {
-    List<Requst> findAll();
+public interface ClazzService {
+    List<Clazz> findAll();
 }

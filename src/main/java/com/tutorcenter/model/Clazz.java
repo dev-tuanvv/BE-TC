@@ -12,21 +12,16 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "tblPatrents")
-public class Parents {
+@Table(name = "tblClass")
+public class Clazz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @OneToOne
-    @JoinColumn(name = "userID")
-    private User user;
+    @JoinColumn(name = "requestID")
+    private Request request;
     @Column
-    private String phone;
+    private int tutorID;
     @Column
-    private String address;
-    @Column
-    private String district;
-    @Column
-    private String province;
-
+    private String status;
 }
