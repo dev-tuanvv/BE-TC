@@ -37,7 +37,7 @@ public class Tutor {
     @Column
     private String subject;
     @Column
-    private float grade;
+    private String grade;
     @Column
     private String area;
     @Column
