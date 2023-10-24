@@ -46,6 +46,8 @@ public class User implements UserDetails {
     private Role role;
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
+    @Column
+    private boolean isDeleted;
 
     public User orElseThrow(Object object) {
         return null;

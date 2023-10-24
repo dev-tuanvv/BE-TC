@@ -35,4 +35,6 @@ public class Blog {
     private int createdBy;
     @Column
     private int updatedBy;
+    @Column
+    private boolean isDeleted;
 }

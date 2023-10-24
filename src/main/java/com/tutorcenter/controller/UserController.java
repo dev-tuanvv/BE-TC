@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tutorcenter.model.CustomUserDetails;
 import com.tutorcenter.model.User;
 import com.tutorcenter.service.UserService;
 

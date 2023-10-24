@@ -13,7 +13,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
-import com.tutorcenter.model.CustomUserDetails;
 import com.tutorcenter.model.User;
 import com.tutorcenter.repository.UserRepository;
 import com.tutorcenter.service.UserService;

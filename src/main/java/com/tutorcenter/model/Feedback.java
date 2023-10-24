@@ -29,4 +29,6 @@ public class Feedback {
     private String status;
     @Column
     private Date dateCreate;
+    @Column
+    private boolean isDeleted;
 }

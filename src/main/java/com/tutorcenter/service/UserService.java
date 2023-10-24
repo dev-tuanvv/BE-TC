@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import com.tutorcenter.model.CustomUserDetails;
 import com.tutorcenter.model.User;
 
 @Service

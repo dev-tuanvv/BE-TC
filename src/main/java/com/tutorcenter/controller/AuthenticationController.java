@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.model.AuthenticationRequest;
 import com.tutorcenter.model.AuthenticationResponse;
-import com.tutorcenter.model.CustomUserDetails;
 import com.tutorcenter.model.LoginRequest;
 import com.tutorcenter.model.LoginResponse;
 import com.tutorcenter.model.RegisterRequest;

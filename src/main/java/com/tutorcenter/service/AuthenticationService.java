@@ -5,6 +5,7 @@ import com.tutorcenter.configuration.JwtService;
 import com.tutorcenter.model.AuthenticationRequest;
 import com.tutorcenter.model.AuthenticationResponse;
 import com.tutorcenter.model.RegisterRequest;
+import com.tutorcenter.model.Role;
 import com.tutorcenter.model.Token;
 import com.tutorcenter.model.TokenType;
 import com.tutorcenter.model.User;
@@ -39,7 +40,7 @@ public class AuthenticationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .fullname(request.getFullname())
-                .role(request.getRole())
+                .role(Role.USER)
                 .build();
         var savedUser = repository.save(user);
         var jwtToken = jwtService.generateToken(user);
