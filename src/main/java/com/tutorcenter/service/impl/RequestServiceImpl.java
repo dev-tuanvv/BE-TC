@@ -2,6 +2,8 @@ package com.tutorcenter.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -34,6 +36,14 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public Optional<Request> getRequestById(int id) {
         return requestRepository.findById(id);
+    }
+
+    @Override
+    public List<Request> getRequestByParentID(int pId) {
+        List<Request> list = findAll().stream()
+                .filter(rq -> rq.getParent().equals(pId))
+                .collect(Collectors.toList());
+        return list;
     }
 
 }

@@ -16,4 +16,7 @@ public interface RequestService {
     void disable(int id);
 
     Optional<Request> getRequestById(int id);
+
+    List<Request> getRequestByParentID(int pId);
+
 }

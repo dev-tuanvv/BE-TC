@@ -2,6 +2,7 @@ package com.tutorcenter.controller;
 
 import java.sql.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -31,17 +32,27 @@ public class RequestController {
         return requestService.findAll();
     }
 
+    @GetMapping("/{id}")
+    public Optional<Request> getRequestById(@RequestParam int id) {
+        return requestService.getRequestById(id);
+    }
+
+    @GetMapping("/parent/{pId}")
+    public List<Request> getRequestByParentId(@RequestParam int pId) {
+
+        return requestService.getRequestByParentID(pId);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Request> createRequest(
-            @RequestParam String userID,
             @RequestBody Request request) {
         return ResponseEntity.ok(requestService.save(request));
     }
 
     @PutMapping("/update/{id}")
     public ResponseEntity<Request> updateRequest(
-            @PathVariable int id,
-            @Valid @RequestBody Request requestDetails) {
+            @PathVariable(value = "id") int id,
+            @RequestBody Request requestDetails) {
         Request rq = requestService.getRequestById(id).orElseThrow();
         rq.setAddress(requestDetails.getAddress());
         rq.setAmountStudent(requestDetails.getAmountStudent());
