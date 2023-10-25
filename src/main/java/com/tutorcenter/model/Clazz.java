@@ -25,4 +25,6 @@ public class Clazz {
     private int tutorID;
     @Column
     private String status;
+    @Column
+    private boolean isDeleted;
 }

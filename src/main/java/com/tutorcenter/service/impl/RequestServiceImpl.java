@@ -18,6 +18,12 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<Request> findAll() {
         return requestRepository.findAll();
+
+    }
+
+    @Override
+    public void save(Request request) {
+        requestRepository.saveAndFlush(request);
     }
 
 }

@@ -34,7 +34,7 @@ public class Request {
     @Column
     private String province;
     @Column
-    private float grade;
+    private String level;
     @Column
     private String subject;
     @Column
@@ -59,4 +59,6 @@ public class Request {
     private String status;
     @Column
     private String rejectReason;
+    @Column
+    private boolean isDeleted;
 }

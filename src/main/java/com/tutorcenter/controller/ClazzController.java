@@ -24,7 +24,7 @@ public class ClazzController {
     private ClazzService clazzService;
 
     @GetMapping("")
-    public List<Clazz> getAllUsers() {
+    public List<Clazz> getAllClazzs() {
         return clazzService.findAll();
     }
 

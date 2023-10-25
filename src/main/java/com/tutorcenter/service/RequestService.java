@@ -9,4 +9,6 @@ import com.tutorcenter.model.Request;
 @Service
 public interface RequestService {
     List<Request> findAll();
+
+    void save(Request request);
 }
