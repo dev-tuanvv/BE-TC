@@ -35,7 +35,7 @@ public class RequestController {
     public ResponseEntity<Request> createRequest(
             @RequestParam String userID,
             @RequestBody Request request) {
-        return ResponseEntity.ok(requestService.save(request););
+        return ResponseEntity.ok(requestService.save(request));
     }
 
     @PutMapping("/update/{id}")
