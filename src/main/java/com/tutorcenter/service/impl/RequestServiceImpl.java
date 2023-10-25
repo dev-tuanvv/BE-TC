@@ -1,6 +1,7 @@
 package com.tutorcenter.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,12 +19,21 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<Request> findAll() {
         return requestRepository.findAll();
+    }
+
+    @Override
+    public Request save(Request request) {
+        return requestRepository.saveAndFlush(request);
+    }
+
+    @Override
+    public void disable(int id) {
 
     }
 
     @Override
-    public void save(Request request) {
-        requestRepository.saveAndFlush(request);
+    public Optional<Request> getRequestById(int id) {
+        return requestRepository.findById(id);
     }
 
 }
