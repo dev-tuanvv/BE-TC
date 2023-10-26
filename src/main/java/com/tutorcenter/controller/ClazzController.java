@@ -3,8 +3,11 @@ package com.tutorcenter.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -13,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tutorcenter.dto.PaginRes;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
+import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.service.ClazzService;
 
@@ -39,4 +43,10 @@ public class ClazzController {
         return PaginRes.<SearchResDto>builder().data(data).itemsPerPage(limit).page(offset).build();
     }
 
+    @PutMapping("/delete/{id}")
+    public ResponseEntity<Clazz> disableClazz(@PathVariable int id) {
+        Clazz clazz = clazzService.getClazzById(id).orElseThrow();
+        clazz.setDeleted(true);
+        return ResponseEntity.ok(clazzService.save(clazz));
+    }
 }

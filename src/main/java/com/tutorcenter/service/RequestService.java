@@ -13,10 +13,9 @@ public interface RequestService {
 
     Request save(Request request);
 
-    void disable(int id);
-
     Optional<Request> getRequestById(int id);
 
     List<Request> getRequestByParentID(int pId);
 
+    List<Request> getRequestByManagerID(int pId);
 }

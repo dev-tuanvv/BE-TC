@@ -43,6 +43,12 @@ public class RequestController {
         return requestService.getRequestByParentID(pId);
     }
 
+    @GetMapping("/manager/{mId}")
+    public List<Request> getRequestByManagerId(@RequestParam int mId) {
+
+        return requestService.getRequestByManagerID(mId);
+    }
+
     @PostMapping("/create")
     public ResponseEntity<Request> createRequest(
             @RequestBody Request request) {

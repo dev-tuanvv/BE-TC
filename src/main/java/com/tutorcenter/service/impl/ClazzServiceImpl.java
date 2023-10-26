@@ -1,6 +1,7 @@
 package com.tutorcenter.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,10 +23,21 @@ public class ClazzServiceImpl implements ClazzService {
         return clazzRepository.findAll();
     }
 
-     public List<SearchResDto> search(int limit, int offset, SearchReqDto req, String order) {
+    public List<SearchResDto> search(int limit, int offset, SearchReqDto req, String order) {
         // đến đây dùng JPA k dùng kiểu Object SearchReqDto(req) được nữa
-        // đưa về kiểu dữa liệu cuối cùng của MySQL hiểu ví dụ: int(limit) hoặc string(req.condition)
-        return clazzRepository.search(limit,offset);
+        // đưa về kiểu dữa liệu cuối cùng của MySQL hiểu ví dụ: int(limit) hoặc
+        // string(req.condition)
+        return clazzRepository.search(limit, offset);
+    }
+
+    @Override
+    public Optional<Clazz> getClazzById(int id) {
+        return clazzRepository.findById(id);
+    }
+
+    @Override
+    public Clazz save(Clazz clazz) {
+        return clazzRepository.save(clazz);
     }
 
 }

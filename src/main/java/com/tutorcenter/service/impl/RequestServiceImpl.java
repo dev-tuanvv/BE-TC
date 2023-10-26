@@ -29,11 +29,6 @@ public class RequestServiceImpl implements RequestService {
     }
 
     @Override
-    public void disable(int id) {
-
-    }
-
-    @Override
     public Optional<Request> getRequestById(int id) {
         return requestRepository.findById(id);
     }
@@ -41,7 +36,15 @@ public class RequestServiceImpl implements RequestService {
     @Override
     public List<Request> getRequestByParentID(int pId) {
         List<Request> list = findAll().stream()
-                .filter(rq -> rq.getParent().equals(pId))
+                .filter(rq -> rq.getParent().getId() == pId)
+                .collect(Collectors.toList());
+        return list;
+    }
+
+    @Override
+    public List<Request> getRequestByManagerID(int mId) {
+        List<Request> list = findAll().stream()
+                .filter(rq -> rq.getManager().getId() == mId)
                 .collect(Collectors.toList());
         return list;
     }
