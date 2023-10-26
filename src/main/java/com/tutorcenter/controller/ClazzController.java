@@ -17,6 +17,7 @@ import com.tutorcenter.dto.PaginRes;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.model.Clazz;
+import com.tutorcenter.model.Request;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.service.ClazzService;
 
@@ -30,6 +31,24 @@ public class ClazzController {
     @GetMapping("")
     public List<Clazz> getAllClazzs() {
         return clazzService.findAll();
+    }
+
+    @GetMapping("/parent/{pId}")
+    public List<Clazz> getClazzByParentId(@PathVariable int pId) {
+
+        return clazzService.getClazzByParentId(pId);
+    }
+
+    @GetMapping("/manager/{mId}")
+    public List<Clazz> getClazzByManagerId(@RequestParam int mId) {
+
+        return clazzService.getClazzByManagerId(mId);
+    }
+
+    @GetMapping("/manager/{mId}")
+    public List<Clazz> getClazzByTutorId(@RequestParam int tId) {
+
+        return clazzService.getClazzByTutorId(tId);
     }
 
     @PostMapping("/search")
