@@ -45,7 +45,7 @@ public class ClazzController {
         return clazzService.getClazzByManagerId(mId);
     }
 
-    @GetMapping("/manager/{mId}")
+    @GetMapping("/tutor/{tId}")
     public List<Clazz> getClazzByTutorId(@RequestParam int tId) {
 
         return clazzService.getClazzByTutorId(tId);

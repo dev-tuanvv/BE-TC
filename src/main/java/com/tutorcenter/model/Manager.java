@@ -7,19 +7,21 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.Data;
 
 @Entity
 @Data
+@PrimaryKeyJoinColumn(name = "userId")
 @Table(name = "tbl_Manager")
-public class Manager {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-    @OneToOne
-    @JoinColumn(name = "userID")
-    private User user;
+public class Manager extends User {
+    // @Id
+    // @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // private int id;
+    // @OneToOne
+    // @JoinColumn(name = "userID")
+    // private User user;
     @Column
     private String phone;
 
