@@ -30,8 +30,8 @@ public class ParentController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Parent> getParentById(@PathVariable int id) {
-        return parentService.getParentById(id);
+    public Parent getParentById(@PathVariable int id) {
+        return parentService.getParentById(id).orElseThrow();
     }
 
 }

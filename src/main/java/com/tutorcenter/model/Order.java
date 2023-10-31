@@ -14,23 +14,23 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "tblRequestVerification")
-public class RequestVerification {
+@Table(name = "tblOrder")
+public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
-    @JoinColumn(name = "tutorId")
-    private Tutor tutor;
+    @JoinColumn(name = "classId")
+    private Clazz clazz;
     @ManyToOne
-    @JoinColumn(name = "managerId")
-    private Manager manager;
+    @JoinColumn(name = "userId")
+    private User user;
+    @Column
+    private float amount;
+    @Column
+    private String type;
+    @Column
+    private Date time;
     @Column
     private String status;
-    @Column
-    private String rejectReason;
-    @Column
-    private Date dateModified;
-    @Column
-    private boolean isDeleted;
 }

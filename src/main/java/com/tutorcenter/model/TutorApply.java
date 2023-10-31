@@ -18,11 +18,13 @@ public class TutorApply {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
-    @JoinColumn(name = "ClassID")
-    private Clazz clazzId;
+    @JoinColumn(name = "classId")
+    private Clazz clazz;
     @ManyToOne
-    @JoinColumn(name = "tutorID")
-    private Tutor tutorId;
+    @JoinColumn(name = "tutorId")
+    private Tutor tutor;
     @Column
     private String status;
+    @Column
+    private boolean isDeleted;
 }

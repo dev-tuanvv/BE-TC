@@ -2,6 +2,7 @@ package com.tutorcenter.model;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -24,7 +25,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Builder.Default;
 
 @Entity
 @Data
@@ -38,6 +38,9 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
+    @OneToMany(mappedBy = "user")
+    private Set<Order> orders;
+    @Column
     private String email;
     @Column
     @JsonIgnore
@@ -50,7 +53,7 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "user")
     private List<Token> tokens;
     @Column
-    private boolean isDeleted = false;
+    private boolean isDeleted;
 
     public User orElseThrow(Object object) {
         return null;

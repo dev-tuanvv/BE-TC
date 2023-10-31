@@ -1,8 +1,5 @@
 package com.tutorcenter.model;
 
-import java.sql.Date;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,8 +11,8 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "tblRequestVerification")
-public class RequestVerification {
+@Table(name = "tblTutorSubject")
+public class TutorSubject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -23,14 +20,6 @@ public class RequestVerification {
     @JoinColumn(name = "tutorId")
     private Tutor tutor;
     @ManyToOne
-    @JoinColumn(name = "managerId")
-    private Manager manager;
-    @Column
-    private String status;
-    @Column
-    private String rejectReason;
-    @Column
-    private Date dateModified;
-    @Column
-    private boolean isDeleted;
+    @JoinColumn(name = "subjectId")
+    private Subject subject;
 }

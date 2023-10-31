@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.model.Request;
+import com.tutorcenter.service.ParentService;
 import com.tutorcenter.service.RequestService;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
@@ -25,6 +26,7 @@ import jakarta.validation.Valid;
 public class RequestController {
     @Autowired
     RequestService requestService;
+    ParentService parentService;
 
     @GetMapping("")
     public List<Request> getAllRequests() {
@@ -70,12 +72,12 @@ public class RequestController {
         rq.setManager(requestDetails.getManager());
         rq.setNotes(requestDetails.getNotes());
         rq.setPhone(requestDetails.getPhone());
-        rq.setProvince(requestDetails.getProvince());
+        // rq.setProvince(requestDetails.getProvince());
         rq.setRejectReason(requestDetails.getRejectReason());
         rq.setSlots(requestDetails.getSlots());
         rq.setSlotsLength(requestDetails.getSlotsLength());
         rq.setStatus(requestDetails.getStatus());
-        rq.setSubject(requestDetails.getSubject());
+        // rq.setSubject(requestDetails.getSubject());
 
         return ResponseEntity.ok(requestService.save(rq));
     }
