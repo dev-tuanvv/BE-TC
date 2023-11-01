@@ -19,7 +19,7 @@ public class Subject {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
-    private String subjectName;
+    private String name;
     @Column
     private String level;
     @Column
@@ -33,5 +33,5 @@ public class Subject {
     @Column
     private float pricePerHour; // help reccomend fee
     @Column
-    private String status; // co the chon, ko co tutor, dang km,...
+    private String status; // co tutor, ko co tutor, dang km,...
 }

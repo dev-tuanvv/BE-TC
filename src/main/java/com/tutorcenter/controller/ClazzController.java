@@ -17,8 +17,6 @@ import com.tutorcenter.dto.PaginRes;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.model.Clazz;
-import com.tutorcenter.model.Request;
-import com.tutorcenter.model.Clazz;
 import com.tutorcenter.service.ClazzService;
 
 @RestController

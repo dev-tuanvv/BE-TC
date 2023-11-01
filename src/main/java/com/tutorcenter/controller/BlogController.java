@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.model.Blog;
-import com.tutorcenter.repository.BlogRepository;
 import com.tutorcenter.service.BlogService;
 
 @RestController

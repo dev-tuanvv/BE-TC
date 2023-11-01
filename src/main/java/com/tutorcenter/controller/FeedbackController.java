@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tutorcenter.model.Blog;
 import com.tutorcenter.model.Feedback;
 import com.tutorcenter.repository.FeedbackRepository;
 
