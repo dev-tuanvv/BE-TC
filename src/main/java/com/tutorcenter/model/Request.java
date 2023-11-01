@@ -38,13 +38,13 @@ public class Request {
     @ManyToOne
     @JoinColumn(name = "districtId")
     private District district;
-    @Column
-    private String level;
+    // @Column
+    // private String level;
     @Column
     @OneToMany(mappedBy = "request")
     private Set<RequestSubject> subjects;
-    @Column
-    private int amountStudent;
+    // @Column
+    // private int amountStudent;
     @Column
     private int slots;
     @Column
@@ -60,7 +60,7 @@ public class Request {
     @Column
     private Date dateCreate;
     @Column
-    private Date deatemodified;
+    private Date datemodified;
     @Column
     private String status;
     @Column
