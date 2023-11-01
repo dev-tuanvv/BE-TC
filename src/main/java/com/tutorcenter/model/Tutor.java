@@ -31,7 +31,7 @@ public class Tutor extends User {
     @JoinColumn(name = "districtId")
     private District district;
     @Column
-    private int idNumber;
+    private long idNumber;
     @Column
     private String university;
     @Column
@@ -39,10 +39,10 @@ public class Tutor extends User {
     @Column
     @OneToMany(mappedBy = "tutor")
     private Set<TutorSubject> subjects;
-    @Column
-    private String grade;
-    @Column
-    private String area;
+    // @Column
+    // private String grade;
+    // @Column
+    // private String area;
     @Column
     private String imgAvatar;
     @Column
