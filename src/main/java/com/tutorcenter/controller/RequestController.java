@@ -34,6 +34,7 @@ import jakarta.validation.Valid;
 public class RequestController {
     @Autowired
     RequestService requestService;
+    @Autowired
     ParentService parentService;
     ManagerService managerService;
 
