@@ -54,18 +54,18 @@ public class RequestController {
         return requestService.findAll();
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id")
     public Optional<Request> getRequestById(@RequestParam int id) {
         return requestService.getRequestById(id);
     }
 
-    @GetMapping("/parent/{pId}")
+    @GetMapping("/parent")
     public List<Request> getRequestByParentId(@RequestParam int pId) {
 
         return requestService.getRequestByParentID(pId);
     }
 
-    @GetMapping("/manager/{mId}")
+    @GetMapping("/manager")
     public List<Request> getRequestByManagerId(@RequestParam int mId) {
 
         return requestService.getRequestByManagerID(mId);

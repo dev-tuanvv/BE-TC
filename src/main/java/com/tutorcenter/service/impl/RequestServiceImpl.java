@@ -1,5 +1,6 @@
 package com.tutorcenter.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -34,9 +35,11 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<Request> getRequestByParentID(int pId) {
-        List<Request> list = findAll().stream()
-                .filter(rq -> rq.getParent().getId() == pId)
-                .collect(Collectors.toList());
+        List<Request> list = new ArrayList<>();
+        for (Request r : findAll()) {
+            if (r.getParent().getId() == pId)
+                list.add(r);
+        }
         return list;
     }
 

@@ -1,5 +1,7 @@
 package com.tutorcenter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,9 +18,11 @@ public class RequestSubject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "requestId")
     private Request request;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "subjectId")
     private Subject subject;

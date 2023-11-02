@@ -2,6 +2,8 @@ package com.tutorcenter.model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -25,9 +27,11 @@ public class District {
     @ManyToOne
     @JoinColumn(name = "provinceId")
     private Province province;
+    @JsonIgnore
     @Column
     @OneToMany(mappedBy = "district")
     private Set<Tutor> tutors;
+    @JsonIgnore
     @Column
     @OneToMany(mappedBy = "district")
     private Set<Request> requests;
