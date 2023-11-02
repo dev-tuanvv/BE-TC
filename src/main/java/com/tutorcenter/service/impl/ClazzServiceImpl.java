@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.model.Clazz;
-import com.tutorcenter.model.Clazz;
 import com.tutorcenter.repository.ClazzRepository;
 import com.tutorcenter.service.ClazzService;
 

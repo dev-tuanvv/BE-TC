@@ -2,11 +2,9 @@ package com.tutorcenter.dto;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.Set;
 
 import com.tutorcenter.model.Request;
 import com.tutorcenter.model.RequestSubject;
-import com.tutorcenter.model.Subject;
 
 import lombok.Data;
 
@@ -19,7 +17,7 @@ public class RequestDto {
     private String phone;
     private String address;
     private int districtId;
-    private Set<String> subjects;
+    private List<Integer> subjects;
     private int slots;
     private int slotsLength;
     private float tuition;
@@ -41,7 +39,7 @@ public class RequestDto {
         this.address = r.getAddress();
         this.districtId = r.getDistrict().getId();
         for (RequestSubject s : r.getSubjects()) {
-            this.subjects.add(s.getSubject().getName());
+            this.subjects.add(s.getSubject().getId());
         }
         this.slots = r.getSlots();
         this.slotsLength = r.getSlotsLength();

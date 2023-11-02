@@ -1,7 +1,7 @@
 package com.tutorcenter.model;
 
 import java.sql.Date;
-import java.util.Set;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,10 +23,10 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
-    @JoinColumn(name = "parentID")
+    @JoinColumn(name = "parentId")
     private Parent parent;
     @ManyToOne
-    @JoinColumn(name = "managerID")
+    @JoinColumn(name = "managerId")
     private Manager manager;
     // @Column
     @OneToOne(mappedBy = "request")
@@ -42,7 +42,7 @@ public class Request {
     // private String level;
     @Column
     @OneToMany(mappedBy = "request")
-    private Set<RequestSubject> subjects;
+    private List<RequestSubject> subjects;
     // @Column
     // private int amountStudent;
     @Column
