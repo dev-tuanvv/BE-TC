@@ -60,7 +60,7 @@ public class ClazzServiceImpl implements ClazzService {
     @Override
     public List<Clazz> getClazzByTutorId(int tId) {
         List<Clazz> list = findAll().stream()
-                .filter(clazz -> clazz.getTutorID() == tId)
+                .filter(clazz -> clazz.getTutorId() == tId)
                 .collect(Collectors.toList());
         return list;
     }

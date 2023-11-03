@@ -36,17 +36,17 @@ import jakarta.validation.Valid;
 @RequestMapping("/api/request")
 public class RequestController {
     @Autowired
-    RequestService requestService;
+    private RequestService requestService;
     @Autowired
-    ParentService parentService;
+    private ParentService parentService;
     @Autowired
-    ManagerService managerService;
+    private ManagerService managerService;
+    // @Autowired
+    // private SubjectService subjectService;
     @Autowired
-    SubjectService subjectService;
+    private DistrictService districtService;
     @Autowired
-    DistrictService districtService;
-    @Autowired
-    RequestSubjectService requestSubjectService;
+    private RequestSubjectService requestSubjectService;
 
     @GetMapping("")
     public List<Request> getAllRequests() {
@@ -54,21 +54,21 @@ public class RequestController {
         return requestService.findAll();
     }
 
-    @GetMapping("/id")
-    public Optional<Request> getRequestById(@RequestParam int id) {
+    @GetMapping("/{id}")
+    public Optional<Request> getRequestById(@PathVariable(value = "id") int id) {
         return requestService.getRequestById(id);
     }
 
-    @GetMapping("/parent")
-    public List<Request> getRequestByParentId(@RequestParam int pId) {
+    @GetMapping("/parent/{id}")
+    public List<Request> getRequestByParentId(@PathVariable(value = "id") int id) {
 
-        return requestService.getRequestByParentID(pId);
+        return requestService.getRequestByParentID(id);
     }
 
-    @GetMapping("/manager")
-    public List<Request> getRequestByManagerId(@RequestParam int mId) {
+    @GetMapping("/manager/{id}")
+    public List<Request> getRequestByManagerId(@PathVariable(value = "id") int id) {
 
-        return requestService.getRequestByManagerID(mId);
+        return requestService.getRequestByManagerID(id);
     }
 
     @PostMapping("/create")
@@ -87,10 +87,10 @@ public class RequestController {
         request.setDistrict(district);
         int rId = requestService.save(request).getId();
 
-        for (int sId : requestDto.getSubjects()) {
+        for (int sId : requestDto.getRSubjects()) {
             requestSubjectService.createRSubject(rId, sId);
         }
-        List<RequestSubject> rSubjects = requestSubjectService.getRSubjectsById(requestDto.getSubjects());
+        List<RequestSubject> rSubjects = requestSubjectService.getRSubjectsById(requestDto.getRSubjects());
         request.setSubjects(rSubjects);
         requestService.save(request);
 
@@ -106,10 +106,10 @@ public class RequestController {
 
         District district = districtService.getDistrictById(requestDto.getDistrictId()).orElseThrow();
         Manager manager = managerService.getManagerById(requestDto.getManagerId()).orElseThrow();
-        for (int sId : requestDto.getSubjects()) {
+        for (int sId : requestDto.getRSubjects()) {
             requestSubjectService.createRSubject(id, sId);
         }
-        List<RequestSubject> rSubjects = requestSubjectService.getRSubjectsById(requestDto.getSubjects());
+        List<RequestSubject> rSubjects = requestSubjectService.getRSubjectsById(requestDto.getRSubjects());
 
         rq.setDatemodified(new Date(System.currentTimeMillis()));
         rq.setDistrict(district);
@@ -121,8 +121,7 @@ public class RequestController {
 
     @PutMapping("/delete/{id}")
     public ResponseEntity<Request> disableRequest(
-            @PathVariable int id,
-            @Valid @RequestBody Request request) {
+            @PathVariable int id) {
         Request rq = requestService.getRequestById(id).orElseThrow();
         rq.setDeleted(true);
         return ResponseEntity.ok(requestService.save(rq));

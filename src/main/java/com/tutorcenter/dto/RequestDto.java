@@ -17,7 +17,7 @@ public class RequestDto {
     private String phone;
     private String address;
     private int districtId;
-    private List<Integer> subjects;
+    private List<Integer> rSubjects;
     private int slots;
     private int slotsLength;
     private float tuition;
@@ -39,7 +39,8 @@ public class RequestDto {
         this.address = r.getAddress();
         this.districtId = r.getDistrict().getId();
         for (RequestSubject s : r.getSubjects()) {
-            this.subjects.add(s.getSubject().getId());
+            // this.subjects.add(s.getSubject().getId());
+            this.rSubjects.add(s.getId());
         }
         this.slots = r.getSlots();
         this.slotsLength = r.getSlotsLength();

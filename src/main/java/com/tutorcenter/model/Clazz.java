@@ -1,6 +1,6 @@
 package com.tutorcenter.model;
 
-import java.util.Set;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,15 +28,15 @@ public class Clazz {
     private Feedback feedback;
     @Column
     @OneToMany(mappedBy = "clazz")
-    private Set<Order> orders;
+    private List<Order> orders;
     @Column
     @OneToMany(mappedBy = "clazz")
-    private Set<TutorApply> tutorApplies;
+    private List<TutorApply> tutorApplies;
     @Column
     @OneToMany(mappedBy = "clazz")
-    private Set<Attendance> attendances;
+    private List<Attendance> attendances;
     @Column
-    private int tutorID;
+    private int tutorId;
     @Column
     private String status;
     @Column

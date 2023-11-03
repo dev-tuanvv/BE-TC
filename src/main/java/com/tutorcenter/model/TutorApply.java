@@ -1,5 +1,7 @@
 package com.tutorcenter.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -17,9 +19,11 @@ public class TutorApply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "classId")
     private Clazz clazz;
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "tutorId")
     private Tutor tutor;
