@@ -14,4 +14,10 @@ public interface TutorApplyService {
     Optional<TutorApply> getTutorApplyById(int id);
 
     List<TutorApply> getTutorAppliesById(List<Integer> idList);
+
+    TutorApply save(TutorApply tutorApply);
+
+    List<TutorApply> getTutorAppliesByClazzId(int cId);
+
+    List<TutorApply> getTutorAppliesByTutorId(int tId);
 }

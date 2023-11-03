@@ -1,6 +1,7 @@
 package com.tutorcenter.service.impl;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,16 @@ public class TutorServiceImpl implements TutorService {
     @Override
     public List<Tutor> findAll() {
         return tutorRepository.findAll();
+    }
+
+    @Override
+    public Optional<Tutor> getTutorById(int id) {
+        return tutorRepository.findById(id);
+    }
+
+    @Override
+    public List<Tutor> getTutorsById(List<Integer> idList) {
+        return tutorRepository.findAllById(idList);
     }
 
 }

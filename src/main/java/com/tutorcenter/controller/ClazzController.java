@@ -1,6 +1,5 @@
 package com.tutorcenter.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.ClazzDto;
 import com.tutorcenter.dto.PaginRes;
-import com.tutorcenter.dto.RequestDto;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.model.Attendance;
@@ -61,13 +59,13 @@ public class ClazzController {
     }
 
     @GetMapping("/manager/{mId}")
-    public List<Clazz> getClazzByManagerId(@RequestParam int mId) {
+    public List<Clazz> getClazzByManagerId(@PathVariable int mId) {
 
         return clazzService.getClazzByManagerId(mId);
     }
 
     @GetMapping("/tutor/{tId}")
-    public List<Clazz> getClazzByTutorId(@RequestParam int tId) {
+    public List<Clazz> getClazzByTutorId(@PathVariable int tId) {
 
         return clazzService.getClazzByTutorId(tId);
     }
