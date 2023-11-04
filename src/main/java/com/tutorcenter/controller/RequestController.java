@@ -50,8 +50,8 @@ public class RequestController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Request> getRequestById(@PathVariable(value = "id") int id) {
-        return requestService.getRequestById(id);
+    public Request getRequestById(@PathVariable(value = "id") int id) {
+        return requestService.getRequestById(id).get();
     }
 
     @GetMapping("/parent/{id}")
