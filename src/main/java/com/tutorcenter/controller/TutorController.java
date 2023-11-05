@@ -24,7 +24,7 @@ public class TutorController {
   }
 
   @GetMapping(value = "/{id}")
-  public Tutor getTutorBuId(@PathVariable int id) {
+  public Tutor getTutorById(@PathVariable int id) {
     return tutorService.getTutorById(id).orElseThrow();
   }
 

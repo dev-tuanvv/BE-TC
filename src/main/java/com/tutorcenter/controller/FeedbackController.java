@@ -18,7 +18,7 @@ import com.tutorcenter.repository.FeedbackRepository;
 public class FeedbackController {
 
     @Autowired
-    FeedbackRepository feedbackRepository;
+    FeedbackRepository feedbackRepository;// service
 
     @GetMapping("/tutor/{id}")
     public List<Feedback> getFeedbackByTutorId(@PathVariable int id) {

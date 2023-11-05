@@ -22,6 +22,7 @@ import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.Feedback;
 import com.tutorcenter.model.Order;
 import com.tutorcenter.model.Request;
+import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorApply;
 import com.tutorcenter.service.AttendanceService;
 import com.tutorcenter.service.ClazzService;
@@ -29,6 +30,7 @@ import com.tutorcenter.service.FeedbackService;
 import com.tutorcenter.service.OrderService;
 import com.tutorcenter.service.RequestService;
 import com.tutorcenter.service.TutorApplyService;
+import com.tutorcenter.service.TutorService;
 
 @RestController
 @RequestMapping("/api/Class")
@@ -46,6 +48,8 @@ public class ClazzController {
     private TutorApplyService tutorApplyService;
     @Autowired
     private AttendanceService attendanceService;
+    @Autowired
+    private TutorService tutorService;
 
     @GetMapping("")
     public List<Clazz> getAllClazzs() {
@@ -82,17 +86,19 @@ public class ClazzController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody ClazzDto clazztDto, @RequestBody int rId) {
+    public ResponseEntity<?> create(@RequestBody ClazzDto clazztDto, @RequestParam int rId) {
         Clazz clazz = new Clazz();
         clazztDto.convertClazzDto(clazz);
         Request request = requestService.getRequestById(rId).orElseThrow();
         Feedback feedback = null;
+        Tutor tutor = null;
         List<Order> orders = null;
         List<TutorApply> tutorApplies = null;
         List<Attendance> attendances = null; // co the tao attendance luc tao class
 
         clazz.setRequest(request);
         clazz.setFeedback(feedback);
+        clazz.setTutor(tutor);
         clazz.setOrders(orders);
         clazz.setTutorApplies(tutorApplies);
         clazz.setAttendances(attendances);
@@ -108,12 +114,14 @@ public class ClazzController {
         clazzDto.convertClazzDto(clazz);
         Request request = requestService.getRequestById(clazzDto.getRequestId()).orElseThrow();
         Feedback feedback = feedbackService.getFeedBackById(clazzDto.getFeedbackId()).orElseThrow();
+        Tutor tutor = tutorService.getTutorById(clazzDto.getTutorId()).orElseThrow();
         List<Order> orders = orderService.getOrdersById(clazzDto.getOrders());
         List<TutorApply> tutorApplies = tutorApplyService.getTutorAppliesById(clazzDto.getTutorApplies());
         List<Attendance> attendances = attendanceService.getAttendancesById(clazzDto.getAttendances());
 
         clazz.setRequest(request);
         clazz.setFeedback(feedback);
+        clazz.setTutor(tutor);
         clazz.setOrders(orders);
         clazz.setTutorApplies(tutorApplies);
         clazz.setAttendances(attendances);

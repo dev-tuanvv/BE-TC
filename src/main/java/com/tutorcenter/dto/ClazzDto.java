@@ -42,7 +42,7 @@ public class ClazzDto {
         for (Attendance a : c.getAttendances()) {
             this.attendances.add(a.getId());
         }
-        this.tutorId = c.getTutorId();
+        this.tutorId = c.getTutor().getId();
         this.status = c.getStatus();
         this.isDeleted = c.isDeleted();
     }
@@ -50,7 +50,7 @@ public class ClazzDto {
     // request, feedback, orders, tutorApplies, attendances
     public void convertClazzDto(Clazz c) {
         c.setId(this.id);
-        c.setTutorId(this.tutorId);
+        // c.setTutorId(this.tutorId);
         c.setDeleted(this.isDeleted);
     }
 }

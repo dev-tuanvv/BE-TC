@@ -2,7 +2,6 @@ package com.tutorcenter.controller;
 
 import java.sql.Date;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +50,7 @@ public class RequestController {
 
     @GetMapping("/{id}")
     public Request getRequestById(@PathVariable(value = "id") int id) {
-        return requestService.getRequestById(id).get();
+        return requestService.getRequestById(id).orElseThrow();
     }
 
     @GetMapping("/parent/{id}")

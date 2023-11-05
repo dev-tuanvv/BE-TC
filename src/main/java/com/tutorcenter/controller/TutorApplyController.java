@@ -95,7 +95,7 @@ public class TutorApplyController {
         for (TutorApply ta : tutorApplyService.getTutorAppliesByTutorId(pId)) {
             if (ta.getId() == taId) {
                 update(ta.getId(), "Accepted");
-                ta.getClazz().setTutorId(tutorApply.getTutor().getId());
+                ta.getClazz().getTutor().setId(tutorApply.getTutor().getId());
                 clazzService.save(ta.getClazz());
             } else {
                 update(ta.getId(), "Rejected");
