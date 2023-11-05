@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tutorcenter.dto.ApiRequestDto;
+import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.RequestDto;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.District;
@@ -43,9 +46,9 @@ public class RequestController {
     private RequestSubjectService requestSubjectService;
 
     @GetMapping("")
-    public List<Request> getAllRequests() {
-
-        return requestService.findAll();
+    public ApiResponseDto<List<Request>> getAllRequests() {
+        List<Request> data = requestService.findAll();
+        return ApiResponseDto.<List<Request>>builder().data(data).build();
     }
 
     @GetMapping("/{id}")
@@ -113,7 +116,7 @@ public class RequestController {
         return ResponseEntity.ok(requestService.save(rq));
     }
 
-    @PutMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Request> disableRequest(
             @PathVariable int id) {
         Request rq = requestService.getRequestById(id).orElseThrow();

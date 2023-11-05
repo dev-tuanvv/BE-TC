@@ -1,4 +1,4 @@
-package com.tutorcenter.dto;
+package com.tutorcenter.dto.clazz;
 
 import java.util.List;
 

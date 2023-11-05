@@ -13,8 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tutorcenter.dto.ClazzDto;
+import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.PaginRes;
+import com.tutorcenter.dto.clazz.ClazzDto;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.model.Attendance;
@@ -52,8 +53,10 @@ public class ClazzController {
     private TutorService tutorService;
 
     @GetMapping("")
-    public List<Clazz> getAllClazzs() {
-        return clazzService.findAll();
+    public ApiResponseDto<List<Clazz>> getAllClazzs() {
+
+        List<Clazz> data = clazzService.findAll();
+        return ApiResponseDto.<List<Clazz>>builder().data(data).build();
     }
 
     @GetMapping("/parent/{pId}")
