@@ -17,7 +17,7 @@ public class RequestDto {
     private String phone;
     private String address;
     private int districtId;
-    private List<Integer> rSubjects;
+    // private List<Integer> rSubjects;
     private int slots;
     private int slotsLength;
     private float tuition;
@@ -38,10 +38,10 @@ public class RequestDto {
         this.phone = r.getPhone();
         this.address = r.getAddress();
         this.districtId = r.getDistrict().getId();
-        for (RequestSubject s : r.getSubjects()) {
-            // this.subjects.add(s.getSubject().getId());
-            this.rSubjects.add(s.getId());
-        }
+        // for (RequestSubject s : r.getSubjects()) {
+        // // this.subjects.add(s.getSubject().getId());
+        // this.rSubjects.add(s.getId());
+        // }
         this.slots = r.getSlots();
         this.slotsLength = r.getSlotsLength();
         this.tuition = r.getTuition();

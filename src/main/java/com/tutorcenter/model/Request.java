@@ -40,9 +40,9 @@ public class Request {
     private District district;
     // @Column
     // private String level;
-    @Column
-    @OneToMany(mappedBy = "request")
-    private List<RequestSubject> subjects;
+    // @Column
+    // @OneToMany(mappedBy = "request")
+    // private List<RequestSubject> subjects;
     // @Column
     // private int amountStudent;
     @Column

@@ -13,8 +13,11 @@ public interface RequestSubjectService {
 
     List<RequestSubject> getRSubjectsById(List<Integer> idList);
 
+    List<RequestSubject> getRSubjectByRId(int rId);
+
     Optional<RequestSubject> getRequestSubjectById(int id);
 
     RequestSubject createRSubject(int rId, int sId);
 
+    void updateByRequestId(int id, List<Integer> subjects);
 }

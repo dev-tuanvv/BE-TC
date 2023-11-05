@@ -23,6 +23,7 @@ import com.tutorcenter.model.Manager;
 import com.tutorcenter.model.Parent;
 import com.tutorcenter.model.Request;
 import com.tutorcenter.model.RequestSubject;
+import com.tutorcenter.model.Subject;
 import com.tutorcenter.service.DistrictService;
 import com.tutorcenter.service.ManagerService;
 import com.tutorcenter.service.ParentService;
@@ -82,16 +83,23 @@ public class RequestController {
         request.setManager(manager);
         request.setClazz(clazz);
         request.setDistrict(district);
-        int rId = requestService.save(request).getId();
+        // int rId = requestService.save(request).getId();
 
-        for (int sId : requestDto.getRSubjects()) {
-            requestSubjectService.createRSubject(rId, sId);
-        }
-        List<RequestSubject> rSubjects = requestSubjectService.getRSubjectsById(requestDto.getRSubjects());
-        request.setSubjects(rSubjects);
+        // for (int sId : requestDto.getRSubjects()) {
+        // requestSubjectService.createRSubject(rId, sId);
+        // }
+        // List<RequestSubject> rSubjects =
+        // requestSubjectService.getRSubjectsById(requestDto.getRSubjects());
+        // request.setSubjects(rSubjects);
         requestService.save(request);
 
         return ResponseEntity.ok("Tạo request thành công.");
+    }
+
+    @PutMapping("/createSubject/{rId}")
+    public ResponseEntity<?> createSubjects(@PathVariable int rId, @RequestBody List<Integer> subjects) {
+        requestSubjectService.updateByRequestId(rId, subjects);
+        return ResponseEntity.ok("Thêm subjects thành công.");
     }
 
     @PutMapping("/update/{id}")
@@ -103,15 +111,16 @@ public class RequestController {
 
         District district = districtService.getDistrictById(requestDto.getDistrictId()).orElseThrow();
         Manager manager = managerService.getManagerById(requestDto.getManagerId()).orElseThrow();
-        for (int sId : requestDto.getRSubjects()) {
-            requestSubjectService.createRSubject(id, sId);
-        }
-        List<RequestSubject> rSubjects = requestSubjectService.getRSubjectsById(requestDto.getRSubjects());
+        // for (int sId : requestDto.getRSubjects()) {
+        // requestSubjectService.createRSubject(id, sId);
+        // }
+        // List<RequestSubject> rSubjects =
+        // requestSubjectService.getRSubjectsById(requestDto.getRSubjects());
 
         rq.setDatemodified(new Date(System.currentTimeMillis()));
         rq.setDistrict(district);
         rq.setManager(manager);
-        rq.setSubjects(rSubjects);
+        // rq.setSubjects(rSubjects);
 
         return ResponseEntity.ok(requestService.save(rq));
     }
