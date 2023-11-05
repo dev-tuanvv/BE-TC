@@ -15,6 +15,7 @@ import lombok.Value;
 @Value
 public class ApiResponseDto<T> {
 
+    @JsonInclude(Include.NON_NULL)
     private String requestId;
 
     private String responseCode = ResponseCode.SUCCESS;
