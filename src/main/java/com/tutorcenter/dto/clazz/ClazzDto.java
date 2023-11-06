@@ -51,6 +51,7 @@ public class ClazzDto {
     public void convertClazzDto(Clazz c) {
         c.setId(this.id);
         // c.setTutorId(this.tutorId);
+        c.setStatus(this.status);
         c.setDeleted(this.isDeleted);
     }
 }

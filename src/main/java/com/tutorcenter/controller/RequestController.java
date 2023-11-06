@@ -109,8 +109,11 @@ public class RequestController {
         Request rq = new Request();
         requestDto.convertRequestDto(rq);
 
+        Parent parent = parentService.getParentById(requestDto.getParentId()).orElseThrow();
         District district = districtService.getDistrictById(requestDto.getDistrictId()).orElseThrow();
-        Manager manager = managerService.getManagerById(requestDto.getManagerId()).orElseThrow();
+        Manager manager = managerService.getManagerById(requestDto.getManagerId()).isPresent()
+                ? managerService.getManagerById(requestDto.getManagerId()).get()
+                : null;
         // for (int sId : requestDto.getRSubjects()) {
         // requestSubjectService.createRSubject(id, sId);
         // }
