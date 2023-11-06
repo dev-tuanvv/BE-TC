@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.RequestDto;
+import com.tutorcenter.dto.request.CreateRequestReqDto;
+import com.tutorcenter.dto.request.RequestDetailResDto;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.District;
 import com.tutorcenter.model.Manager;
@@ -50,8 +52,17 @@ public class RequestController {
     }
 
     @GetMapping("/{id}")
-    public Request getRequestById(@PathVariable(value = "id") int id) {
-        return requestService.getRequestById(id).orElseThrow();
+    public ApiResponseDto<RequestDetailResDto> getRequestById(@PathVariable(value = "id") int id) {
+        Request request = requestService.getRequestById(id).orElse(null);
+        if (request == null) {
+            return ApiResponseDto.<RequestDetailResDto>builder().responseCode("404").message("Request not found").build();
+        }
+        RequestDetailResDto response = new RequestDetailResDto();
+        response.fromRequest(request);
+
+        response.setListSubject(requestSubjectService.getRSubjectByRId(id));
+
+        return ApiResponseDto.<RequestDetailResDto>builder().data(response).build();
     }
 
     @GetMapping("/parent/{id}")
@@ -67,30 +78,25 @@ public class RequestController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> createRequest(
-            @RequestBody RequestDto requestDto) {
-        Request request = new Request();
-        requestDto.convertRequestDto(request);
-        Parent parent = parentService.getParentById(requestDto.getParentId()).orElseThrow();
-        Manager manager = null;
-        Clazz clazz = null;
-        District district = districtService.getDistrictById(requestDto.getDistrictId()).orElseThrow();
+    public ApiResponseDto<Request> createRequest(
+            @RequestBody CreateRequestReqDto createRequestDto) {
+        try {
+            Request request = new Request();
+            // TODO: lay Id tu Session
+            createRequestDto.toRequest(request);
+            request.setParent(parentService.getParentById(4).orElse(null));
+            District district = districtService.getDistrictById(createRequestDto.getDistrictId()).orElse(null);
 
-        request.setParent(parent);
-        request.setManager(manager);
-        request.setClazz(clazz);
-        request.setDistrict(district);
-        // int rId = requestService.save(request).getId();
-
-        // for (int sId : requestDto.getRSubjects()) {
-        // requestSubjectService.createRSubject(rId, sId);
-        // }
-        // List<RequestSubject> rSubjects =
-        // requestSubjectService.getRSubjectsById(requestDto.getRSubjects());
-        // request.setSubjects(rSubjects);
-        requestService.save(request);
-
-        return ResponseEntity.ok("Tạo request thành công.");
+            if (district == null) {
+                return ApiResponseDto.<Request>builder().responseCode("404").message("District not found").build();
+            }
+            request.setDistrict(district);
+            Request response = requestService.save(request);
+            requestSubjectService.updateByRequestId(response.getId(), createRequestDto.getListSubjectId());
+            return ApiResponseDto.<Request>builder().message(null).data(response).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<Request>builder().responseCode("500").message(e.getMessage()).build();
+        }
     }
 
     @PutMapping("/createSubject/{rId}")
@@ -112,7 +118,7 @@ public class RequestController {
         rq.setManager(managerService.getManagerById(requestDto.getManagerId()).orElse(null));
         rq.setClazz(clazzService.getClazzById(requestDto.getClazzId()).orElse(null));
         rq.setDistrict(districtService.getDistrictById(requestDto.getDistrictId()).orElse(null));
-        
+
         return ApiResponseDto.<Request>builder().data(requestService.save(rq)).build();
     }
 
