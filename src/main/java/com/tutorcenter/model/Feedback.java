@@ -7,6 +7,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -17,10 +20,12 @@ public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column
-    private int classID;
-    @Column
-    private int tutorID;
+    @OneToOne
+    @JoinColumn(name = "classId", referencedColumnName = "id")
+    private Clazz clazz;
+    @ManyToOne
+    @JoinColumn(name = "tutorId", referencedColumnName = "id")
+    private Tutor tutor;
     @Column
     private int rating;
     @Column
@@ -29,4 +34,6 @@ public class Feedback {
     private String status;
     @Column
     private Date dateCreate;
+    @Column
+    private boolean isDeleted;
 }

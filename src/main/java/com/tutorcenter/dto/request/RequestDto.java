@@ -24,7 +24,7 @@ public class RequestDto {
     private Date dateStart;
     private Date dateEnd;
     private Date dateCreate;
-    private Date datemodified;
+    private Date dateModified;
     private String status;
     private String rejectReason;
     private boolean isDeleted;
@@ -44,7 +44,7 @@ public class RequestDto {
         this.dateStart = r.getDateStart();
         this.dateEnd = r.getDateEnd();
         this.dateCreate = r.getDateCreate();
-        this.datemodified = r.getDateModified();
+        this.dateModified = r.getDateModified();
         this.status = r.getStatus();
         this.rejectReason = r.getRejectReason();
         this.isDeleted = r.isDeleted();

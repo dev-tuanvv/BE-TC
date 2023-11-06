@@ -20,10 +20,10 @@ public class RequestVerification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
-    @JoinColumn(name = "tutorID")
+    @JoinColumn(name = "tutorId")
     private Tutor tutor;
     @ManyToOne
-    @JoinColumn(name = "managerID")
+    @JoinColumn(name = "managerId")
     private Manager manager;
     @Column
     private String status;
@@ -31,4 +31,6 @@ public class RequestVerification {
     private String rejectReason;
     @Column
     private Date dateModified;
+    @Column
+    private boolean isDeleted;
 }

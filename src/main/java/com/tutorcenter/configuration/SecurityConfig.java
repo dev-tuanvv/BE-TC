@@ -54,6 +54,7 @@ public class SecurityConfig {
         @Bean
         public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
                 http
+
                                 .csrf(AbstractHttpConfigurer::disable)
                                 .authorizeHttpRequests(req -> req.requestMatchers(WHITE_LIST_URL)
                                                 .permitAll()
@@ -72,7 +73,7 @@ public class SecurityConfig {
                                 .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                                 .authenticationProvider(authenticationProvider)
                                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                                .logout(logout -> logout.logoutUrl("/api/v1/auth/logout")
+                                .logout(logout -> logout.logoutUrl("/api/auth/logout")
                                                 .addLogoutHandler(logoutHandler)
                                                 .logoutSuccessHandler(
                                                                 (request, response,

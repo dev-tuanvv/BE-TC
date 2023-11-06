@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -17,10 +19,11 @@ public class TransactionHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column
-    private int userWalletId;
-    @Column
-    private int managerId;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User userId;
+    // @Column
+    // private int managerId;
     @Column
     private String type;
     @Column

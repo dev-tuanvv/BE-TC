@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,7 +18,13 @@ public class ParentController {
     ParentService parentService;
 
     @GetMapping("")
-    public List<Parent> getAllTutors() {
+    public List<Parent> getAllParents() {
         return parentService.findAll();
     }
+
+    @GetMapping("/{id}")
+    public Parent getParentById(@PathVariable int id) {
+        return parentService.getParentById(id).orElseThrow();
+    }
+
 }
