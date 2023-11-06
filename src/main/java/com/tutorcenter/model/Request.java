@@ -29,16 +29,9 @@ public class Request {
     private String phone;
     @Column
     private String address;
-    @Column
-    private String district;
-    @Column
-    private String province;
-    @Column
-    private float grade;
-    @Column
-    private String subject;
-    @Column
-    private int amountStudent;
+    @ManyToOne
+    @JoinColumn(name = "districtId")
+    private District district;
     @Column
     private int slots;
     @Column
@@ -54,7 +47,7 @@ public class Request {
     @Column
     private Date dateCreate;
     @Column
-    private Date deatemodified;
+    private Date dateModified;
     @Column
     private String status;
     @Column
