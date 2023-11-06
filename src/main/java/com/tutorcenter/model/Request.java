@@ -23,10 +23,10 @@ public class Request {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
-    @JoinColumn(name = "parent_id")
+    @JoinColumn(name = "parentId")
     private Parent parent;
     @ManyToOne
-    @JoinColumn(name = "manager_id")
+    @JoinColumn(name = "managerId")
     private Manager manager;
     // @Column
     @OneToOne(mappedBy = "request")
