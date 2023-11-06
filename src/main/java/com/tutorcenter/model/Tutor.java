@@ -48,7 +48,11 @@ public class Tutor extends User {
     @Column
     private String imgCertificate;
     @Column
-    private String imgID;
+    private String imgId;
     @Column
-    private String status;
+    private int status;
+    @Column
+    private String gender;
+    @Column
+    private String area;
 }

@@ -55,10 +55,12 @@ public class Request {
     @Column
     private Date dateModified;
     @Column
-    private String status;
+    private int status;
     @Column
     private String rejectReason;
     @JsonIgnore
     @Column
     private boolean isDeleted;
+    @Column
+    private Boolean gender;
 }

@@ -18,5 +18,5 @@ public class Manager extends User {
     @Column
     private String phone;
     @Column
-    private String status;
+    private int status;
 }

@@ -25,5 +25,5 @@ public class Attendance {
     @Column
     private Date dateCreate;
     @Column
-    private String status;
+    private int status;
 }

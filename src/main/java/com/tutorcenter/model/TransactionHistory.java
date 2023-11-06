@@ -31,5 +31,5 @@ public class TransactionHistory {
     @Column
     private float amount;
     @Column
-    private Date time;
+    private Date timeCreate;
 }

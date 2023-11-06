@@ -20,6 +20,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -54,6 +55,8 @@ public class User implements UserDetails {
     private List<Token> tokens;
     @Column
     private boolean isDeleted;
+    @OneToOne(mappedBy = "user")
+    private UserWallet userWallet;
 
     public User orElseThrow(Object object) {
         return null;

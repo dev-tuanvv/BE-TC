@@ -25,7 +25,7 @@ public class RequestDto {
     private Date dateEnd;
     private Date dateCreate;
     private Date dateModified;
-    private String status;
+    private int status;
     private String rejectReason;
     private boolean isDeleted;
 

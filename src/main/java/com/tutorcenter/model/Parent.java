@@ -24,5 +24,5 @@ public class Parent extends User {
     @Column
     private String province;
     @Column
-    private String status;
+    private int status;
 }

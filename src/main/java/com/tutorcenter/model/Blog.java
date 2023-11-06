@@ -28,9 +28,11 @@ public class Blog {
     @Column
     private String Content;
     @Column
-    private String Status;
+    private int Status;
     @Column
     private Date dateCreate;
+    @Column
+    private Date dateModified;
     @Column
     private int createdBy;
     @Column

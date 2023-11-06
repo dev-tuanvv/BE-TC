@@ -26,7 +26,7 @@ public class RequestVerification {
     @JoinColumn(name = "managerId")
     private Manager manager;
     @Column
-    private String status;
+    private int status;
     @Column
     private String rejectReason;
     @Column

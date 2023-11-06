@@ -25,7 +25,7 @@ public class ClazzDto {
 
     private int tutorId;
 
-    private String status;
+    private int status;
 
     private boolean isDeleted;
 

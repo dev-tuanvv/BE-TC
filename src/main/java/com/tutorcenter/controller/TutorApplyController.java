@@ -53,7 +53,7 @@ public class TutorApplyController {
         tutorApply.setClazz(clazz);
         tutorApply.setTutor(tutor);
         tutorApply.setDeleted(false);
-        tutorApply.setStatus("0");
+        tutorApply.setStatus(0);
 
         tutorApplyService.save(tutorApply);
 
@@ -61,7 +61,7 @@ public class TutorApplyController {
     }
 
     @PutMapping("/updateStatus/{id}")
-    public ResponseEntity<?> update(@PathVariable int id, @RequestParam(name = "status") String status) {
+    public ResponseEntity<?> update(@PathVariable int id, @RequestParam(name = "status") int status) {
         TutorApply tutorApply = tutorApplyService.getTutorApplyById(id).orElseThrow();
         tutorApply.setStatus(status);
 
@@ -94,11 +94,11 @@ public class TutorApplyController {
 
         for (TutorApply ta : tutorApplyService.getTutorAppliesByTutorId(pId)) {
             if (ta.getId() == taId) {
-                update(ta.getId(), "Accepted");
+                update(ta.getId(), 1);// 1 = accepted
                 ta.getClazz().getTutor().setId(tutorApply.getTutor().getId());
                 clazzService.save(ta.getClazz());
             } else {
-                update(ta.getId(), "Rejected");
+                update(ta.getId(), 2);// 2 = rejected
             }
         }
 

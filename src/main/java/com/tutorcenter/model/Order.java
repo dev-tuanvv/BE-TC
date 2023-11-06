@@ -34,7 +34,7 @@ public class Order {
     @Column
     private String type;
     @Column
-    private Date time;
+    private Date timeCreate;
     @Column
-    private String status;
+    private int status;
 }

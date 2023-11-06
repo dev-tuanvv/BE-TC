@@ -20,7 +20,13 @@ public class Log {
     @Column
     private String object;
     @Column
+    private String table;
+    @Column
+    private String field;
+    @Column
+    private String userId;
+    @Column
     private String activity;
     @Column
-    private Date time;
+    private Date timeCreate;
 }

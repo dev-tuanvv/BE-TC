@@ -28,7 +28,7 @@ public class TutorApply {
     @JoinColumn(name = "tutorId")
     private Tutor tutor;
     @Column
-    private String status;
+    private int status;
     @Column
     private boolean isDeleted;
 }

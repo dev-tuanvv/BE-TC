@@ -2,6 +2,7 @@ package com.tutorcenter.model;
 
 import java.sql.Date;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,18 +21,18 @@ public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @OneToOne
-    @JoinColumn(name = "classId", referencedColumnName = "id")
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "clazzId", referencedColumnName = "id")
     private Clazz clazz;
     @ManyToOne
-    @JoinColumn(name = "tutorId", referencedColumnName = "id")
+    @JoinColumn(name = "tutorId")
     private Tutor tutor;
     @Column
     private int rating;
     @Column
     private String content;
     @Column
-    private String status;
+    private int status;
     @Column
     private Date dateCreate;
     @Column

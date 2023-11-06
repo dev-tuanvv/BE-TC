@@ -2,6 +2,7 @@ package com.tutorcenter.model;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,13 +17,13 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "tblClass")
+@Table(name = "tblClazz")
 
 public class Clazz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "requestId", referencedColumnName = "id")
     private Request request;
     @OneToOne(mappedBy = "clazz")
@@ -40,7 +41,7 @@ public class Clazz {
     @JoinColumn(name = "tutorId")
     private Tutor tutor;
     @Column
-    private String status;
+    private int status;
     @Column
     private boolean isDeleted;
 }

@@ -33,5 +33,5 @@ public class Subject {
     @Column
     private float pricePerHour; // help reccomend fee
     @Column
-    private String status; // co tutor, ko co tutor, dang km,...
+    private int status; // co tutor, ko co tutor, dang km,...
 }
