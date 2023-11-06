@@ -112,6 +112,7 @@ public class RequestController {
         rq.setManager(managerService.getManagerById(requestDto.getManagerId()).orElse(null));
         rq.setClazz(clazzService.getClazzById(requestDto.getClazzId()).orElse(null));
         rq.setDistrict(districtService.getDistrictById(requestDto.getDistrictId()).orElse(null));
+        
         return ApiResponseDto.<Request>builder().data(requestService.save(rq)).build();
     }
 

@@ -17,10 +17,11 @@ public class ApiResponseDto<T> {
 
     @JsonInclude(Include.NON_NULL)
     private String requestId;
-    
+
     @Builder.Default
     private String responseCode = ResponseCode.SUCCESS;
-
+    
+    @JsonInclude(Include.NON_NULL)
     private T data;
 
     private String message;

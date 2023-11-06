@@ -2,17 +2,7 @@ package com.tutorcenter.dto;
 
 import java.sql.Date;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import com.tutorcenter.model.Clazz;
-import com.tutorcenter.model.District;
-import com.tutorcenter.model.Manager;
-import com.tutorcenter.model.Parent;
 import com.tutorcenter.model.Request;
-import com.tutorcenter.service.ClazzService;
-import com.tutorcenter.service.DistrictService;
-import com.tutorcenter.service.ManagerService;
-import com.tutorcenter.service.ParentService;
 
 import lombok.Data;
 
@@ -65,8 +55,7 @@ public class RequestDto {
     }
 
     // parent, manager, class, district, subjects
-    public void convertRequestDto(Request r) {
-        // r.setParent(this.parentId);
+    public void convertRequestDto(Request r) {    
         r.setPhone(this.phone);
         r.setAddress(this.address);
         r.setSlots(this.slots);
@@ -79,8 +68,6 @@ public class RequestDto {
         r.setDateModified(this.dateModified);
         r.setStatus(this.status);
         r.setRejectReason(this.rejectReason);
-        r.setDeleted(this.isDeleted);
-        
- 
+        r.setDeleted(this.isDeleted); 
     }
 }
