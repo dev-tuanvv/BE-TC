@@ -1,6 +1,5 @@
 package com.tutorcenter.controller;
 
-import java.sql.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tutorcenter.dto.ApiRequestDto;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.RequestDto;
 import com.tutorcenter.model.Clazz;
@@ -22,8 +20,7 @@ import com.tutorcenter.model.District;
 import com.tutorcenter.model.Manager;
 import com.tutorcenter.model.Parent;
 import com.tutorcenter.model.Request;
-import com.tutorcenter.model.RequestSubject;
-import com.tutorcenter.model.Subject;
+import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.DistrictService;
 import com.tutorcenter.service.ManagerService;
 import com.tutorcenter.service.ParentService;
@@ -39,12 +36,12 @@ public class RequestController {
     private ParentService parentService;
     @Autowired
     private ManagerService managerService;
-    // @Autowired
-    // private SubjectService subjectService;
     @Autowired
     private DistrictService districtService;
     @Autowired
     private RequestSubjectService requestSubjectService;
+    @Autowired
+    ClazzService clazzService;
 
     @GetMapping("")
     public ApiResponseDto<List<Request>> getAllRequests() {
@@ -103,29 +100,19 @@ public class RequestController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<Request> updateRequest(
+    public ApiResponseDto<Request> updateRequest(
             @PathVariable(value = "id") int id,
             @RequestBody RequestDto requestDto) {
-        Request rq = new Request();
+        Request rq = requestService.getRequestById(id).orElse(null);
+        if (rq == null) {
+            return ApiResponseDto.<Request>builder().data(null).responseCode("404").message("Not found").build();
+        }
         requestDto.convertRequestDto(rq);
-
-        Parent parent = parentService.getParentById(requestDto.getParentId()).orElseThrow();
-        District district = districtService.getDistrictById(requestDto.getDistrictId()).orElseThrow();
-        Manager manager = managerService.getManagerById(requestDto.getManagerId()).isPresent()
-                ? managerService.getManagerById(requestDto.getManagerId()).get()
-                : null;
-        // for (int sId : requestDto.getRSubjects()) {
-        // requestSubjectService.createRSubject(id, sId);
-        // }
-        // List<RequestSubject> rSubjects =
-        // requestSubjectService.getRSubjectsById(requestDto.getRSubjects());
-
-        rq.setDateModified(new Date(System.currentTimeMillis()));
-        rq.setDistrict(district);
-        rq.setManager(manager);
-        // rq.setSubjects(rSubjects);
-
-        return ResponseEntity.ok(requestService.save(rq));
+        rq.setParent(parentService.getParentById(requestDto.getParentId()).orElse(null));
+        rq.setManager(managerService.getManagerById(requestDto.getManagerId()).orElse(null));
+        rq.setClazz(clazzService.getClazzById(requestDto.getClazzId()).orElse(null));
+        rq.setDistrict(districtService.getDistrictById(requestDto.getDistrictId()).orElse(null));
+        return ApiResponseDto.<Request>builder().data(requestService.save(rq)).build();
     }
 
     @DeleteMapping("/delete/{id}")

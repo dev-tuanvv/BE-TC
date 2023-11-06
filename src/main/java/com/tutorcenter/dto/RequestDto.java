@@ -37,15 +37,7 @@ public class RequestDto {
     private String rejectReason;
     private boolean isDeleted;
 
-    @Autowired
-    ParentService parentService;
-    @Autowired
-    ManagerService managerService;
 
-    @Autowired
-    ClazzService clazzService;
-    @Autowired
-    DistrictService districtService;
 
     public void convertRequest(Request r) {
         this.id = r.getId();
@@ -89,9 +81,6 @@ public class RequestDto {
         r.setRejectReason(this.rejectReason);
         r.setDeleted(this.isDeleted);
         
-        r.setParent(parentService.getParentById(this.parentId).orElse(null));
-        r.setManager(managerService.getManagerById(managerId).orElse(null));
-        r.setClazz(clazzService.getClazzById(clazzId).orElse(null));
-        r.setDistrict(districtService.getDistrictById(districtId).orElse(null));
+ 
     }
 }
