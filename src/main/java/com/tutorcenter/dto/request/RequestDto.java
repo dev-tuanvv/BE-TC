@@ -63,7 +63,7 @@ public class RequestDto {
         r.setDateStart(this.dateStart);
         r.setDateEnd(this.dateEnd);
         r.setDateCreate(this.dateCreate);
-        r.setDateModified(this.datemodified);
+        r.setDateModified(this.dateModified);
         r.setStatus(this.status);
         r.setRejectReason(this.rejectReason);
         r.setDeleted(this.isDeleted);

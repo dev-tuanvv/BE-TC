@@ -120,7 +120,7 @@ public class RequestController {
         // List<RequestSubject> rSubjects =
         // requestSubjectService.getRSubjectsById(requestDto.getRSubjects());
 
-        rq.setDatemodified(new Date(System.currentTimeMillis()));
+        rq.setDateModified(new Date(System.currentTimeMillis()));
         rq.setDistrict(district);
         rq.setManager(manager);
         // rq.setSubjects(rSubjects);
