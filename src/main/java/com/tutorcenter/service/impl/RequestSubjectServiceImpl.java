@@ -66,4 +66,9 @@ public class RequestSubjectServiceImpl implements RequestSubjectService {
             createRSubject(rId, sId);
         }
     }
+
+    @Override
+    public List<RequestSubject> findAllByRequestRequestId(int requestId) {
+      return requestSubjectRepository.findByRequest_Id(requestId);
+    }
 }

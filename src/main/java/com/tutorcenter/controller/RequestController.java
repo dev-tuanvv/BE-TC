@@ -1,6 +1,8 @@
 package com.tutorcenter.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +19,14 @@ import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.RequestDto;
 import com.tutorcenter.dto.request.CreateRequestReqDto;
 import com.tutorcenter.dto.request.RequestDetailResDto;
+import com.tutorcenter.dto.request.RequestResDto;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.District;
 import com.tutorcenter.model.Manager;
 import com.tutorcenter.model.Parent;
 import com.tutorcenter.model.Request;
+import com.tutorcenter.model.RequestSubject;
+import com.tutorcenter.model.Subject;
 import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.DistrictService;
 import com.tutorcenter.service.ManagerService;
@@ -55,7 +60,8 @@ public class RequestController {
     public ApiResponseDto<RequestDetailResDto> getRequestById(@PathVariable(value = "id") int id) {
         Request request = requestService.getRequestById(id).orElse(null);
         if (request == null) {
-            return ApiResponseDto.<RequestDetailResDto>builder().responseCode("404").message("Request not found").build();
+            return ApiResponseDto.<RequestDetailResDto>builder().responseCode("404").message("Request not found")
+                    .build();
         }
         RequestDetailResDto response = new RequestDetailResDto();
         response.fromRequest(request);
@@ -72,9 +78,27 @@ public class RequestController {
     }
 
     @GetMapping("/manager/{id}")
-    public List<Request> getRequestByManagerId(@PathVariable(value = "id") int id) {
+    public ApiResponseDto<List<RequestResDto>> getRequestByManagerId(@PathVariable(value = "id") int id) {
+        Manager manager = managerService.getManagerById(id).orElse(null);
+        if (manager == null) {
+            return ApiResponseDto.<List<RequestResDto>>builder().responseCode("404").message("Manager not found")
+                    .build();
+        }
+        List<RequestResDto> response = new ArrayList<>();
+        List<Request> listRequests = requestService.getRequestByManagerID(id);
+        if (listRequests == null || listRequests.isEmpty()) {
+            return ApiResponseDto.<List<RequestResDto>>builder().responseCode("404")
+                    .message("Manager don't have any request")
+                    .build();
+        }
+        for (Request request : listRequests) {
+            RequestResDto requestResDto = new RequestResDto();
+            requestResDto.fromRequest(request);
+            requestResDto.setSubjects(requestSubjectService.findAllByRequestRequestId(request.getId()).stream().map(r -> r.getSubject().getName()) .collect(Collectors.toList()));
+            response.add(requestResDto);
+        }
 
-        return requestService.getRequestByManagerID(id);
+        return ApiResponseDto.<List<RequestResDto>>builder().data(response).build();
     }
 
     @PostMapping("/create")

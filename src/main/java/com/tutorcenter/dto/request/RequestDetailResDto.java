@@ -3,13 +3,10 @@ package com.tutorcenter.dto.request;
 import java.sql.Date;
 import java.util.List;
 
-import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.District;
 import com.tutorcenter.model.Manager;
-import com.tutorcenter.model.Parent;
 import com.tutorcenter.model.Request;
 import com.tutorcenter.model.RequestSubject;
-import com.tutorcenter.model.Subject;
 
 import lombok.Data;
 

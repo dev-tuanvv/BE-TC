@@ -62,5 +62,5 @@ public class Request {
     @Column
     private boolean isDeleted;
     @Column
-    private Boolean gender;
+    private String gender;
 }

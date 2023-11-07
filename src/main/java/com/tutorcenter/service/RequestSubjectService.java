@@ -11,6 +11,8 @@ import com.tutorcenter.model.RequestSubject;
 public interface RequestSubjectService {
     List<RequestSubject> findAll();
 
+    List<RequestSubject> findAllByRequestRequestId(int requestId);
+
     List<RequestSubject> getRSubjectsById(List<Integer> idList);
 
     List<RequestSubject> getRSubjectByRId(int rId);
