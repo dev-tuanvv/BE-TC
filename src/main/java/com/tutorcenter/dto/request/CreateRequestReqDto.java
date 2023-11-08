@@ -6,11 +6,13 @@ import java.util.List;
 
 import com.tutorcenter.model.Request;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 @Data
 public class CreateRequestReqDto {
 
+    @NotEmpty
     private String phone;
     private String address;
     private List<Integer> listSubjectId;
