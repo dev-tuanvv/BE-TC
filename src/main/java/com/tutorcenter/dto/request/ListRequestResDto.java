@@ -12,7 +12,7 @@ import com.tutorcenter.model.Subject;
 import lombok.Data;
 
 @Data
-public class ListRequestDto {
+public class ListRequestResDto {
     private int id;
 
     private String parentName;

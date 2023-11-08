@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.RequestDto;
 import com.tutorcenter.dto.request.CreateRequestReqDto;
-import com.tutorcenter.dto.request.ListRequestDto;
+import com.tutorcenter.dto.request.ListRequestResDto;
 import com.tutorcenter.dto.request.RequestDetailResDto;
 import com.tutorcenter.dto.request.RequestResDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
@@ -62,11 +62,11 @@ public class RequestController {
     }
 
     @GetMapping("/list")
-    public ApiResponseDto<List<ListRequestDto>> getListRequest() {
-        List<ListRequestDto> response = new ArrayList<>();
+    public ApiResponseDto<List<ListRequestResDto>> getListRequest() {
+        List<ListRequestResDto> response = new ArrayList<>();
 
         for (Request request : requestService.findAll()) {
-            ListRequestDto dto = new ListRequestDto();
+            ListRequestResDto dto = new ListRequestResDto();
             dto.fromRequest(request);
             List<Integer> listSId = requestSubjectService
                     .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(request.getId()));
@@ -83,7 +83,7 @@ public class RequestController {
             response.add(dto);
         }
 
-        return ApiResponseDto.<List<ListRequestDto>>builder().data(response).build();
+        return ApiResponseDto.<List<ListRequestResDto>>builder().data(response).build();
     }
 
     @GetMapping("/{id}")
