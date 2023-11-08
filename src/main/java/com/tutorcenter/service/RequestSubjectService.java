@@ -22,4 +22,6 @@ public interface RequestSubjectService {
     RequestSubject createRSubject(int rId, int sId);
 
     void updateByRequestId(int id, List<Integer> subjects);
+
+    List<Integer> getListSIdByListRSId(List<RequestSubject> listRS);
 }

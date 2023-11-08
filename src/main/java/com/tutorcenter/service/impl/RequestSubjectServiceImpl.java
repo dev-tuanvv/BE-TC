@@ -3,13 +3,13 @@ package com.tutorcenter.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Component;
 
 import com.tutorcenter.model.RequestSubject;
-import com.tutorcenter.model.Subject;
 import com.tutorcenter.repository.RequestSubjectRepository;
 import com.tutorcenter.service.RequestService;
 import com.tutorcenter.service.RequestSubjectService;
@@ -69,6 +69,12 @@ public class RequestSubjectServiceImpl implements RequestSubjectService {
 
     @Override
     public List<RequestSubject> findAllByRequestRequestId(int requestId) {
-      return requestSubjectRepository.findByRequest_Id(requestId);
+        return requestSubjectRepository.findByRequest_Id(requestId);
+    }
+
+    @Override
+    public List<Integer> getListSIdByListRSId(List<RequestSubject> listRS) {
+
+        return listRS.stream().map(rs -> rs.getSubject().getId()).collect(Collectors.toList());
     }
 }

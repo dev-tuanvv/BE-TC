@@ -11,7 +11,9 @@ import com.tutorcenter.model.Subject;
 public interface SubjectService {
     List<Subject> findAll();
 
-    List<Subject> getSubjectsByListId(List<Integer> sId);
+    List<Subject> getSubjectsByListId(List<Integer> listId);
 
     Optional<Subject> getSubjectById(int id);
+
+    List<Subject> getSubjectsByLevel(String level);
 }

@@ -1,5 +1,6 @@
 package com.tutorcenter.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,13 +23,23 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public List<Subject> getSubjectsByListId(List<Integer> sId) {
-        return subjectRepository.findAllById(sId);
+    public List<Subject> getSubjectsByListId(List<Integer> listId) {
+        return subjectRepository.findAllById(listId);
     }
 
     @Override
     public Optional<Subject> getSubjectById(int id) {
         return subjectRepository.findById(id);
+    }
+
+    @Override
+    public List<Subject> getSubjectsByLevel(String level) {
+        List<Subject> subjects = new ArrayList<>();
+        for (Subject s : findAll()) {
+            if (s.getLevel().equalsIgnoreCase(level))
+                subjects.add(s);
+        }
+        return subjects;
     }
 
 }

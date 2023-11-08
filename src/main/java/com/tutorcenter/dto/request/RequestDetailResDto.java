@@ -51,7 +51,7 @@ public class RequestDetailResDto {
 
     private Boolean gender;
 
-    private List<RequestSubject>  listSubject;
+    private List<String> listSubject;
 
     public void fromRequest(Request request) {
         this.id = request.getId();

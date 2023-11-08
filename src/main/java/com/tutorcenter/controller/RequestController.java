@@ -66,7 +66,7 @@ public class RequestController {
         RequestDetailResDto response = new RequestDetailResDto();
         response.fromRequest(request);
 
-        response.setListSubject(requestSubjectService.getRSubjectByRId(id));
+        response.setListSubject(null);
 
         return ApiResponseDto.<RequestDetailResDto>builder().data(response).build();
     }
@@ -94,7 +94,8 @@ public class RequestController {
         for (Request request : listRequests) {
             RequestResDto requestResDto = new RequestResDto();
             requestResDto.fromRequest(request);
-            requestResDto.setSubjects(requestSubjectService.findAllByRequestRequestId(request.getId()).stream().map(r -> r.getSubject().getName()) .collect(Collectors.toList()));
+            requestResDto.setSubjects(requestSubjectService.findAllByRequestRequestId(request.getId()).stream()
+                    .map(r -> r.getSubject().getName()).collect(Collectors.toList()));
             response.add(requestResDto);
         }
 
@@ -110,7 +111,6 @@ public class RequestController {
             createRequestDto.toRequest(request);
             request.setParent(parentService.getParentById(4).orElse(null));
             District district = districtService.getDistrictById(createRequestDto.getDistrictId()).orElse(null);
-
             if (district == null) {
                 return ApiResponseDto.<Request>builder().responseCode("404").message("District not found").build();
             }

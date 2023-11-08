@@ -37,7 +37,7 @@ public class CreateRequestReqDto {
         request.setDateEnd(this.dateEnd);
         request.setDateCreate(new Date(Calendar.getInstance().getTimeInMillis()));
         request.setDateModified(new Date(Calendar.getInstance().getTimeInMillis()));
-        request.setStatus(1);
+        request.setStatus(0);
         request.setDeleted(false);
         request.setTutorLevel(this.tutorLevel);
     }

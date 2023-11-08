@@ -2,6 +2,8 @@ package com.tutorcenter.model;
 
 import java.util.Set;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,6 +22,7 @@ public class Province {
     private int id;
     @Column
     private String name;
+    @JsonIgnore
     @Column
     @OneToMany(mappedBy = "province")
     private Set<District> districts;
