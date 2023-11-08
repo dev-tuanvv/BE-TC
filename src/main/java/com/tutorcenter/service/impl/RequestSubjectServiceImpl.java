@@ -18,11 +18,11 @@ import com.tutorcenter.service.SubjectService;
 @Component
 public class RequestSubjectServiceImpl implements RequestSubjectService {
     @Autowired
-    RequestSubjectRepository requestSubjectRepository;
+    private RequestSubjectRepository requestSubjectRepository;
     @Autowired
-    RequestService requestService;
+    private RequestService requestService;
     @Autowired
-    SubjectService subjectService;
+    private SubjectService subjectService;
 
     @Override
     public List<RequestSubject> findAll() {

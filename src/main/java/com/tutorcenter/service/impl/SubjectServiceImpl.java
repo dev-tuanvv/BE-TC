@@ -15,7 +15,7 @@ import com.tutorcenter.service.SubjectService;
 public class SubjectServiceImpl implements SubjectService {
 
     @Autowired
-    SubjectRepository subjectRepository;
+    private SubjectRepository subjectRepository;
 
     @Override
     public List<Subject> findAll() {

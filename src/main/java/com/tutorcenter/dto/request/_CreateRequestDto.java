@@ -1,14 +1,13 @@
 package com.tutorcenter.dto.request;
 
 import java.sql.Date;
-import java.util.List;
 
 import com.tutorcenter.model.Request;
 
 import lombok.Data;
 
 @Data
-public class CreateRequestDto {
+public class _CreateRequestDto {
     private int id;
     private int parentId;
     private int managerId;

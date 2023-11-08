@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.RequestDto;
 import com.tutorcenter.dto.request.CreateRequestReqDto;
+import com.tutorcenter.dto.request.ListRequestDto;
 import com.tutorcenter.dto.request.RequestDetailResDto;
 import com.tutorcenter.dto.request.RequestResDto;
+import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.District;
 import com.tutorcenter.model.Manager;
@@ -33,6 +35,7 @@ import com.tutorcenter.service.ManagerService;
 import com.tutorcenter.service.ParentService;
 import com.tutorcenter.service.RequestService;
 import com.tutorcenter.service.RequestSubjectService;
+import com.tutorcenter.service.SubjectService;
 
 @RestController
 @RequestMapping("/api/request")
@@ -48,12 +51,39 @@ public class RequestController {
     @Autowired
     private RequestSubjectService requestSubjectService;
     @Autowired
-    ClazzService clazzService;
+    private ClazzService clazzService;
+    @Autowired
+    private SubjectService subjectService;
 
     @GetMapping("")
     public ApiResponseDto<List<Request>> getAllRequests() {
         List<Request> data = requestService.findAll();
         return ApiResponseDto.<List<Request>>builder().data(data).build();
+    }
+
+    @GetMapping("/list")
+    public ApiResponseDto<List<ListRequestDto>> getListRequest() {
+        List<ListRequestDto> response = new ArrayList<>();
+
+        for (Request request : requestService.findAll()) {
+            ListRequestDto dto = new ListRequestDto();
+            dto.fromRequest(request);
+            List<Integer> listSId = requestSubjectService
+                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(request.getId()));
+            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+            List<SubjectLevelResDto> listSL = new ArrayList<>();
+            for (Subject subject : subjects) {
+                SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                sLDto.fromSubject(subject);
+                listSL.add(sLDto);
+            }
+            dto.setSubjects(listSL);
+
+            response.add(dto);
+        }
+
+        return ApiResponseDto.<List<ListRequestDto>>builder().data(response).build();
     }
 
     @GetMapping("/{id}")
@@ -123,10 +153,10 @@ public class RequestController {
         }
     }
 
-    @PutMapping("/createSubject/{rId}")
-    public ResponseEntity<?> createSubjects(@PathVariable int rId, @RequestBody List<Integer> subjects) {
+    @PutMapping("/updateSubject/{rId}")
+    public ResponseEntity<?> updateSubjects(@PathVariable int rId, @RequestBody List<Integer> subjects) {
         requestSubjectService.updateByRequestId(rId, subjects);
-        return ResponseEntity.ok("Thêm subjects thành công.");
+        return ResponseEntity.ok("Sửa subjects thành công.");
     }
 
     @PutMapping("/update/{id}")
