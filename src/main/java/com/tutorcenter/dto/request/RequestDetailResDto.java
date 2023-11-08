@@ -3,6 +3,7 @@ package com.tutorcenter.dto.request;
 import java.sql.Date;
 import java.util.List;
 
+import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.District;
 import com.tutorcenter.model.Manager;
 import com.tutorcenter.model.Request;
@@ -14,19 +15,11 @@ public class RequestDetailResDto {
 
     private int id;
 
-    // private Parent parent;
-
-    private int parentId;
-
     private String parentName;
 
-    private Manager manager;
+    private String email;
 
     private String phone;
-
-    private String address;
-
-    private District district;
 
     private int slots;
 
@@ -40,21 +33,24 @@ public class RequestDetailResDto {
 
     private Date dateEnd;
 
-    private Date dateCreate;
-
-    private Date dateModified;
-
     private int status;
 
     private String rejectReason;
 
-    private Boolean gender;
-
-    private List<String> listSubject;
+    private List<SubjectLevelResDto> subjects;
 
     public void fromRequest(Request request) {
         this.id = request.getId();
-        this.parentId = request.getParent().getId();
         this.parentName = request.getParent().getFullname();
+        this.email = request.getParent().getEmail();
+        this.phone = request.getPhone();
+        this.slots = request.getSlots();
+        this.slotsLength = request.getSlotsLength();
+        this.tuition = request.getTuition();
+        this.notes = request.getNotes();
+        this.dateStart = request.getDateStart();
+        this.dateEnd = request.getDateEnd();
+        this.status = request.getStatus();
+        this.rejectReason = request.getRejectReason();
     }
 }

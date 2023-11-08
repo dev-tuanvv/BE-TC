@@ -22,10 +22,8 @@ import com.tutorcenter.dto.request.ListRequestResDto;
 import com.tutorcenter.dto.request.RequestDetailResDto;
 import com.tutorcenter.dto.request.RequestResDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
-import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.District;
 import com.tutorcenter.model.Manager;
-import com.tutorcenter.model.Parent;
 import com.tutorcenter.model.Request;
 import com.tutorcenter.model.RequestSubject;
 import com.tutorcenter.model.Subject;
@@ -87,7 +85,7 @@ public class RequestController {
     }
 
     @GetMapping("/{id}")
-    public ApiResponseDto<RequestDetailResDto> getRequestById(@PathVariable(value = "id") int id) {
+    public ApiResponseDto<RequestDetailResDto> getRequestDetailById(@PathVariable(value = "id") int id) {
         Request request = requestService.getRequestById(id).orElse(null);
         if (request == null) {
             return ApiResponseDto.<RequestDetailResDto>builder().responseCode("404").message("Request not found")
@@ -95,8 +93,19 @@ public class RequestController {
         }
         RequestDetailResDto response = new RequestDetailResDto();
         response.fromRequest(request);
+        List<RequestSubject> rsList = requestSubjectService.getRSubjectByRId(id);
+        List<Integer> listSId = requestSubjectService
+                .getListSIdByListRSId(rsList.stream().collect(Collectors.toList()));
+        List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
-        response.setListSubject(null);
+        List<SubjectLevelResDto> listSL = new ArrayList<>();
+        for (Subject subject : subjects) {
+            SubjectLevelResDto sLDto = new SubjectLevelResDto();
+            sLDto.fromSubject(subject);
+            listSL.add(sLDto);
+        }
+        response.setSubjects(listSL);
+        ;
 
         return ApiResponseDto.<RequestDetailResDto>builder().data(response).build();
     }
