@@ -10,7 +10,7 @@ import lombok.Data;
 
 @Data
 public class CreateRequestReqDto {
-   
+
     private String phone;
     private String address;
     private List<Integer> listSubjectId;
@@ -23,9 +23,8 @@ public class CreateRequestReqDto {
     private Date dateEnd;
     private int districtId;
     private String tutorLevel;
-    
 
-    public void toRequest(Request request){
+    public void toRequest(Request request) {
         request.setPhone(this.phone);
         request.setAddress(this.address);
         request.setSlots(this.slots);
@@ -38,5 +37,6 @@ public class CreateRequestReqDto {
         request.setDateModified(new Date(Calendar.getInstance().getTimeInMillis()));
         request.setStatus(1);
         request.setDeleted(false);
+        request.setTutorLevel(this.tutorLevel);
     }
 }
