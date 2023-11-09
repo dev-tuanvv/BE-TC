@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.ApiResponseDto;
@@ -168,6 +169,21 @@ public class RequestController {
     public ResponseEntity<?> updateSubjects(@PathVariable int rId, @RequestBody List<Integer> subjects) {
         requestSubjectService.updateByRequestId(rId, subjects);
         return ResponseEntity.ok("Sửa subjects thành công.");
+    }
+
+    @PutMapping("/updateStatus")
+    public ApiResponseDto<Integer> updateSubjects(@RequestParam(name = "requestId") int rId,
+            @RequestParam(name = "status") int status, @RequestParam(name = "rejectReason") String rr) {
+        Request rq = requestService.getRequestById(rId).orElse(null);
+        if (rq == null) {
+            return ApiResponseDto.<Integer>builder().data(null).responseCode("404").message("Not found").build();
+        }
+        rq.setStatus(status);
+        rq.setRejectReason(rr);
+
+        requestService.save(rq);
+
+        return ApiResponseDto.<Integer>builder().data(rId).build();
     }
 
     @PutMapping("/update/{id}")
