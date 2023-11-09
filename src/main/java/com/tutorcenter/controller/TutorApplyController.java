@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.tutorApply.TutorApplyResDto;
 import com.tutorcenter.model.Clazz;
+import com.tutorcenter.model.Request;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorApply;
 import com.tutorcenter.service.ClazzService;
@@ -76,14 +77,32 @@ public class TutorApplyController {
         return ApiResponseDto.<TutorApplyResDto>builder().data(dto).build();
     }
 
-    @PutMapping("/updateStatus/{id}")
-    public ResponseEntity<?> update(@PathVariable int id, @RequestParam(name = "status") int status) {
-        TutorApply tutorApply = tutorApplyService.getTutorApplyById(id).orElseThrow();
-        tutorApply.setStatus(status);
+    // @PutMapping("/updateStatus/{id}")
+    // public ResponseEntity<?> update(@PathVariable int id, @RequestParam(name =
+    // "status") int status) {
+    // TutorApply tutorApply =
+    // tutorApplyService.getTutorApplyById(id).orElseThrow();
+    // tutorApply.setStatus(status);
+
+    // tutorApplyService.save(tutorApply);
+
+    // return ResponseEntity.ok("Cập nhật thành công.");
+    // }
+
+    @PutMapping("/acceptTutor/{taId}")
+    public ApiResponseDto<?> update(@PathVariable int taId) {
+        TutorApply tutorApply = tutorApplyService.getTutorApplyById(taId).orElse(null);
+        for (TutorApply ta : tutorApplyService.getTutorAppliesByClazzId(tutorApply.getClazz().getId())) {
+            if (ta.getId() == taId)
+                ta.setStatus(1);
+            else
+                ta.setStatus(2);
+        }
+        tutorApply.getClazz().setTutor(tutorApply.getTutor());
 
         tutorApplyService.save(tutorApply);
 
-        return ResponseEntity.ok("Cập nhật thành công.");
+        return ApiResponseDto.<String>builder().data(tutorApply.getTutor().getFullname()).build();
     }
 
     @PutMapping("/disable/{id}")
@@ -96,28 +115,29 @@ public class TutorApplyController {
         return ResponseEntity.ok("Disable thành công.");
     }
 
-    @PutMapping("/accept")
-    public ResponseEntity<?> acceptTutorApplied(
-            @RequestParam(name = "pId") int pId,
-            // @RequestParam(name = "tId") int tId,
-            @RequestParam(name = "taId") int taId) {
+    // @PutMapping("/accept")
+    // public ResponseEntity<?> acceptTutorApplied(
+    // @RequestParam(name = "pId") int pId,
+    // // @RequestParam(name = "tId") int tId,
+    // @RequestParam(name = "taId") int taId) {
 
-        TutorApply tutorApply = tutorApplyService.getTutorApplyById(taId).orElseThrow();
+    // TutorApply tutorApply =
+    // tutorApplyService.getTutorApplyById(taId).orElseThrow();
 
-        if (tutorApply.getClazz().getRequest().getParent().getId() != pId) {
-            return null;
-        }
+    // if (tutorApply.getClazz().getRequest().getParent().getId() != pId) {
+    // return null;
+    // }
 
-        for (TutorApply ta : tutorApplyService.getTutorAppliesByTutorId(pId)) {
-            if (ta.getId() == taId) {
-                update(ta.getId(), 1);// 1 = accepted
-                ta.getClazz().getTutor().setId(tutorApply.getTutor().getId());
-                clazzService.save(ta.getClazz());
-            } else {
-                update(ta.getId(), 2);// 2 = rejected
-            }
-        }
+    // for (TutorApply ta : tutorApplyService.getTutorAppliesByTutorId(pId)) {
+    // if (ta.getId() == taId) {
+    // update(ta.getId(), 1);// 1 = accepted
+    // ta.getClazz().getTutor().setId(tutorApply.getTutor().getId());
+    // clazzService.save(ta.getClazz());
+    // } else {
+    // update(ta.getId(), 2);// 2 = rejected
+    // }
+    // }
 
-        return ResponseEntity.ok("Chọn gia sư thành công.");
-    }
+    // return ResponseEntity.ok("Chọn gia sư thành công.");
+    // }
 }
