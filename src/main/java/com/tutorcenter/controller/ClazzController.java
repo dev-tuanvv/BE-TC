@@ -19,6 +19,7 @@ import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.PaginRes;
 import com.tutorcenter.dto.clazz.ClazzDetailResDto;
 import com.tutorcenter.dto.clazz.CreateClazzResDto;
+import com.tutorcenter.dto.clazz.ListClazzResDto;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
@@ -77,7 +78,7 @@ public class ClazzController {
         Clazz clazz = clazzService.getClazzById(id).orElse(null);
         ClazzDetailResDto dto = new ClazzDetailResDto();
         dto.fromClazz(clazz);
-        // Tạo list SubjectLevel
+        // Tạo list SubjectLevel từ requestId
         List<Integer> listSId = requestSubjectService
                 .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(clazz.getRequest().getId()));
         List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
@@ -95,9 +96,28 @@ public class ClazzController {
     }
 
     @GetMapping("/parent/{pId}")
-    public List<Clazz> getClazzByParentId(@PathVariable int pId) {
+    public ApiResponseDto<List<ListClazzResDto>> getClazzByParentId(@PathVariable int pId) {
+        List<Clazz> clazzs = clazzService.getClazzByParentId(pId);
+        List<ListClazzResDto> response = new ArrayList<>();
+        for (Clazz c : clazzs) {
+            ListClazzResDto dto = new ListClazzResDto();
+            dto.fromClazz(c);
+            // Tạo list SubjectLevel từ requestId
+            List<Integer> listSId = requestSubjectService
+                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(c.getRequest().getId()));
+            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
-        return clazzService.getClazzByParentId(pId);
+            List<SubjectLevelResDto> listSL = new ArrayList<>();
+            for (Subject subject : subjects) {
+                SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                sLDto.fromSubject(subject);
+                listSL.add(sLDto);
+            }
+
+            dto.setSubjects(listSL);
+            response.add(dto);
+        }
+        return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
     }
 
     @GetMapping("/manager/{mId}")
