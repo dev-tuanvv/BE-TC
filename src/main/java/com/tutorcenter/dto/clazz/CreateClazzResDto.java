@@ -22,8 +22,6 @@ public class CreateClazzResDto {
 
     private int status;
 
-    private boolean isDeleted;
-
     public void convertClazz(Clazz c) {
         this.id = c.getId();
         // this.requestId = c.getRequest().getId();
@@ -39,7 +37,7 @@ public class CreateClazzResDto {
         // }
         // this.tutorId = c.getTutor().getId();
         this.status = c.getStatus();
-        this.isDeleted = c.isDeleted();
+        // this.isDeleted = c.isDeleted();
     }
 
     // request, feedback, orders, tutorApplies, attendances
@@ -47,6 +45,6 @@ public class CreateClazzResDto {
         c.setId(this.id);
         // c.setTutorId(this.tutorId);
         c.setStatus(this.status);
-        c.setDeleted(this.isDeleted);
+        // c.setDeleted(this.isDeleted);
     }
 }

@@ -17,15 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.PaginRes;
+import com.tutorcenter.dto.clazz.ClazzDetailResDto;
 import com.tutorcenter.dto.clazz.CreateClazzResDto;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
+import com.tutorcenter.dto.subject.SubjectLevelResDto;
+import com.tutorcenter.dto.subject.SubjectResDto;
 import com.tutorcenter.model.Attendance;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.Feedback;
 import com.tutorcenter.model.Order;
 import com.tutorcenter.model.Request;
 import com.tutorcenter.model.RequestSubject;
+import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorApply;
 import com.tutorcenter.service.AttendanceService;
@@ -34,6 +38,7 @@ import com.tutorcenter.service.FeedbackService;
 import com.tutorcenter.service.OrderService;
 import com.tutorcenter.service.RequestService;
 import com.tutorcenter.service.RequestSubjectService;
+import com.tutorcenter.service.SubjectService;
 import com.tutorcenter.service.TutorApplyService;
 import com.tutorcenter.service.TutorService;
 
@@ -57,12 +62,36 @@ public class ClazzController {
     private TutorService tutorService;
     @Autowired
     private RequestSubjectService requestSubjectService;
+    @Autowired
+    SubjectService subjectService;
 
     @GetMapping("")
     public ApiResponseDto<List<Clazz>> getAllClazzs() {
 
         List<Clazz> data = clazzService.findAll();
         return ApiResponseDto.<List<Clazz>>builder().data(data).build();
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponseDto<ClazzDetailResDto> getClazzDetail(@PathVariable int id) {
+        Clazz clazz = clazzService.getClazzById(id).orElse(null);
+        ClazzDetailResDto dto = new ClazzDetailResDto();
+        dto.fromClazz(clazz);
+        // Tạo list SubjectLevel
+        List<Integer> listSId = requestSubjectService
+                .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(clazz.getRequest().getId()));
+        List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+        List<SubjectLevelResDto> listSL = new ArrayList<>();
+        for (Subject subject : subjects) {
+            SubjectLevelResDto sLDto = new SubjectLevelResDto();
+            sLDto.fromSubject(subject);
+            listSL.add(sLDto);
+        }
+
+        dto.setSubjects(listSL);
+
+        return ApiResponseDto.<ClazzDetailResDto>builder().data(dto).build();
     }
 
     @GetMapping("/parent/{pId}")

@@ -67,6 +67,7 @@ public class RequestController {
         for (Request request : requestService.findAll()) {
             ListRequestResDto dto = new ListRequestResDto();
             dto.fromRequest(request);
+            // Tạo list SubjectLevel
             List<Integer> listSId = requestSubjectService
                     .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(request.getId()));
             List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
