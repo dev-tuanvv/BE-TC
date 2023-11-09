@@ -1,5 +1,6 @@
 package com.tutorcenter.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.PaginRes;
-import com.tutorcenter.dto.clazz.ClazzDto;
+import com.tutorcenter.dto.clazz.CreateClazzResDto;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.model.Attendance;
@@ -24,6 +25,7 @@ import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.Feedback;
 import com.tutorcenter.model.Order;
 import com.tutorcenter.model.Request;
+import com.tutorcenter.model.RequestSubject;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorApply;
 import com.tutorcenter.service.AttendanceService;
@@ -31,11 +33,12 @@ import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.FeedbackService;
 import com.tutorcenter.service.OrderService;
 import com.tutorcenter.service.RequestService;
+import com.tutorcenter.service.RequestSubjectService;
 import com.tutorcenter.service.TutorApplyService;
 import com.tutorcenter.service.TutorService;
 
 @RestController
-@RequestMapping("/api/Class")
+@RequestMapping("/api/clazz")
 public class ClazzController {
 
     @Autowired
@@ -52,6 +55,8 @@ public class ClazzController {
     private AttendanceService attendanceService;
     @Autowired
     private TutorService tutorService;
+    @Autowired
+    private RequestSubjectService requestSubjectService;
 
     @GetMapping("")
     public ApiResponseDto<List<Clazz>> getAllClazzs() {
@@ -73,9 +78,26 @@ public class ClazzController {
     }
 
     @GetMapping("/tutor/{tId}")
-    public List<Clazz> getClazzByTutorId(@PathVariable int tId) {
+    public Clazz getClazzByTutorId(@PathVariable int tId) {
 
-        return clazzService.getClazzByTutorId(tId);
+        return clazzService.getClazzById(1).orElse(null);
+    }
+
+    @GetMapping("/subject/{sId}")
+    public ApiResponseDto<List<CreateClazzResDto>> getClazzsBySubjectId(@PathVariable int sId) {
+        List<CreateClazzResDto> response = new ArrayList<>();
+        for (Clazz clazz : clazzService.findAll()) {
+            List<RequestSubject> rsList = requestSubjectService.getRSubjectByRId(clazz.getRequest().getId());
+            for (RequestSubject rs : rsList) {
+                if (rs.getSubject().getId() == sId) {
+                    CreateClazzResDto dto = new CreateClazzResDto();
+                    dto.convertClazz(clazz);
+                    response.add(dto);
+                }
+            }
+        }
+
+        return ApiResponseDto.<List<CreateClazzResDto>>builder().data(response).build();
     }
 
     @PostMapping("/search")
@@ -90,10 +112,10 @@ public class ClazzController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestBody ClazzDto clazztDto, @RequestParam int rId) {
+    public ApiResponseDto<Integer> create(@RequestParam(name = "requestId") int rId) {
         Clazz clazz = new Clazz();
-        clazztDto.convertClazzDto(clazz);
-        Request request = requestService.getRequestById(rId).orElseThrow();
+
+        Request request = requestService.getRequestById(rId).orElse(null);
         Feedback feedback = null;
         Tutor tutor = null;
         List<Order> orders = null;
@@ -106,29 +128,35 @@ public class ClazzController {
         clazz.setOrders(orders);
         clazz.setTutorApplies(tutorApplies);
         clazz.setAttendances(attendances);
+        clazz.setStatus(0);
+        clazz.setDeleted(false);
 
-        clazzService.save(clazz);
+        int clazzId = clazzService.save(clazz).getId();
 
-        return ResponseEntity.ok("Tạo lớp thành công.");
+        return ApiResponseDto.<Integer>builder().data(clazzId).build();
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<?> update(@PathVariable(value = "id") int id, @RequestBody ClazzDto clazzDto) {
+    public ResponseEntity<?> update(@PathVariable(value = "id") int id, @RequestBody CreateClazzResDto clazzDto) {
         Clazz clazz = new Clazz();
         clazzDto.convertClazzDto(clazz);
-        Request request = requestService.getRequestById(clazzDto.getRequestId()).orElseThrow();
-        Feedback feedback = feedbackService.getFeedBackById(clazzDto.getFeedbackId()).orElseThrow();
-        Tutor tutor = tutorService.getTutorById(clazzDto.getTutorId()).orElseThrow();
-        List<Order> orders = orderService.getOrdersById(clazzDto.getOrders());
-        List<TutorApply> tutorApplies = tutorApplyService.getTutorAppliesById(clazzDto.getTutorApplies());
-        List<Attendance> attendances = attendanceService.getAttendancesById(clazzDto.getAttendances());
+        // Request request =
+        // requestService.getRequestById(clazzDto.getRequestId()).orElseThrow();
+        // Feedback feedback =
+        // feedbackService.getFeedBackById(clazzDto.getFeedbackId()).orElseThrow();
+        // Tutor tutor = tutorService.getTutorById(clazzDto.getTutorId()).orElseThrow();
+        // List<Order> orders = orderService.getOrdersById(clazzDto.getOrders());
+        // List<TutorApply> tutorApplies =
+        // tutorApplyService.getTutorAppliesById(clazzDto.getTutorApplies());
+        // List<Attendance> attendances =
+        // attendanceService.getAttendancesById(clazzDto.getAttendances());
 
-        clazz.setRequest(request);
-        clazz.setFeedback(feedback);
-        clazz.setTutor(tutor);
-        clazz.setOrders(orders);
-        clazz.setTutorApplies(tutorApplies);
-        clazz.setAttendances(attendances);
+        // clazz.setRequest(request);
+        // clazz.setFeedback(feedback);
+        // clazz.setTutor(tutor);
+        // clazz.setOrders(orders);
+        // clazz.setTutorApplies(tutorApplies);
+        // clazz.setAttendances(attendances);
 
         clazzService.save(clazz);
 

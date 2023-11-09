@@ -44,7 +44,7 @@ public class ClazzServiceImpl implements ClazzService {
     @Override
     public List<Clazz> getClazzByParentId(int pId) {
         List<Clazz> list = findAll().stream()
-                // .filter(clazz -> clazz.getParent().getId() == pId)
+                .filter(clazz -> clazz.getRequest().getParent().getId() == pId)
                 .collect(Collectors.toList());
         return list;
     }
@@ -52,7 +52,7 @@ public class ClazzServiceImpl implements ClazzService {
     @Override
     public List<Clazz> getClazzByManagerId(int mId) {
         List<Clazz> list = findAll().stream()
-                // .filter(clazz -> clazz.getParent().getId() == mId)
+                .filter(clazz -> clazz.getRequest().getManager().getId() == mId)
                 .collect(Collectors.toList());
         return list;
     }

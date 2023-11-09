@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tutorcenter.dto.ApiResponseDto;
+import com.tutorcenter.dto.tutorApply.TutorApplyResDto;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorApply;
@@ -45,19 +47,21 @@ public class TutorApplyController {
     }
 
     @PostMapping("/create")
-    public ResponseEntity<?> create(@RequestParam(name = "clazzId") int cId, @RequestParam(name = "tutorId") int tId) {
+    public ApiResponseDto<TutorApplyResDto> create(@RequestParam(name = "clazzId") int cId,
+            @RequestParam(name = "tutorId") int tId) {
         TutorApply tutorApply = new TutorApply();
-        Clazz clazz = clazzService.getClazzById(cId).orElseThrow();
-        Tutor tutor = tutorService.getTutorById(tId).orElseThrow();
+        Clazz clazz = clazzService.getClazzById(cId).orElse(null);
+        Tutor tutor = tutorService.getTutorById(tId).orElse(null);
 
         tutorApply.setClazz(clazz);
         tutorApply.setTutor(tutor);
         tutorApply.setDeleted(false);
         tutorApply.setStatus(0);
 
-        tutorApplyService.save(tutorApply);
+        TutorApplyResDto dto = new TutorApplyResDto();
+        dto.fromTutorApply(tutorApplyService.save(tutorApply));
 
-        return ResponseEntity.ok("Apply thành công.");
+        return ApiResponseDto.<TutorApplyResDto>builder().data(dto).build();
     }
 
     @PutMapping("/updateStatus/{id}")

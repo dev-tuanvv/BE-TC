@@ -21,7 +21,7 @@ public class TutorApply {
     private int id;
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name = "classId")
+    @JoinColumn(name = "clazzId")
     private Clazz clazz;
     @JsonIgnore
     @ManyToOne

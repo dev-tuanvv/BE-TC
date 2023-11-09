@@ -2,6 +2,8 @@ package com.tutorcenter.model;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,17 +28,22 @@ public class Clazz {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "requestId", referencedColumnName = "id")
     private Request request;
+    @JsonIgnore
     @OneToOne(mappedBy = "clazz")
     private Feedback feedback;
+    @JsonIgnore
     @Column
     @OneToMany(mappedBy = "clazz")
     private List<Order> orders;
+    @JsonIgnore
     @Column
     @OneToMany(mappedBy = "clazz")
     private List<TutorApply> tutorApplies;
+    @JsonIgnore
     @Column
     @OneToMany(mappedBy = "clazz")
     private List<Attendance> attendances;
+
     @ManyToOne
     @JoinColumn(name = "tutorId")
     private Tutor tutor;
