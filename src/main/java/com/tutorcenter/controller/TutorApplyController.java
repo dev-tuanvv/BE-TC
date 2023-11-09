@@ -1,6 +1,8 @@
 package com.tutorcenter.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -37,8 +39,18 @@ public class TutorApplyController {
     }
 
     @GetMapping("/clazz/{id}")
-    public List<TutorApply> getTutorAppliesByClazzId(@PathVariable int id) {
-        return tutorApplyService.getTutorAppliesByClazzId(id);
+    public ApiResponseDto<List<TutorApplyResDto>> getTutorAppliesByClazzId(@PathVariable int id) {
+        // List<TutorApply> list = tutorApplyService.getTutorAppliesByClazzId(id);
+        List<TutorApplyResDto> response = new ArrayList<>();
+
+        for (TutorApply ta : tutorApplyService.getTutorAppliesByClazzId(id)) {
+            TutorApplyResDto dto = new TutorApplyResDto();
+            dto.fromTutorApply(ta);
+            response.add(dto);
+
+        }
+
+        return ApiResponseDto.<List<TutorApplyResDto>>builder().data(response).build();
     }
 
     @GetMapping("/tutor/{id}")
