@@ -65,4 +65,24 @@ public class ClazzServiceImpl implements ClazzService {
         return list;
     }
 
+    @Override
+    public List<Clazz> getClazzBySubjectId(int sId) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getClazzBySubjectId'");
+    }
+
+    @Override
+    public List<Clazz> getClazzByLevel(String level) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getClazzByLevel'");
+    }
+
+    @Override
+    public List<Clazz> getClazzByDistrict(int dId) {
+        List<Clazz> list = findAll().stream()
+                .filter(clazz -> clazz.getRequest().getDistrict().getId() == dId)
+                .collect(Collectors.toList());
+        return list;
+    }
+
 }

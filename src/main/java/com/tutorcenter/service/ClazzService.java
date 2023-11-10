@@ -24,4 +24,10 @@ public interface ClazzService {
     List<Clazz> getClazzByManagerId(int pId);
 
     List<Clazz> getClazzByTutorId(int pId);
+
+    List<Clazz> getClazzBySubjectId(int sId);
+
+    List<Clazz> getClazzByLevel(String level);
+
+    List<Clazz> getClazzByDistrict(int dId);
 }
