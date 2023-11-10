@@ -2,6 +2,7 @@ package com.tutorcenter.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -22,13 +23,24 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
-    public Optional<Attendance> getAttendanceNyId(int id) {
+    public Optional<Attendance> getAttendanceById(int id) {
         return attendanceRepository.findById(id);
     }
 
     @Override
     public List<Attendance> getAttendancesById(List<Integer> idList) {
         return attendanceRepository.findAllById(idList);
+    }
+
+    @Override
+    public List<Attendance> getAttendancesByClazzId(int cId) {
+        return attendanceRepository.findAll().stream().filter(a -> a.getClazz().getId() == cId)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Attendance save(Attendance attendance) {
+        return attendanceRepository.save(attendance);
     }
 
 }

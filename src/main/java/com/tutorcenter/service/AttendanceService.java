@@ -11,7 +11,11 @@ import com.tutorcenter.model.Attendance;
 public interface AttendanceService {
     List<Attendance> findAll();
 
-    Optional<Attendance> getAttendanceNyId(int id);
+    Optional<Attendance> getAttendanceById(int id);
 
     List<Attendance> getAttendancesById(List<Integer> idList);
+
+    List<Attendance> getAttendancesByClazzId(int cId);
+
+    Attendance save(Attendance attendance);
 }
