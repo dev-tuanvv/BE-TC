@@ -6,5 +6,5 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/transactionHistory")
 public class TransactionHistoryController {
-
+    // chưa có transaction dto
 }

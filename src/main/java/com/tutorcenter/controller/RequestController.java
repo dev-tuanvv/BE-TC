@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +24,7 @@ import com.tutorcenter.dto.request.RequestResDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.District;
 import com.tutorcenter.model.Manager;
+import com.tutorcenter.model.Parent;
 import com.tutorcenter.model.Request;
 import com.tutorcenter.model.RequestSubject;
 import com.tutorcenter.model.Subject;
@@ -113,9 +113,28 @@ public class RequestController {
     }
 
     @GetMapping("/parent/{id}")
-    public List<Request> getRequestByParentId(@PathVariable(value = "id") int id) {
+    public ApiResponseDto<List<RequestResDto>> getRequestByParentId(@PathVariable(value = "id") int id) {
+        Parent parent = parentService.getParentById(id).orElse(null);
+        if (parent == null) {
+            return ApiResponseDto.<List<RequestResDto>>builder().responseCode("404").message("Parent not found")
+                    .build();
+        }
+        List<RequestResDto> response = new ArrayList<>();
+        List<Request> listRequests = requestService.getRequestByParentID(id);
+        if (listRequests == null || listRequests.isEmpty()) {
+            return ApiResponseDto.<List<RequestResDto>>builder().responseCode("404")
+                    .message("Parent don't have any request")
+                    .build();
+        }
+        for (Request request : listRequests) {
+            RequestResDto requestResDto = new RequestResDto();
+            requestResDto.fromRequest(request);
+            requestResDto.setSubjects(requestSubjectService.findAllByRequestRequestId(request.getId()).stream()
+                    .map(r -> r.getSubject().getName()).collect(Collectors.toList()));
+            response.add(requestResDto);
+        }
 
-        return requestService.getRequestByParentID(id);
+        return ApiResponseDto.<List<RequestResDto>>builder().data(response).build();
     }
 
     @GetMapping("/manager/{id}")
@@ -164,11 +183,12 @@ public class RequestController {
         }
     }
 
-    @PutMapping("/updateSubject/{rId}")
-    public ResponseEntity<?> updateSubjects(@PathVariable int rId, @RequestBody List<Integer> subjects) {
-        requestSubjectService.updateByRequestId(rId, subjects);
-        return ResponseEntity.ok("Sửa subjects thành công.");
-    }
+    // @PutMapping("/updateSubject/{rId}")
+    // public ResponseEntity<?> updateSubjects(@PathVariable int rId, @RequestBody
+    // List<Integer> subjects) {
+    // requestSubjectService.updateByRequestId(rId, subjects);
+    // return ResponseEntity.ok("Sửa subjects thành công.");
+    // }
 
     @PutMapping("/updateStatus")
     public ApiResponseDto<Integer> updateSubjects(@RequestParam(name = "requestId") int rId,
@@ -203,10 +223,9 @@ public class RequestController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Request> disableRequest(
-            @PathVariable int id) {
+    public ApiResponseDto<Integer> disableRequest(@PathVariable int id) {
         Request rq = requestService.getRequestById(id).orElseThrow();
         rq.setDeleted(true);
-        return ResponseEntity.ok(requestService.save(rq));
+        return ApiResponseDto.<Integer>builder().data(id).build();
     }
 }

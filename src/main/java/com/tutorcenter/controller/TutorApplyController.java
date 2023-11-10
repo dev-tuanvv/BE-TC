@@ -41,10 +41,10 @@ public class TutorApplyController {
 
     @GetMapping("/clazz/{id}")
     public ApiResponseDto<List<TutorApplyResDto>> getTutorAppliesByClazzId(@PathVariable int id) {
-        // List<TutorApply> list = tutorApplyService.getTutorAppliesByClazzId(id);
+        List<TutorApply> taList = tutorApplyService.getTutorAppliesByClazzId(id);
         List<TutorApplyResDto> response = new ArrayList<>();
 
-        for (TutorApply ta : tutorApplyService.getTutorAppliesByClazzId(id)) {
+        for (TutorApply ta : taList) {
             TutorApplyResDto dto = new TutorApplyResDto();
             dto.fromTutorApply(ta);
             response.add(dto);
@@ -55,8 +55,18 @@ public class TutorApplyController {
     }
 
     @GetMapping("/tutor/{id}")
-    public List<TutorApply> getTutorAppliesByTutorId(@PathVariable int id) {
-        return tutorApplyService.getTutorAppliesByTutorId(id);
+    public ApiResponseDto<List<TutorApplyResDto>> getTutorAppliesByTutorId(@PathVariable int id) {
+        List<TutorApply> taList = tutorApplyService.getTutorAppliesByTutorId(id);
+        List<TutorApplyResDto> response = new ArrayList<>();
+
+        for (TutorApply ta : taList) {
+            TutorApplyResDto dto = new TutorApplyResDto();
+            dto.fromTutorApply(ta);
+            response.add(dto);
+
+        }
+
+        return ApiResponseDto.<List<TutorApplyResDto>>builder().data(response).build();
     }
 
     @PostMapping("/create")
@@ -94,9 +104,9 @@ public class TutorApplyController {
         TutorApply tutorApply = tutorApplyService.getTutorApplyById(taId).orElse(null);
         for (TutorApply ta : tutorApplyService.getTutorAppliesByClazzId(tutorApply.getClazz().getId())) {
             if (ta.getId() == taId)
-                ta.setStatus(1);
+                ta.setStatus(1);// accepted
             else
-                ta.setStatus(2);
+                ta.setStatus(2);// rejected
         }
         tutorApply.getClazz().setTutor(tutorApply.getTutor());
 

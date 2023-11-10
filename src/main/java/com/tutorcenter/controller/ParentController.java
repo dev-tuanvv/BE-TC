@@ -17,6 +17,7 @@ public class ParentController {
     @Autowired
     ParentService parentService;
 
+    // chưa có parent dto
     @GetMapping("")
     public List<Parent> getAllParents() {
         return parentService.findAll();
