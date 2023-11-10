@@ -4,7 +4,6 @@ import java.sql.Date;
 import java.util.List;
 
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
-import com.tutorcenter.dto.subject.SubjectResDto;
 import com.tutorcenter.model.Clazz;
 
 import lombok.Data;

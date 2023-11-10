@@ -12,4 +12,8 @@ public interface FeedbackService {
     List<Feedback> findAll();
 
     Optional<Feedback> getFeedBackById(int id);
+
+    Feedback save(Feedback feedback);
+
+    List<Feedback> getFeedbacksByTutorId(int tId);
 }
