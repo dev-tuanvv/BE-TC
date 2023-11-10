@@ -8,8 +8,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tutorcenter.dto.ApiResponseDto;
+import com.tutorcenter.dto.tutor.TutorResDto;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.service.TutorService;
+
+import io.swagger.v3.oas.models.responses.ApiResponse;
+
 import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
@@ -23,9 +28,12 @@ public class TutorController {
     return tutorService.findAll();
   }
 
-  @GetMapping(value = "/{id}")
-  public Tutor getTutorById(@PathVariable int id) {
-    return tutorService.getTutorById(id).orElseThrow();
+  @GetMapping("/{id}")
+  public ApiResponseDto<TutorResDto> getTutorById(@PathVariable int id) {
+    Tutor tutor = tutorService.getTutorById(id).orElse(null);
+    TutorResDto dto = new TutorResDto();
+    dto.fromTutor(tutor);
+    return ApiResponseDto.<TutorResDto>builder().data(dto).build();
   }
 
   @GetMapping(value = "/list")

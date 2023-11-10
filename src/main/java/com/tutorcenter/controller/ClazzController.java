@@ -127,6 +127,62 @@ public class ClazzController {
         return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
     }
 
+    @GetMapping("/level/{lId}")
+    public ApiResponseDto<List<ListClazzResDto>> getClazzByLevel(@PathVariable String level) {
+        List<Clazz> clazzs = clazzService.findAll();
+        List<ListClazzResDto> response = new ArrayList<>();
+        for (Clazz c : clazzs) {
+            List<Integer> listSId = requestSubjectService
+                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(c.getRequest().getId()));
+            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+            for (Subject s : subjects) {
+                if (s.getLevel().equalsIgnoreCase(level)) {
+                    // tạo subjectDto
+                    ListClazzResDto dto = new ListClazzResDto();
+                    dto.fromClazz(c);
+                    // tạo SubjectLevel từ requestId
+
+                    List<SubjectLevelResDto> listSL = new ArrayList<>();
+                    for (Subject subject : subjects) {
+                        SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                        sLDto.fromSubject(subject);
+                        listSL.add(sLDto);
+                    }
+                    // set list SubjectLevel
+                    dto.setSubjects(listSL);
+                    response.add(dto);
+                }
+            }
+
+        }
+        return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
+    }
+
+    @GetMapping("/district/{dId}")
+    public ApiResponseDto<List<ListClazzResDto>> getClazzByDistrictId(@PathVariable int dId) {
+        List<Clazz> clazzs = clazzService.getClazzByDistrict(dId);
+        List<ListClazzResDto> response = new ArrayList<>();
+        for (Clazz c : clazzs) {
+            ListClazzResDto dto = new ListClazzResDto();
+            dto.fromClazz(c);
+            // Tạo list SubjectLevel từ requestId
+            List<Integer> listSId = requestSubjectService
+                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(c.getRequest().getId()));
+            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+            List<SubjectLevelResDto> listSL = new ArrayList<>();
+            for (Subject subject : subjects) {
+                SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                sLDto.fromSubject(subject);
+                listSL.add(sLDto);
+            }
+
+            dto.setSubjects(listSL);
+            response.add(dto);
+        }
+        return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
+    }
+
     @GetMapping("/parent/{pId}")
     public ApiResponseDto<List<ListClazzResDto>> getClazzByParentId(@PathVariable int pId) {
         List<Clazz> clazzs = clazzService.getClazzByParentId(pId);
@@ -164,22 +220,25 @@ public class ClazzController {
         return clazzService.getClazzById(1).orElse(null);
     }
 
-    @GetMapping("/subject/{sId}")
-    public ApiResponseDto<List<CreateClazzResDto>> getClazzsBySubjectId(@PathVariable int sId) {
-        List<CreateClazzResDto> response = new ArrayList<>();
-        for (Clazz clazz : clazzService.findAll()) {
-            List<RequestSubject> rsList = requestSubjectService.getRSubjectByRId(clazz.getRequest().getId());
-            for (RequestSubject rs : rsList) {
-                if (rs.getSubject().getId() == sId) {
-                    CreateClazzResDto dto = new CreateClazzResDto();
-                    dto.convertClazz(clazz);
-                    response.add(dto);
-                }
-            }
-        }
+    // @GetMapping("/subject/{sId}")
+    // public ApiResponseDto<List<CreateClazzResDto>>
+    // getClazzsBySubjectId(@PathVariable int sId) {
+    // List<CreateClazzResDto> response = new ArrayList<>();
+    // for (Clazz clazz : clazzService.findAll()) {
+    // List<RequestSubject> rsList =
+    // requestSubjectService.getRSubjectByRId(clazz.getRequest().getId());
+    // for (RequestSubject rs : rsList) {
+    // if (rs.getSubject().getId() == sId) {
+    // CreateClazzResDto dto = new CreateClazzResDto();
+    // dto.convertClazz(clazz);
+    // response.add(dto);
+    // }
+    // }
+    // }
 
-        return ApiResponseDto.<List<CreateClazzResDto>>builder().data(response).build();
-    }
+    // return
+    // ApiResponseDto.<List<CreateClazzResDto>>builder().data(response).build();
+    // }
 
     @PostMapping("/search")
     public PaginRes<SearchResDto> search(

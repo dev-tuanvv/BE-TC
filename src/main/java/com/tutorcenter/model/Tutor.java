@@ -9,8 +9,10 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
+@Data
 @PrimaryKeyJoinColumn(name = "userId")
 @Table(name = "tblTutor")
 public class Tutor extends User {
