@@ -14,4 +14,6 @@ public interface OrderService {
     Optional<Order> getOrderById(int id);
 
     List<Order> getOrdersById(List<Integer> idList);
+
+    Order save(Order order);
 }

@@ -30,4 +30,9 @@ public class OrderServiceImpl implements OrderService {
         return orderRepository.findAllById(idList);
     }
 
+    @Override
+    public Order save(Order order) {
+        return orderRepository.save(order);
+    }
+
 }

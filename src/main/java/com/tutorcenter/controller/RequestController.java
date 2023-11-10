@@ -23,7 +23,6 @@ import com.tutorcenter.dto.request.ListRequestResDto;
 import com.tutorcenter.dto.request.RequestDetailResDto;
 import com.tutorcenter.dto.request.RequestResDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
-import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.District;
 import com.tutorcenter.model.Manager;
 import com.tutorcenter.model.Request;

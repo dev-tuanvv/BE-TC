@@ -23,13 +23,11 @@ import com.tutorcenter.dto.clazz.ListClazzResDto;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
-import com.tutorcenter.dto.subject.SubjectResDto;
 import com.tutorcenter.model.Attendance;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.Feedback;
 import com.tutorcenter.model.Order;
 import com.tutorcenter.model.Request;
-import com.tutorcenter.model.RequestSubject;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorApply;
@@ -67,10 +65,30 @@ public class ClazzController {
     SubjectService subjectService;
 
     @GetMapping("")
-    public ApiResponseDto<List<Clazz>> getAllClazzs() {
+    public ApiResponseDto<List<ListClazzResDto>> getAllClazzs() {
 
-        List<Clazz> data = clazzService.findAll();
-        return ApiResponseDto.<List<Clazz>>builder().data(data).build();
+        List<Clazz> clazzs = clazzService.findAll();
+        List<ListClazzResDto> response = new ArrayList<>();
+        for (Clazz c : clazzs) {
+            ListClazzResDto dto = new ListClazzResDto();
+            dto.fromClazz(c);
+            // Tạo list SubjectLevel từ requestId
+            List<Integer> listSId = requestSubjectService
+                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(c.getRequest().getId()));
+            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+            List<SubjectLevelResDto> listSL = new ArrayList<>();
+            for (Subject subject : subjects) {
+                SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                sLDto.fromSubject(subject);
+                listSL.add(sLDto);
+            }
+
+            dto.setSubjects(listSL);
+            response.add(dto);
+        }
+
+        return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
     }
 
     @GetMapping("/{id}")
