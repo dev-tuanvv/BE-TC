@@ -29,9 +29,10 @@ public class SubjectController {
     @GetMapping("/level")
     public ApiResponseDto<List<SubjectResDto>> getSubjectsByLevel(@RequestParam String level) {
         List<SubjectResDto> data = new ArrayList<>();
-        SubjectResDto dto = new SubjectResDto();
+
         List<Subject> subjects = subjectService.getSubjectsByLevel(level);
         for (Subject s : subjects) {
+            SubjectResDto dto = new SubjectResDto();
             dto.fromSubject(s);
             data.add(dto);
         }
