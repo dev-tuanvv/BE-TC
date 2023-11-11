@@ -115,15 +115,15 @@ public class RequestController {
         return ApiResponseDto.<RequestDetailResDto>builder().data(response).build();
     }
 
-    @GetMapping("/parent/{id}")
-    public ApiResponseDto<List<ParentRequestResDto>> getRequestByParentId(@PathVariable(value = "id") int id) {
-        Parent parent = parentService.getParentById(id).orElse(null);
+    @GetMapping("/parent/{pId}")
+    public ApiResponseDto<List<ParentRequestResDto>> getRequestByParentId(@PathVariable(value = "pId") int pId) {
+        Parent parent = parentService.getParentById(pId).orElse(null);
         if (parent == null) {
             return ApiResponseDto.<List<ParentRequestResDto>>builder().responseCode("404").message("Parent not found")
                     .build();
         }
         List<ParentRequestResDto> response = new ArrayList<>();
-        List<Request> listRequests = requestService.getRequestByParentID(id);
+        List<Request> listRequests = requestService.getRequestByParentID(pId);
 
         if (listRequests == null || listRequests.isEmpty()) {
             return ApiResponseDto.<List<ParentRequestResDto>>builder().responseCode("404")
