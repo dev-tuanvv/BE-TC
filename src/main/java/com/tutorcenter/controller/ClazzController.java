@@ -74,7 +74,7 @@ public class ClazzController {
             dto.fromClazz(c);
             // Tạo list SubjectLevel từ requestId
             List<Integer> listSId = requestSubjectService
-                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(c.getRequest().getId()));
+                    .getListSIdByRId(c.getRequest().getId());
             List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
             List<SubjectLevelResDto> listSL = new ArrayList<>();
@@ -98,7 +98,7 @@ public class ClazzController {
         dto.fromClazz(clazz);
         // Tạo list SubjectLevel từ requestId
         List<Integer> listSId = requestSubjectService
-                .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(clazz.getRequest().getId()));
+                .getListSIdByRId(clazz.getRequest().getId());
         List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
         List<SubjectLevelResDto> listSL = new ArrayList<>();
@@ -119,7 +119,7 @@ public class ClazzController {
         List<ListClazzResDto> response = new ArrayList<>();
         for (Clazz c : clazzs) {
             List<Integer> listSId = requestSubjectService
-                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(c.getRequest().getId()));
+                    .getListSIdByRId(c.getRequest().getId());
 
             for (int i : listSId) {
                 if (i == sId) {
@@ -151,7 +151,7 @@ public class ClazzController {
         List<ListClazzResDto> response = new ArrayList<>();
         for (Clazz c : clazzs) {
             List<Integer> listSId = requestSubjectService
-                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(c.getRequest().getId()));
+                    .getListSIdByRId(c.getRequest().getId());
             List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
             for (Subject s : subjects) {
                 if (s.getLevel().equalsIgnoreCase(level)) {
@@ -185,7 +185,7 @@ public class ClazzController {
             dto.fromClazz(c);
             // Tạo list SubjectLevel từ requestId
             List<Integer> listSId = requestSubjectService
-                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(c.getRequest().getId()));
+                    .getListSIdByRId(c.getRequest().getId());
             List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
             List<SubjectLevelResDto> listSL = new ArrayList<>();
@@ -210,7 +210,7 @@ public class ClazzController {
             dto.fromClazz(c);
             // Tạo list SubjectLevel từ requestId
             List<Integer> listSId = requestSubjectService
-                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(c.getRequest().getId()));
+                    .getListSIdByRId(c.getRequest().getId());
             List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
             List<SubjectLevelResDto> listSL = new ArrayList<>();
@@ -235,7 +235,7 @@ public class ClazzController {
             dto.fromClazz(c);
             // Tạo list SubjectLevel từ requestId
             List<Integer> listSId = requestSubjectService
-                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(c.getRequest().getId()));
+                    .getListSIdByRId(c.getRequest().getId());
             List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
             List<SubjectLevelResDto> listSL = new ArrayList<>();
@@ -260,7 +260,7 @@ public class ClazzController {
             dto.fromClazz(c);
             // Tạo list SubjectLevel từ requestId
             List<Integer> listSId = requestSubjectService
-                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(c.getRequest().getId()));
+                    .getListSIdByRId(c.getRequest().getId());
             List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
             List<SubjectLevelResDto> listSL = new ArrayList<>();
@@ -285,7 +285,7 @@ public class ClazzController {
             dto.fromClazz(c);
             // Tạo list SubjectLevel từ requestId
             List<Integer> listSId = requestSubjectService
-                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(c.getRequest().getId()));
+                    .getListSIdByRId(c.getRequest().getId());
             List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
             List<SubjectLevelResDto> listSL = new ArrayList<>();

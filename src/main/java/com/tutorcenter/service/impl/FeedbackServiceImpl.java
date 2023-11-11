@@ -39,4 +39,23 @@ public class FeedbackServiceImpl implements FeedbackService {
         return list;
     }
 
+    @Override
+    public Float getAverageRatingByTutorId(int tId) {
+        List<Feedback> list = feedbackRepository.findAll().stream().filter(fb -> fb.getTutor().getId() == tId)
+                .collect(Collectors.toList());
+
+        if (list.isEmpty()) {
+            return null;
+        }
+
+        List<Integer> ratings = list.stream().map(f -> f.getRating()).collect(Collectors.toList());
+        int sum = 0;
+        for (int rating : ratings)
+            sum += rating;
+        float avgRating = sum / ratings.size();
+
+        return avgRating;
+
+    }
+
 }

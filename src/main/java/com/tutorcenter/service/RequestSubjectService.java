@@ -15,7 +15,9 @@ public interface RequestSubjectService {
 
     List<RequestSubject> getRSubjectsById(List<Integer> idList);
 
-    List<RequestSubject> getRSubjectByRId(int rId);
+    List<RequestSubject> getRSByRId(int rId);
+
+    List<Integer> getListSIdByRId(int rId);
 
     Optional<RequestSubject> getRequestSubjectById(int id);
 
@@ -23,5 +25,4 @@ public interface RequestSubjectService {
 
     void updateByRequestId(int id, List<Integer> subjects);
 
-    List<Integer> getListSIdByListRSId(List<RequestSubject> listRS);
 }

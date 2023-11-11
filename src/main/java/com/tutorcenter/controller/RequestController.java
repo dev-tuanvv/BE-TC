@@ -69,7 +69,7 @@ public class RequestController {
             dto.fromRequest(request);
             // Tạo list SubjectLevel
             List<Integer> listSId = requestSubjectService
-                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(request.getId()));
+                    .getListSIdByRId(request.getId());
             List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
             List<SubjectLevelResDto> listSL = new ArrayList<>();
@@ -95,9 +95,8 @@ public class RequestController {
         }
         RequestDetailResDto response = new RequestDetailResDto();
         response.fromRequest(request);
-        List<RequestSubject> rsList = requestSubjectService.getRSubjectByRId(id);
         List<Integer> listSId = requestSubjectService
-                .getListSIdByListRSId(rsList.stream().collect(Collectors.toList()));
+                .getListSIdByRId(id);
         List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
         List<SubjectLevelResDto> listSL = new ArrayList<>();
@@ -132,7 +131,7 @@ public class RequestController {
             dto.fromRequest(r);
             // Tạo list SubjectLevel từ requestId
             List<Integer> listSId = requestSubjectService
-                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(r.getId()));
+                    .getListSIdByRId(r.getId());
             List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
             List<SubjectLevelResDto> listSL = new ArrayList<>();
@@ -167,7 +166,7 @@ public class RequestController {
             requestResDto.fromRequest(request);
             // tạo list SubjectLevel từ requestId
             List<Integer> listSId = requestSubjectService
-                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(request.getId()));
+                    .getListSIdByRId(request.getId());
             List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
             List<SubjectLevelResDto> listSL = new ArrayList<>();

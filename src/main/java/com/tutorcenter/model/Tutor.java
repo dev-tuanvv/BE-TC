@@ -1,5 +1,6 @@
 package com.tutorcenter.model;
 
+import java.util.List;
 import java.util.Set;
 
 import jakarta.persistence.Column;
@@ -40,7 +41,7 @@ public class Tutor extends User {
     private String major;
     @Column
     @OneToMany(mappedBy = "tutor")
-    private Set<TutorSubject> subjects;
+    private List<TutorSubject> subjects;
     // @Column
     // private String grade;
     // @Column
