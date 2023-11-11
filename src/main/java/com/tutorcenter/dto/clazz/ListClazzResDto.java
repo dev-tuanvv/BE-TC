@@ -12,17 +12,23 @@ public class ListClazzResDto {
     private int id;
     private int requestId;
     private List<SubjectLevelResDto> subjects;
-    private int status;
+    private String tutorLevel;
     private String address;
+    private String districtName;
+    private String provinceName;
     private String gender;
     private float tuition;
+    private int status;
 
     public void fromClazz(Clazz clazz) {
         this.id = clazz.getId();
         this.requestId = clazz.getRequest().getId();
-        this.status = clazz.getStatus();
+        this.tutorLevel = clazz.getRequest().getTutorLevel();
         this.address = clazz.getRequest().getAddress();
+        this.districtName = clazz.getRequest().getDistrict().getName();
+        this.provinceName = clazz.getRequest().getDistrict().getProvince().getName();
         this.gender = clazz.getRequest().getGender();
         this.tuition = clazz.getRequest().getTuition();
+        this.status = clazz.getStatus();
     }
 }

@@ -276,6 +276,30 @@ public class ClazzController {
         return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
     }
 
+    @GetMapping("/status/{status}")
+    public ApiResponseDto<List<ListClazzResDto>> getClazzByStatus(@PathVariable int status) {
+        List<Clazz> clazzs = clazzService.getClazzByStatus(status);
+        List<ListClazzResDto> response = new ArrayList<>();
+        for (Clazz c : clazzs) {
+            ListClazzResDto dto = new ListClazzResDto();
+            dto.fromClazz(c);
+            // Tạo list SubjectLevel từ requestId
+            List<Integer> listSId = requestSubjectService
+                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(c.getRequest().getId()));
+            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+            List<SubjectLevelResDto> listSL = new ArrayList<>();
+            for (Subject subject : subjects) {
+                SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                sLDto.fromSubject(subject);
+                listSL.add(sLDto);
+            }
+
+            dto.setSubjects(listSL);
+            response.add(dto);
+        }
+        return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
+    }
     // @GetMapping("/subject/{sId}")
     // public ApiResponseDto<List<CreateClazzResDto>>
     // getClazzsBySubjectId(@PathVariable int sId) {

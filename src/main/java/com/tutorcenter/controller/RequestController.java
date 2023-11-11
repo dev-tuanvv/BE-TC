@@ -17,14 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.RequestDto;
-import com.tutorcenter.dto.clazz.ListClazzResDto;
 import com.tutorcenter.dto.request.CreateRequestReqDto;
-import com.tutorcenter.dto.request.ListRequestResDto;
 import com.tutorcenter.dto.request.ParentRequestResDto;
 import com.tutorcenter.dto.request.RequestDetailResDto;
 import com.tutorcenter.dto.request.RequestResDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
-import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.District;
 import com.tutorcenter.model.Manager;
 import com.tutorcenter.model.Parent;
@@ -63,12 +60,12 @@ public class RequestController {
         return ApiResponseDto.<List<Request>>builder().data(data).build();
     }
 
-    @GetMapping("/list")
-    public ApiResponseDto<List<ListRequestResDto>> getListRequest() {
-        List<ListRequestResDto> response = new ArrayList<>();
+    @GetMapping("/")
+    public ApiResponseDto<List<RequestResDto>> getListRequest() {
+        List<RequestResDto> response = new ArrayList<>();
 
         for (Request request : requestService.findAll()) {
-            ListRequestResDto dto = new ListRequestResDto();
+            RequestResDto dto = new RequestResDto();
             dto.fromRequest(request);
             // Tạo list SubjectLevel
             List<Integer> listSId = requestSubjectService
@@ -86,7 +83,7 @@ public class RequestController {
             response.add(dto);
         }
 
-        return ApiResponseDto.<List<ListRequestResDto>>builder().data(response).build();
+        return ApiResponseDto.<List<RequestResDto>>builder().data(response).build();
     }
 
     @GetMapping("/{id}")
@@ -168,8 +165,19 @@ public class RequestController {
         for (Request request : listRequests) {
             RequestResDto requestResDto = new RequestResDto();
             requestResDto.fromRequest(request);
-            requestResDto.setSubjects(requestSubjectService.findAllByRequestRequestId(request.getId()).stream()
-                    .map(r -> r.getSubject().getName()).collect(Collectors.toList()));
+            // tạo list SubjectLevel từ requestId
+            List<Integer> listSId = requestSubjectService
+                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(request.getId()));
+            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+            List<SubjectLevelResDto> listSL = new ArrayList<>();
+            for (Subject subject : subjects) {
+                SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                sLDto.fromSubject(subject);
+                listSL.add(sLDto);
+            }
+
+            requestResDto.setSubjects(listSL);
             response.add(requestResDto);
         }
 

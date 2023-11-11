@@ -85,4 +85,12 @@ public class ClazzServiceImpl implements ClazzService {
         return list;
     }
 
+    @Override
+    public List<Clazz> getClazzByStatus(int status) {
+        List<Clazz> list = findAll().stream()
+                .filter(clazz -> clazz.getRequest().getStatus() == status)
+                .collect(Collectors.toList());
+        return list;
+    }
+
 }
