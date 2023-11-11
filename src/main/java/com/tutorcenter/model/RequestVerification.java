@@ -30,6 +30,8 @@ public class RequestVerification {
     @Column
     private String rejectReason;
     @Column
+    private Date dateCreate;
+    @Column
     private Date dateModified;
     @Column
     private boolean isDeleted;

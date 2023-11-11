@@ -2,6 +2,7 @@ package com.tutorcenter.service.impl;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -26,8 +27,15 @@ public class TutorSubjectServiceImpl implements TutorSubjectService {
     }
 
     @Override
-    public List<TutorSubject> gTutorSubjectsById(List<Integer> idList) {
+    public List<TutorSubject> getTutorSubjectsById(List<Integer> idList) {
         return tutorSubjectRepository.findAllById(idList);
+    }
+
+    @Override
+    public List<Integer> getListSIdByTId(int tId) {
+        List<TutorSubject> list = tutorSubjectRepository.findAll().stream().filter(ts -> ts.getTutor().getId() == tId)
+                .collect(Collectors.toList());
+        return list.stream().map(ts -> ts.getSubject().getId()).collect(Collectors.toList());
     }
 
 }

@@ -9,27 +9,31 @@ import com.tutorcenter.model.Request;
 import lombok.Data;
 
 @Data
-public class RequestResDto {
-    private int id;
+public class ParentRequestResDto {
+
     private List<SubjectLevelResDto> subjects;
+
     private String gender;
+
     private String tutorLevel;
-    private String districtName;
-    private String provinceName;
-    private float tuition; // fee
+
+    private String address;
+
     private int slots;
+
     private int slotsLength;
+
+    private float tuition; // fee
+
     private int status;
 
     public void fromRequest(Request request) {
-        this.id = request.getId();
         this.gender = request.getGender();
         this.tutorLevel = request.getTutorLevel();
-        this.districtName = request.getDistrict().getName();
-        this.provinceName = request.getDistrict().getProvince().getName();
-        this.tuition = request.getTuition();
+        this.address = request.getAddress();
         this.slots = request.getSlots();
         this.slotsLength = request.getSlotsLength();
+        this.tuition = request.getTuition();
         this.status = request.getStatus();
 
     }

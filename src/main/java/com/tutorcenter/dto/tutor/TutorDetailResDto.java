@@ -8,8 +8,7 @@ import com.tutorcenter.model.Tutor;
 import lombok.Data;
 
 @Data
-public class TutorResDto {
-
+public class TutorDetailResDto {
     private String tutorName;
     private List<SubjectLevelResDto> subjects;
     private String gender;
@@ -18,7 +17,7 @@ public class TutorResDto {
     private String university;
     private String major;
     private String imgCert;
-    private String imgAvatar;
+    private float rating;
 
     public void fromTutor(Tutor tutor) {
         this.tutorName = tutor.getFullname();
@@ -28,6 +27,5 @@ public class TutorResDto {
         this.university = tutor.getUniversity();
         this.major = tutor.getMajor();
         this.imgCert = tutor.getImgCertificate();
-        this.imgAvatar = tutor.getImgAvatar();
     }
 }

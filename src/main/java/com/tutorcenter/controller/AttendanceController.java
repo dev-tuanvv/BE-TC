@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.attendance.AttendanceResDto;
 import com.tutorcenter.model.Attendance;
-import com.tutorcenter.repository.AttendanceRepository;
 import com.tutorcenter.service.AttendanceService;
 
 @RestController

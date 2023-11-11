@@ -30,4 +30,6 @@ public interface ClazzService {
     List<Clazz> getClazzByLevel(String level);
 
     List<Clazz> getClazzByDistrict(int dId);
+
+    List<Clazz> getClazzByStatus(int status);
 }

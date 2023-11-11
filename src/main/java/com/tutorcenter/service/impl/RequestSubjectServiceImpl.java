@@ -47,18 +47,18 @@ public class RequestSubjectServiceImpl implements RequestSubjectService {
     }
 
     @Override
-    public List<RequestSubject> getRSubjectByRId(int rId) {
+    public List<Integer> getListSIdByRId(int rId) {
         List<RequestSubject> requestSubjects = new ArrayList<>();
         for (RequestSubject rs : findAll()) {
             if (rs.getRequest().getId() == rId)
                 requestSubjects.add(rs);
         }
-        return requestSubjects;
+        return requestSubjects.stream().map(rs -> rs.getSubject().getId()).collect(Collectors.toList());
     }
 
     @Override
     public void updateByRequestId(int rId, List<Integer> subjects) {
-        for (RequestSubject rs : getRSubjectByRId(rId)) {
+        for (RequestSubject rs : getRSByRId(rId)) {
             requestSubjectRepository.deleteById(rs.getId());
         }
         for (Integer sId : subjects) {
@@ -72,8 +72,10 @@ public class RequestSubjectServiceImpl implements RequestSubjectService {
     }
 
     @Override
-    public List<Integer> getListSIdByListRSId(List<RequestSubject> listRS) {
+    public List<RequestSubject> getRSByRId(int rId) {
+        List<RequestSubject> list = requestSubjectRepository.findAll().stream()
+                .filter(rs -> rs.getRequest().getId() == rId).collect(Collectors.toList());
 
-        return listRS.stream().map(rs -> rs.getSubject().getId()).collect(Collectors.toList());
+        return list;
     }
 }

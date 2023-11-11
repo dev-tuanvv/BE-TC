@@ -11,7 +11,10 @@ import com.tutorcenter.model.TutorSubject;
 public interface TutorSubjectService {
     List<TutorSubject> findAll();
 
-    List<TutorSubject> gTutorSubjectsById(List<Integer> idList);
+    List<TutorSubject> getTutorSubjectsById(List<Integer> idList);
 
     Optional<TutorSubject> getTutorSubjectById(int id);
+
+    List<Integer> getListSIdByTId(int tId);
+
 }
