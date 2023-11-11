@@ -17,11 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.RequestDto;
+import com.tutorcenter.dto.clazz.ListClazzResDto;
 import com.tutorcenter.dto.request.CreateRequestReqDto;
 import com.tutorcenter.dto.request.ListRequestResDto;
+import com.tutorcenter.dto.request.ParentRequestResDto;
 import com.tutorcenter.dto.request.RequestDetailResDto;
 import com.tutorcenter.dto.request.RequestResDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
+import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.District;
 import com.tutorcenter.model.Manager;
 import com.tutorcenter.model.Parent;
@@ -113,28 +116,39 @@ public class RequestController {
     }
 
     @GetMapping("/parent/{id}")
-    public ApiResponseDto<List<RequestResDto>> getRequestByParentId(@PathVariable(value = "id") int id) {
+    public ApiResponseDto<List<ParentRequestResDto>> getRequestByParentId(@PathVariable(value = "id") int id) {
         Parent parent = parentService.getParentById(id).orElse(null);
         if (parent == null) {
-            return ApiResponseDto.<List<RequestResDto>>builder().responseCode("404").message("Parent not found")
+            return ApiResponseDto.<List<ParentRequestResDto>>builder().responseCode("404").message("Parent not found")
                     .build();
         }
-        List<RequestResDto> response = new ArrayList<>();
+        List<ParentRequestResDto> response = new ArrayList<>();
         List<Request> listRequests = requestService.getRequestByParentID(id);
+
         if (listRequests == null || listRequests.isEmpty()) {
-            return ApiResponseDto.<List<RequestResDto>>builder().responseCode("404")
+            return ApiResponseDto.<List<ParentRequestResDto>>builder().responseCode("404")
                     .message("Parent don't have any request")
                     .build();
         }
-        for (Request request : listRequests) {
-            RequestResDto requestResDto = new RequestResDto();
-            requestResDto.fromRequest(request);
-            requestResDto.setSubjects(requestSubjectService.findAllByRequestRequestId(request.getId()).stream()
-                    .map(r -> r.getSubject().getName()).collect(Collectors.toList()));
-            response.add(requestResDto);
-        }
+        for (Request r : listRequests) {
+            ParentRequestResDto dto = new ParentRequestResDto();
+            dto.fromRequest(r);
+            // Tạo list SubjectLevel từ requestId
+            List<Integer> listSId = requestSubjectService
+                    .getListSIdByListRSId(requestSubjectService.getRSubjectByRId(r.getId()));
+            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
-        return ApiResponseDto.<List<RequestResDto>>builder().data(response).build();
+            List<SubjectLevelResDto> listSL = new ArrayList<>();
+            for (Subject subject : subjects) {
+                SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                sLDto.fromSubject(subject);
+                listSL.add(sLDto);
+            }
+
+            dto.setSubjects(listSL);
+            response.add(dto);
+        }
+        return ApiResponseDto.<List<ParentRequestResDto>>builder().data(response).build();
     }
 
     @GetMapping("/manager/{id}")

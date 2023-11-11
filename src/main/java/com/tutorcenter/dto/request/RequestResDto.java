@@ -15,10 +15,11 @@ public class RequestResDto {
     private String levels;
     private int status;
     private Date dateCreate;
-    public void fromRequest(Request request){
-       requestId = request.getId();
-       parentName = request.getParent().getFullname();
-       status = request.getStatus();
-       dateCreate = request.getDateCreate();
+
+    public void fromRequest(Request request) {
+        requestId = request.getId();
+        parentName = request.getParent().getFullname();
+        status = request.getStatus();
+        dateCreate = request.getDateCreate();
     }
 }
