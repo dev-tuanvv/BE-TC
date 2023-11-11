@@ -27,7 +27,9 @@ public class RequestVerificationResDto {
     }
 
     public void toRequestVerification(RequestVerification requestVerification) {
-
+        requestVerification.setStatus(this.status);
+        requestVerification.setRejectReason(this.rejectReason);
+        requestVerification.setDateModified(new Date(System.currentTimeMillis()));
     }
 
 }

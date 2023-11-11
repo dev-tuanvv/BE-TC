@@ -8,16 +8,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.ApiRequestDto;
 import com.tutorcenter.dto.ApiResponseDto;
+import com.tutorcenter.dto.requestVerification.RequestVerificationReqDto;
 import com.tutorcenter.dto.requestVerification.RequestVerificationResDto;
 import com.tutorcenter.model.RequestVerification;
 import com.tutorcenter.service.RequestVerificationService;
 import com.tutorcenter.service.TutorService;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 @RequestMapping("/api/requestVerification")
@@ -79,6 +83,17 @@ public class RequestVerificationController {
         int rvId = requestVerificationService.save(requestVerification).getId();
 
         return ApiResponseDto.<Integer>builder().data(rvId).build();
+    }
+
+    @PutMapping("/update")
+    public ApiResponseDto<RequestVerificationResDto> update(@RequestBody RequestVerificationReqDto reqDto) {
+        RequestVerification requestVerification = requestVerificationService.getRVById(reqDto.getId()).orElse(null);
+
+        reqDto.toRequestVerification(requestVerification);
+        RequestVerificationResDto resDto = new RequestVerificationResDto();
+        resDto.fromRequestVerification(requestVerificationService.save(requestVerification));
+
+        return ApiResponseDto.<RequestVerificationResDto>builder().data(resDto).build();
     }
 
 }
