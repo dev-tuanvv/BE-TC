@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tutorcenter.common.Common;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.RequestDto;
 import com.tutorcenter.dto.request.CreateRequestReqDto;
@@ -26,7 +28,6 @@ import com.tutorcenter.model.District;
 import com.tutorcenter.model.Manager;
 import com.tutorcenter.model.Parent;
 import com.tutorcenter.model.Request;
-import com.tutorcenter.model.RequestSubject;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.DistrictService;
@@ -37,6 +38,7 @@ import com.tutorcenter.service.RequestSubjectService;
 import com.tutorcenter.service.SubjectService;
 
 @RestController
+    @PreAuthorize("hasAnyAuthority('admin:read')")
 @RequestMapping("/api/request")
 public class RequestController {
     @Autowired
@@ -54,8 +56,12 @@ public class RequestController {
     @Autowired
     private SubjectService subjectService;
 
+
     @GetMapping("")
     public ApiResponseDto<List<RequestResDto>> getListRequest() {
+
+        System.out.println("GetUserId từ JWT: "+ Common.getCurrentUserId());
+
         List<RequestResDto> response = new ArrayList<>();
 
         for (Request request : requestService.findAll()) {
@@ -79,7 +85,8 @@ public class RequestController {
 
         return ApiResponseDto.<List<RequestResDto>>builder().data(response).build();
     }
-
+  @PreAuthorize("hasAnyAuthority('admin:readd')") 
+  // này test trường hợp k author được, vì admin:readd chứ k phải admin:read
     @GetMapping("/{id}")
     public ApiResponseDto<RequestDetailResDto> getRequestDetailById(@PathVariable(value = "id") int id) {
         Request request = requestService.getRequestById(id).orElse(null);
@@ -197,6 +204,7 @@ public class RequestController {
             return ApiResponseDto.<Request>builder().responseCode("500").message(e.getMessage()).build();
         }
     }
+
     @PutMapping("/updateStatus")
     public ApiResponseDto<Integer> updateSubjects(@RequestParam(name = "requestId") int rId,
             @RequestParam(name = "status") int status, @RequestParam(name = "rejectReason") String rr) {
