@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tutorcenter.common.Common;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.RequestDto;
 import com.tutorcenter.dto.request.CreateRequestReqDto;
@@ -37,7 +38,7 @@ import com.tutorcenter.service.RequestSubjectService;
 import com.tutorcenter.service.SubjectService;
 
 @RestController
-@PreAuthorize("hasAnyAuthority('ADMIN_READ','MANAGER_READ')")
+@PreAuthorize("hasAnyAuthority('admin:read')")
 @RequestMapping("/api/request")
 public class RequestController {
     @Autowired
@@ -57,6 +58,9 @@ public class RequestController {
 
     @GetMapping("")
     public ApiResponseDto<List<RequestResDto>> getListRequest() {
+
+        System.out.println("GetUserId từ JWT: " + Common.getCurrentUserId());
+
         List<RequestResDto> response = new ArrayList<>();
 
         for (Request request : requestService.findAll()) {
@@ -81,6 +85,8 @@ public class RequestController {
         return ApiResponseDto.<List<RequestResDto>>builder().data(response).build();
     }
 
+    @PreAuthorize("hasAnyAuthority('admin:readd')")
+    // này test trường hợp k author được, vì admin:readd chứ k phải admin:read
     @GetMapping("/{id}")
     public ApiResponseDto<RequestDetailResDto> getRequestDetailById(@PathVariable(value = "id") int id) {
         Request request = requestService.getRequestById(id).orElse(null);
@@ -198,6 +204,7 @@ public class RequestController {
             return ApiResponseDto.<Request>builder().responseCode("500").message(e.getMessage()).build();
         }
     }
+
     @PutMapping("/updateStatus")
     public ApiResponseDto<Integer> updateSubjects(@RequestParam(name = "requestId") int rId,
             @RequestParam(name = "status") int status, @RequestParam(name = "rejectReason") String rr) {
