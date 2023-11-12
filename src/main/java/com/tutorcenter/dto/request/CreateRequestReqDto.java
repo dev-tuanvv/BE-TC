@@ -6,7 +6,9 @@ import java.util.List;
 
 import com.tutorcenter.model.Request;
 
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
@@ -14,9 +16,13 @@ public class CreateRequestReqDto {
 
     @NotEmpty
     private String phone;
+    @NotEmpty
     private String address;
+    @NotEmpty
     private List<Integer> listSubjectId;
     private String gender;
+    @NotNull
+    @Min(0)
     private int slots;
     private int slotsLength;
     private float tuition;

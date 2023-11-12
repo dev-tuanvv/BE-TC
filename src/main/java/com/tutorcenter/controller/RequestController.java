@@ -55,12 +55,6 @@ public class RequestController {
     private SubjectService subjectService;
 
     @GetMapping("")
-    public ApiResponseDto<List<Request>> getAllRequests() {
-        List<Request> data = requestService.findAll();
-        return ApiResponseDto.<List<Request>>builder().data(data).build();
-    }
-
-    @GetMapping("/")
     public ApiResponseDto<List<RequestResDto>> getListRequest() {
         List<RequestResDto> response = new ArrayList<>();
 
@@ -203,14 +197,6 @@ public class RequestController {
             return ApiResponseDto.<Request>builder().responseCode("500").message(e.getMessage()).build();
         }
     }
-
-    // @PutMapping("/updateSubject/{rId}")
-    // public ResponseEntity<?> updateSubjects(@PathVariable int rId, @RequestBody
-    // List<Integer> subjects) {
-    // requestSubjectService.updateByRequestId(rId, subjects);
-    // return ResponseEntity.ok("Sửa subjects thành công.");
-    // }
-
     @PutMapping("/updateStatus")
     public ApiResponseDto<Integer> updateSubjects(@RequestParam(name = "requestId") int rId,
             @RequestParam(name = "status") int status, @RequestParam(name = "rejectReason") String rr) {
