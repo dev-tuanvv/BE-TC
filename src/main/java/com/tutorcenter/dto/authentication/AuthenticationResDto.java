@@ -1,4 +1,4 @@
-package com.tutorcenter.model;
+package com.tutorcenter.dto.authentication;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationResponse {
+public class AuthenticationResDto {
     @JsonProperty("access_token")
     private String accessToken;
     @JsonProperty("refresh_token")

@@ -1,4 +1,4 @@
-package com.tutorcenter.model;
+package com.tutorcenter.dto.authentication;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AuthenticationRequest {
+public class AuthenticationReqDto {
     private String email;
     String password;
 }

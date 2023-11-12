@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutorcenter.configuration.JwtService;
 import com.tutorcenter.constant.TokenType;
-import com.tutorcenter.model.AuthenticationRequest;
-import com.tutorcenter.model.AuthenticationResponse;
-import com.tutorcenter.model.RegisterRequest;
+import com.tutorcenter.dto.authentication.AuthenticationReqDto;
+import com.tutorcenter.dto.authentication.AuthenticationResDto;
+import com.tutorcenter.dto.authentication.RegisterReqDto;
 import com.tutorcenter.model.Token;
 import com.tutorcenter.model.User;
 import com.tutorcenter.repository.TokenRepository;
@@ -32,7 +32,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResDto register(RegisterReqDto request) {
         var user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -43,13 +43,13 @@ public class AuthenticationService {
         var jwtToken = jwtService.generateToken(user);
         var refreshToken = jwtService.generateRefreshToken(user);
         saveUserToken(savedUser, jwtToken);
-        return AuthenticationResponse.builder()
+        return AuthenticationResDto.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    public AuthenticationResDto authenticate(AuthenticationReqDto request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),
@@ -60,7 +60,7 @@ public class AuthenticationService {
         var refreshToken = jwtService.generateRefreshToken(user);
         revokeAllUserTokens(user);
         saveUserToken(user, jwtToken);
-        return AuthenticationResponse.builder()
+        return AuthenticationResDto.builder()
                 .accessToken(jwtToken)
                 .refreshToken(refreshToken)
                 .build();
@@ -106,7 +106,7 @@ public class AuthenticationService {
                 var accessToken = jwtService.generateToken(user);
                 revokeAllUserTokens(user);
                 saveUserToken(user, accessToken);
-                var authResponse = AuthenticationResponse.builder()
+                var authResponse = AuthenticationResDto.builder()
                         .accessToken(accessToken)
                         .refreshToken(refreshToken)
                         .build();

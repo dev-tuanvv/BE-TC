@@ -1,4 +1,4 @@
-package com.tutorcenter.model;
+package com.tutorcenter.dto.authentication;
 
 import com.tutorcenter.constant.Role;
 
@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class RegisterReqDto {
 
     private String email;
     private String password;
