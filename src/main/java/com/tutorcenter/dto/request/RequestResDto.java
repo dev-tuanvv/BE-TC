@@ -11,6 +11,7 @@ import lombok.Data;
 @Data
 public class RequestResDto {
     private int id;
+    private String parentFulName;
     private List<SubjectLevelResDto> subjects;
     private String gender;
     private String tutorLevel;
@@ -20,8 +21,11 @@ public class RequestResDto {
     private int slots;
     private int slotsLength;
     private int status;
+    private String address;
+    private Date dateCreate;
 
     public void fromRequest(Request request) {
+        this.parentFulName = request.getParent().getFullname();
         this.id = request.getId();
         this.gender = request.getGender();
         this.tutorLevel = request.getTutorLevel();
@@ -31,6 +35,7 @@ public class RequestResDto {
         this.slots = request.getSlots();
         this.slotsLength = request.getSlotsLength();
         this.status = request.getStatus();
-
+        this.address = request.getAddress();
+        this.dateCreate = request.getDateCreate();
     }
 }
