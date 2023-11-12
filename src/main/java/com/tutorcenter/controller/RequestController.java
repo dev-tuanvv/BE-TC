@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,7 +27,6 @@ import com.tutorcenter.model.District;
 import com.tutorcenter.model.Manager;
 import com.tutorcenter.model.Parent;
 import com.tutorcenter.model.Request;
-import com.tutorcenter.model.RequestSubject;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.DistrictService;
@@ -37,6 +37,7 @@ import com.tutorcenter.service.RequestSubjectService;
 import com.tutorcenter.service.SubjectService;
 
 @RestController
+@PreAuthorize("hasAnyAuthority('ADMIN_READ','MANAGER_READ')")
 @RequestMapping("/api/request")
 public class RequestController {
     @Autowired
