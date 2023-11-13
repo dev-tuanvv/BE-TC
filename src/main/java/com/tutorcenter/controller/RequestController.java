@@ -85,7 +85,7 @@ public class RequestController {
         return ApiResponseDto.<List<RequestResDto>>builder().data(response).build();
     }
 
-    @PreAuthorize("hasAnyAuthority('admin:readd')")
+    // @PreAuthorize("hasAnyAuthority('admin:readd')")
     // này test trường hợp k author được, vì admin:readd chứ k phải admin:read
     @GetMapping("/{id}")
     public ApiResponseDto<RequestDetailResDto> getRequestDetailById(@PathVariable(value = "id") int id) {
