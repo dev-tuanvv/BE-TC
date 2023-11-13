@@ -2,12 +2,16 @@ package com.tutorcenter.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "userId")
 @Table(name = "tblParent")
+@Data
 public class Parent extends User {
     // @Id
     // @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,10 +23,9 @@ public class Parent extends User {
     private String phone;
     @Column
     private String address;
-    @Column
-    private String district;
-    @Column
-    private String province;
+    @ManyToOne
+    @JoinColumn(name = "districtId")
+    private District district;
     @Column
     private int status;
 }

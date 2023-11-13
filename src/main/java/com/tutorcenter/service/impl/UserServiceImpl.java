@@ -34,6 +34,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.existsById(id);
     }
 
+    @Override
+    public boolean isUserExistByEmail(String email) {
+        return userRepository.findAll().stream().anyMatch(u -> u.getEmail().equals(email));
+    }
+
     // @Override
     // public Optional<User> getUserByEmail(String email) {
     // return userRepository.getUserByEmail(email);

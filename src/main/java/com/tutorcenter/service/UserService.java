@@ -17,6 +17,8 @@ public interface UserService {
 
     boolean isUserExist(int id);
 
+    boolean isUserExistByEmail(String email);
+
     // String authenticate(CustomUserDetails loginDTO);
 
     // UserDetails getUserDetailsByEmail(String username);
