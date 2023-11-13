@@ -38,7 +38,7 @@ import com.tutorcenter.service.RequestSubjectService;
 import com.tutorcenter.service.SubjectService;
 
 @RestController
-@PreAuthorize("hasAnyAuthority('admin:read')")
+// @PreAuthorize("hasAnyAuthority('admin:read')")
 @RequestMapping("/api/request")
 public class RequestController {
     @Autowired
