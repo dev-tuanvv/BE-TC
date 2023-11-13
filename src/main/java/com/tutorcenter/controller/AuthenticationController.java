@@ -16,7 +16,6 @@ import com.tutorcenter.dto.authentication.AuthenticationResDto;
 import com.tutorcenter.dto.authentication.RegisterParentReqDto;
 import com.tutorcenter.dto.authentication.RegisterReqDto;
 import com.tutorcenter.dto.authentication.RegisterTutorReqDto;
-import com.tutorcenter.model.Parent;
 import com.tutorcenter.service.UserService;
 import com.tutorcenter.service.impl.AuthenticationService;
 

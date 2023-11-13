@@ -42,10 +42,6 @@ public class Tutor extends User {
     @Column
     @OneToMany(mappedBy = "tutor")
     private List<TutorSubject> subjects;
-    // @Column
-    // private String grade;
-    // @Column
-    // private String area;
     @Column
     private String imgAvatar;
     @Column

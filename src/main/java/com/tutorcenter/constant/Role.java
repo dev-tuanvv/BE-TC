@@ -1,8 +1,5 @@
 package com.tutorcenter.constant;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 import static com.tutorcenter.constant.Permission.ADMIN_CREATE;
 import static com.tutorcenter.constant.Permission.ADMIN_DELETE;
 import static com.tutorcenter.constant.Permission.ADMIN_READ;
@@ -20,12 +17,14 @@ import static com.tutorcenter.constant.Permission.TUTOR_DELETE;
 import static com.tutorcenter.constant.Permission.TUTOR_READ;
 import static com.tutorcenter.constant.Permission.TUTOR_UPDATE;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum Role {

@@ -2,7 +2,6 @@ package com.tutorcenter.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.tutorApply.TutorApplyResDto;
 import com.tutorcenter.model.Clazz;
-import com.tutorcenter.model.Request;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorApply;
 import com.tutorcenter.service.ClazzService;

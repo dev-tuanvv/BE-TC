@@ -1,7 +1,6 @@
 package com.tutorcenter.dto.authentication;
 
 import com.tutorcenter.constant.Role;
-import com.tutorcenter.model.Parent;
 import com.tutorcenter.model.Tutor;
 
 import lombok.Data;

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tutorcenter.configuration.JwtService;
-import com.tutorcenter.constant.Role;
 import com.tutorcenter.constant.TokenType;
 import com.tutorcenter.dto.authentication.AuthenticationReqDto;
 import com.tutorcenter.dto.authentication.AuthenticationResDto;
@@ -27,7 +26,6 @@ import com.tutorcenter.repository.TokenRepository;
 import com.tutorcenter.repository.TutorRepository;
 import com.tutorcenter.repository.UserRepository;
 import com.tutorcenter.service.DistrictService;
-import com.tutorcenter.service.ParentService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
