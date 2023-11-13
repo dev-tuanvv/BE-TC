@@ -10,6 +10,7 @@ import lombok.Data;
 @Data
 public class TutorResDto {
 
+    private int id;
     private String tutorName;
     private List<SubjectLevelResDto> subjects;
     private String gender;
@@ -21,6 +22,7 @@ public class TutorResDto {
     private String imgAvatar;
 
     public void fromTutor(Tutor tutor) {
+        this.id = tutor.getId();
         this.tutorName = tutor.getFullname();
         this.gender = tutor.getGender();
         this.districtName = tutor.getDistrict().getName();
