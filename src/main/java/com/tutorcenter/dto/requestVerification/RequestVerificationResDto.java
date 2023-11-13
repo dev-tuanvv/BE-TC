@@ -14,22 +14,20 @@ public class RequestVerificationResDto {
     private int status;
     private String rejectReason;
     private Date dateCreate;
-    private Date dateModified;
 
     public void fromRequestVerification(RequestVerification requestVerification) {
         this.id = requestVerification.getId();
         this.tutorId = requestVerification.getTutor().getId();
-        this.managerId = (requestVerification.getTutor() != null) ? requestVerification.getManager().getId() : null;
+        this.managerId = (requestVerification.getManager() != null) ? requestVerification.getManager().getId()
+                : managerId;
         this.status = requestVerification.getStatus();
         this.rejectReason = requestVerification.getRejectReason();
         this.dateCreate = requestVerification.getDateCreate();
-        this.dateModified = requestVerification.getDateModified();
     }
 
     public void toRequestVerification(RequestVerification requestVerification) {
         requestVerification.setStatus(this.status);
         requestVerification.setRejectReason(this.rejectReason);
-        requestVerification.setDateModified(new Date(System.currentTimeMillis()));
     }
 
 }

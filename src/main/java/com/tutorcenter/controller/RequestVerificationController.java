@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,8 +21,6 @@ import com.tutorcenter.dto.requestVerification.RequestVerificationResDto;
 import com.tutorcenter.model.RequestVerification;
 import com.tutorcenter.service.RequestVerificationService;
 import com.tutorcenter.service.TutorService;
-
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 @RequestMapping("/api/requestVerification")
@@ -77,8 +76,6 @@ public class RequestVerificationController {
         requestVerification.setStatus(0);
         requestVerification.setRejectReason(null);
         requestVerification.setDateCreate(new Date(System.currentTimeMillis()));
-        requestVerification.setDateModified(new Date(System.currentTimeMillis()));
-        requestVerification.setDeleted(false);
 
         int rvId = requestVerificationService.save(requestVerification).getId();
 
