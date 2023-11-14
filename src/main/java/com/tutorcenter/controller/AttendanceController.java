@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -49,7 +50,7 @@ public class AttendanceController {
     }
 
     @PostMapping("/create")
-    public ApiResponseDto<Integer> create(@RequestParam(name = "clazzId") int clazzId,
+    public ApiResponseDto<AttendanceResDto> create(@RequestParam(name = "clazzId") int clazzId,
             @RequestParam(name = "status") int status) {
         Attendance attendance = new Attendance();
         AttendanceResDto dto = new AttendanceResDto();
@@ -57,8 +58,8 @@ public class AttendanceController {
         dto.setStatus(status);
         dto.fromAttendance(attendance);
 
-        int aId = attendanceService.save(attendance).getId();
+        attendanceService.save(attendance);
 
-        return ApiResponseDto.<Integer>builder().data(aId).build();
+        return ApiResponseDto.<AttendanceResDto>builder().data(dto).build();
     }
 }

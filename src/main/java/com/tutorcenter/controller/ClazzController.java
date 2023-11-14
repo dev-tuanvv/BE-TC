@@ -383,10 +383,18 @@ public class ClazzController {
         return ResponseEntity.ok("Cập nhật thành công class.");
     }
 
+    @PutMapping("/updateStatus")
+    public ApiResponseDto<Integer> updateClazzStatus(@RequestParam(name = "clazzId") int id,
+            @RequestParam(name = "status") int status) {
+        Clazz clazz = clazzService.getClazzById(id).orElseThrow();
+        clazz.setStatus(status);
+        return ApiResponseDto.<Integer>builder().data(clazzService.save(clazz).getId()).build();
+    }
+
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Clazz> disableClazz(@PathVariable int id) {
+    public ApiResponseDto<Integer> disableClazz(@PathVariable int id) {
         Clazz clazz = clazzService.getClazzById(id).orElseThrow();
         clazz.setDeleted(true);
-        return ResponseEntity.ok(clazzService.save(clazz));
+        return ApiResponseDto.<Integer>builder().data(clazzService.save(clazz).getId()).build();
     }
 }
