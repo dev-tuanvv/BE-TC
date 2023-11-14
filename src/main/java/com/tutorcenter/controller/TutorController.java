@@ -9,9 +9,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tutorcenter.common.Common;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.dto.tutor.TutorDetailResDto;
+import com.tutorcenter.dto.tutor.TutorProfileResDto;
 import com.tutorcenter.dto.tutor.TutorResDto;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Tutor;
@@ -83,4 +85,25 @@ public class TutorController {
     return ApiResponseDto.<TutorDetailResDto>builder().data(dto).build();
   }
 
+  @GetMapping("/profile")
+  public ApiResponseDto<TutorProfileResDto> getProfileParentById() {
+    Tutor model = tutorService.getTutorById(Common.getCurrentUserId()).orElse(null);
+    if (model == null) {
+      return ApiResponseDto.<TutorProfileResDto>builder().responseCode("404").build();
+    }
+    TutorProfileResDto dto = new TutorProfileResDto();
+    dto.fromTutor(model);
+    List<Integer> listSId = tutorSubjectService
+        .getListSIdByTId(model.getId());
+    List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+    List<SubjectLevelResDto> listSL = new ArrayList<>();
+    for (Subject subject : subjects) {
+      SubjectLevelResDto sLDto = new SubjectLevelResDto();
+      sLDto.fromSubject(subject);
+      listSL.add(sLDto);
+    }
+    dto.setSubjects(listSL);
+    return ApiResponseDto.<TutorProfileResDto>builder().data(dto).build();
+  }
 }

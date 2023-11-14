@@ -5,7 +5,7 @@ import com.tutorcenter.model.Parent;
 import lombok.Data;
 
 @Data
-public class ParentDetailDto {
+public class ParentProfileResDto {
     private String fullName;
     private String email;
     private String phone;
