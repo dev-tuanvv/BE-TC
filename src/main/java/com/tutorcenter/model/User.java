@@ -41,7 +41,7 @@ public class User implements UserDetails {
     @Column
     @OneToMany(mappedBy = "user")
     private Set<Order> orders;
-    @Column
+    @Column(unique = true)
     private String email;
     @Column
     @JsonIgnore
