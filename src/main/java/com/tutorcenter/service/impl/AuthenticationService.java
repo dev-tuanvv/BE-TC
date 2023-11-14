@@ -63,37 +63,23 @@ public class AuthenticationService {
                 .build();
     }
 
-    public AuthenticationResDto registerParent(RegisterParentReqDto request) {
+    public String registerParent(RegisterParentReqDto request) {
         Parent parent = new Parent();
         request.toParent(parent);
         parent.setPassword(passwordEncoder.encode(request.getPassword()));
         parent.setDistrict(districtService.getDistrictById(request.getDistrictId()).orElse(null));
 
-        var savedUser = parentRepository.save(parent);
-        var jwtToken = jwtService.generateToken(parent);
-        var refreshToken = jwtService.generateRefreshToken(parent);
-        saveUserToken(savedUser, jwtToken);
-        return AuthenticationResDto.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .build();
+        return parentRepository.save(parent).getEmail();
     }
 
-    public AuthenticationResDto registerTutor(RegisterTutorReqDto request) {
+    public String registerTutor(RegisterTutorReqDto request) {
         Tutor tutor = new Tutor();
         request.toTutor(tutor);
 
         tutor.setPassword(passwordEncoder.encode(request.getPassword()));
         tutor.setDistrict(districtService.getDistrictById(request.getDistrictId()).orElse(null));
 
-        var savedUser = tutorRepository.save(tutor);
-        var jwtToken = jwtService.generateToken(tutor);
-        var refreshToken = jwtService.generateRefreshToken(tutor);
-        saveUserToken(savedUser, jwtToken);
-        return AuthenticationResDto.builder()
-                .accessToken(jwtToken)
-                .refreshToken(refreshToken)
-                .build();
+        return tutorRepository.save(tutor).getEmail();
     }
 
     public AuthenticationResDto authenticate(AuthenticationReqDto request) {

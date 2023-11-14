@@ -57,18 +57,18 @@ public class AuthenticationController {
     }
 
     @PostMapping("/registerParent")
-    public ApiResponseDto<AuthenticationResDto> registerParent(
+    public ApiResponseDto<String> registerParent(
             @RequestBody RegisterParentReqDto request) {
 
-        return ApiResponseDto.<AuthenticationResDto>builder().data(authenticationService.registerParent(request))
+        return ApiResponseDto.<String>builder().data(authenticationService.registerParent(request))
                 .build();
     }
 
     @PostMapping("/registerTutor")
-    public ApiResponseDto<AuthenticationResDto> registerTutor(
+    public ApiResponseDto<String> registerTutor(
             @RequestBody RegisterTutorReqDto request) {
 
-        return ApiResponseDto.<AuthenticationResDto>builder().data(authenticationService.registerTutor(request))
+        return ApiResponseDto.<String>builder().data(authenticationService.registerTutor(request))
                 .build();
     }
 }
