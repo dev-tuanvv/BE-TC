@@ -71,6 +71,15 @@ public class RequestVerificationController {
     @PostMapping("/create")
     public ApiResponseDto<Integer> create(@RequestParam(name = "tutorId") int tId) {
         RequestVerification requestVerification = new RequestVerification();
+        // check RequestVerification đã tồn tại ở trạng thái chờ duyệt
+        List<RequestVerification> reqs = requestVerificationService.getRVByTutorId(tId).stream()
+                .filter(req -> req.getStatus() == 1)
+                .toList();
+        if (reqs.size() > 0) {
+            return ApiResponseDto.<Integer>builder().data(-1)
+                    .message("Đã tồn tại RequestVerification với TutorId: " + tId + " ở trạng thái đang chờ duyệt")
+                    .build();
+        }
         requestVerification.setTutor(tutorService.getTutorById(tId).orElse(null));
         requestVerification.setManager(null);
         requestVerification.setStatus(0);
@@ -84,7 +93,9 @@ public class RequestVerificationController {
 
     @PutMapping("/update")
     public ApiResponseDto<UpdateRequestVerificationResDto> update(@RequestBody RequestVerificationReqDto reqDto) {
-        RequestVerification requestVerification = requestVerificationService.getRVById(reqDto.getId()).orElse(null);
+        RequestVerification requestVerification = requestVerificationService.getRVByTutorId(reqDto.getId()).stream()
+                .filter(req -> req.getStatus() == 0)
+                .toList().get(0);
 
         reqDto.toRequestVerification(requestVerification);
         UpdateRequestVerificationResDto resDto = new UpdateRequestVerificationResDto();
