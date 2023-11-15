@@ -1,5 +1,6 @@
 package com.tutorcenter.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -59,9 +60,12 @@ public class ClazzServiceImpl implements ClazzService {
 
     @Override
     public List<Clazz> getClazzByTutorId(int tId) {
-        List<Clazz> list = findAll().stream()
-                .filter(clazz -> clazz.getTutor().getId() == tId)
-                .collect(Collectors.toList());
+        List<Clazz> list = new ArrayList<>();
+
+        for (Clazz c : clazzRepository.findAll()) {
+            if (c.getTutor() != null && c.getTutor().getId() == tId)
+                list.add(c);
+        }
         return list;
     }
 
