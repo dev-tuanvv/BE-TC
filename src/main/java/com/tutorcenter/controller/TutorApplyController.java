@@ -14,13 +14,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.ApiResponseDto;
+import com.tutorcenter.dto.subject.SubjectLevelResDto;
+import com.tutorcenter.dto.tutorApply.ListTutorApplyResDto;
 import com.tutorcenter.dto.tutorApply.TutorApplyResDto;
 import com.tutorcenter.model.Clazz;
+import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorApply;
 import com.tutorcenter.service.ClazzService;
+import com.tutorcenter.service.SubjectService;
 import com.tutorcenter.service.TutorApplyService;
 import com.tutorcenter.service.TutorService;
+import com.tutorcenter.service.TutorSubjectService;
 
 @RestController
 @RequestMapping("/api/tutorApply")
@@ -31,6 +36,10 @@ public class TutorApplyController {
     private ClazzService clazzService;
     @Autowired
     private TutorService tutorService;
+    @Autowired
+    private TutorSubjectService tutorSubjectService;
+    @Autowired
+    private SubjectService subjectService;
 
     @GetMapping("/")
     public List<TutorApply> getAll() {
@@ -38,18 +47,30 @@ public class TutorApplyController {
     }
 
     @GetMapping("/clazz/{id}")
-    public ApiResponseDto<List<TutorApplyResDto>> getTutorAppliesByClazzId(@PathVariable int id) {
+    public ApiResponseDto<List<ListTutorApplyResDto>> getTutorAppliesByClazzId(@PathVariable int id) {
         List<TutorApply> taList = tutorApplyService.getTutorAppliesByClazzId(id);
-        List<TutorApplyResDto> response = new ArrayList<>();
+        List<ListTutorApplyResDto> response = new ArrayList<>();
 
         for (TutorApply ta : taList) {
-            TutorApplyResDto dto = new TutorApplyResDto();
+            ListTutorApplyResDto dto = new ListTutorApplyResDto();
             dto.fromTutorApply(ta);
-            response.add(dto);
+            // Tạo list SubjectLevel từ tutorId
+            List<Integer> listSId = tutorSubjectService
+                    .getListSIdByTId(ta.getTutor().getId());
+            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
+            List<SubjectLevelResDto> listSL = new ArrayList<>();
+            for (Subject subject : subjects) {
+                SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                sLDto.fromSubject(subject);
+                listSL.add(sLDto);
+            }
+
+            dto.setTutorSubjects(listSL);
+            response.add(dto);
         }
 
-        return ApiResponseDto.<List<TutorApplyResDto>>builder().data(response).build();
+        return ApiResponseDto.<List<ListTutorApplyResDto>>builder().data(response).build();
     }
 
     @GetMapping("/tutor/{id}")
