@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -201,6 +202,7 @@ public class ClazzController {
         return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
     }
 
+    @PreAuthorize("hasAnyAuthority('parent:read')")
     @GetMapping("/parent/{pId}")
     public ApiResponseDto<List<ListClazzResDto>> getClazzByParentId(@PathVariable int pId) {
         List<Clazz> clazzs = clazzService.getClazzByParentId(pId);
@@ -226,6 +228,7 @@ public class ClazzController {
         return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
     }
 
+    @PreAuthorize("hasAnyAuthority('manager:read')")
     @GetMapping("/manager/{mId}")
     public ApiResponseDto<List<ListClazzResDto>> getClazzByManagerId(@PathVariable int mId) {
         List<Clazz> clazzs = clazzService.getClazzByManagerId(mId);
@@ -331,6 +334,7 @@ public class ClazzController {
         return PaginRes.<SearchResDto>builder().data(data).itemsPerPage(limit).page(offset).build();
     }
 
+    @PreAuthorize("hasAnyAuthority('manager:create')")
     @PostMapping("/create")
     public ApiResponseDto<Integer> create(@RequestParam(name = "requestId") int rId) {
         Clazz clazz = new Clazz();
@@ -383,6 +387,7 @@ public class ClazzController {
         return ResponseEntity.ok("Cập nhật thành công class.");
     }
 
+    @PreAuthorize("hasAnyAuthority('manager:update')")
     @PutMapping("/updateStatus")
     public ApiResponseDto<Integer> updateClazzStatus(@RequestParam(name = "clazzId") int id,
             @RequestParam(name = "status") int status) {

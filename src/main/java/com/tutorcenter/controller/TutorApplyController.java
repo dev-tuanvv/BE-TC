@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,6 +47,7 @@ public class TutorApplyController {
         return tutorApplyService.findAll();
     }
 
+    @PreAuthorize("hasAnyAuthority('parent:read','manager:read')")
     @GetMapping("/clazz/{id}")
     public ApiResponseDto<List<ListTutorApplyResDto>> getTutorAppliesByClazzId(@PathVariable int id) {
         List<TutorApply> taList = tutorApplyService.getTutorAppliesByClazzId(id);
@@ -73,6 +75,7 @@ public class TutorApplyController {
         return ApiResponseDto.<List<ListTutorApplyResDto>>builder().data(response).build();
     }
 
+    @PreAuthorize("hasAnyAuthority('tutor:read','manager:read')")
     @GetMapping("/tutor/{id}")
     public ApiResponseDto<List<TutorApplyResDto>> getTutorAppliesByTutorId(@PathVariable int id) {
         List<TutorApply> taList = tutorApplyService.getTutorAppliesByTutorId(id);
@@ -88,6 +91,7 @@ public class TutorApplyController {
         return ApiResponseDto.<List<TutorApplyResDto>>builder().data(response).build();
     }
 
+    @PreAuthorize("hasAnyAuthority('tutor:create')")
     @PostMapping("/create")
     public ApiResponseDto<TutorApplyResDto> create(@RequestParam(name = "clazzId") int cId,
             @RequestParam(name = "tutorId") int tId) {
@@ -117,9 +121,9 @@ public class TutorApplyController {
 
     // return ResponseEntity.ok("Cập nhật thành công.");
     // }
-
+    @PreAuthorize("hasAnyAuthority('parent:update')")
     @PutMapping("/acceptTutor/{taId}")
-    public ApiResponseDto<?> update(@PathVariable int taId) {
+    public ApiResponseDto<String> update(@PathVariable int taId) {
         TutorApply tutorApply = tutorApplyService.getTutorApplyById(taId).orElse(null);
         for (TutorApply ta : tutorApplyService.getTutorAppliesByClazzId(tutorApply.getClazz().getId())) {
             if (ta.getId() == taId)
@@ -134,6 +138,7 @@ public class TutorApplyController {
         return ApiResponseDto.<String>builder().data(tutorApply.getTutor().getFullname()).build();
     }
 
+    @PreAuthorize("hasAnyAuthority('tutor:delete')")
     @PutMapping("/disable/{id}")
     public ResponseEntity<?> disable(@PathVariable int id) {
         TutorApply tutorApply = tutorApplyService.getTutorApplyById(id).orElseThrow();

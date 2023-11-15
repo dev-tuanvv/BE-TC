@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,8 +58,6 @@ public class RequestController {
     @GetMapping("")
     public ApiResponseDto<List<RequestResDto>> getListRequest() {
 
-        System.out.println("GetUserId từ JWT: " + Common.getCurrentUserId());
-
         List<RequestResDto> response = new ArrayList<>();
 
         for (Request request : requestService.findAll()) {
@@ -110,10 +109,11 @@ public class RequestController {
         return ApiResponseDto.<RequestDetailResDto>builder().data(response).build();
     }
 
+    @PreAuthorize("hasAnyAuthority('parent:read')")
     @GetMapping("/parent/{pId}")
     public ApiResponseDto<List<ParentRequestResDto>> getRequestByParentId(@PathVariable(value = "pId") int pId) {
         Parent parent = parentService.getParentById(pId).orElse(null);
-        if (parent == null) {
+        if (parent == null || pId != Common.getCurrentUserId()) {
             return ApiResponseDto.<List<ParentRequestResDto>>builder().responseCode("404").message("Parent not found")
                     .build();
         }
@@ -146,15 +146,16 @@ public class RequestController {
         return ApiResponseDto.<List<ParentRequestResDto>>builder().data(response).build();
     }
 
-    @GetMapping("/manager/{id}")
-    public ApiResponseDto<List<RequestResDto>> getRequestByManagerId(@PathVariable(value = "id") int id) {
-        Manager manager = managerService.getManagerById(id).orElse(null);
-        if (manager == null) {
+    @PreAuthorize("hasAnyAuthority('manager:read')")
+    @GetMapping("/manager/{mId}")
+    public ApiResponseDto<List<RequestResDto>> getRequestByManagerId(@PathVariable(value = "mId") int mId) {
+        Manager manager = managerService.getManagerById(mId).orElse(null);
+        if (manager == null || mId != Common.getCurrentUserId()) {
             return ApiResponseDto.<List<RequestResDto>>builder().responseCode("404").message("Manager not found")
                     .build();
         }
         List<RequestResDto> response = new ArrayList<>();
-        List<Request> listRequests = requestService.getRequestByManagerID(id);
+        List<Request> listRequests = requestService.getRequestByManagerID(mId);
         if (listRequests == null || listRequests.isEmpty()) {
             return ApiResponseDto.<List<RequestResDto>>builder().responseCode("404")
                     .message("Manager don't have any request")
@@ -182,6 +183,7 @@ public class RequestController {
         return ApiResponseDto.<List<RequestResDto>>builder().data(response).build();
     }
 
+    @PreAuthorize("hasAnyAuthority('parent:create')")
     @PostMapping("/create")
     public ApiResponseDto<Integer> createRequest(
             @RequestBody CreateRequestReqDto createRequestDto) {
@@ -203,6 +205,7 @@ public class RequestController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('manager:update')")
     @PutMapping("/updateStatus")
     public ApiResponseDto<Integer> updateSubjects(@RequestParam(name = "requestId") int rId,
             @RequestParam(name = "status") int status, @RequestParam(name = "rejectReason") String rr) {
@@ -218,6 +221,7 @@ public class RequestController {
         return ApiResponseDto.<Integer>builder().data(rId).build();
     }
 
+    //
     @PutMapping("/update/{id}")
     public ApiResponseDto<Request> updateRequest(
             @PathVariable(value = "id") int id,
@@ -235,6 +239,7 @@ public class RequestController {
         return ApiResponseDto.<Request>builder().data(requestService.save(rq)).build();
     }
 
+    @PreAuthorize("hasAnyAuthority('parent:delete')")
     @DeleteMapping("/delete/{id}")
     public ApiResponseDto<Integer> disableRequest(@PathVariable int id) {
         Request rq = requestService.getRequestById(id).orElseThrow();

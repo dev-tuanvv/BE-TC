@@ -6,5 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/systemVariable")
 public class SystemVariableController {
+    // @PreAuthorize("hasAnyAuthority('admin')")
+    // @GetMapping("")
 
 }

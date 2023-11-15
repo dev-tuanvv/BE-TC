@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,6 +41,7 @@ public class RequestVerificationController {
         return ApiResponseDto.<RequestVerificationResDto>builder().data(dto).build();
     }
 
+    @PreAuthorize("hasAnyAuthority('manager:read','tutor:read')")
     @GetMapping("/tutor/{tId}")
     public ApiResponseDto<List<RequestVerificationResDto>> getRVByTutorId(@PathVariable int tId) {
 
@@ -54,6 +56,7 @@ public class RequestVerificationController {
         return ApiResponseDto.<List<RequestVerificationResDto>>builder().data(response).build();
     }
 
+    @PreAuthorize("hasAnyAuthority('manager:read')")
     @GetMapping("/manager/{mId}")
     public ApiResponseDto<List<RequestVerificationResDto>> getRVByManagerId(@PathVariable int mId) {
 
@@ -68,6 +71,7 @@ public class RequestVerificationController {
         return ApiResponseDto.<List<RequestVerificationResDto>>builder().data(response).build();
     }
 
+    @PreAuthorize("hasAnyAuthority('tutor:create')")
     @PostMapping("/create")
     public ApiResponseDto<Integer> create(@RequestParam(name = "tutorId") int tId) {
         RequestVerification requestVerification = new RequestVerification();
@@ -91,6 +95,7 @@ public class RequestVerificationController {
         return ApiResponseDto.<Integer>builder().data(rvId).build();
     }
 
+    @PreAuthorize("hasAnyAuthority('manager:update')")
     @PutMapping("/updateStatus")
     public ApiResponseDto<UpdateRequestVerificationResDto> update(@RequestBody RequestVerificationReqDto reqDto) {
 
