@@ -3,7 +3,6 @@ package com.tutorcenter.dto.tutorApply;
 import java.util.List;
 
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
-import com.tutorcenter.dto.tutor.TutorResDto;
 import com.tutorcenter.model.TutorApply;
 
 import lombok.Data;

@@ -35,6 +35,8 @@ public class RequestDetailResDto {
 
     private String rejectReason;
 
+    private String tutorLevel;
+
     private List<SubjectLevelResDto> subjects;
 
     public void fromRequest(Request request) {
@@ -49,6 +51,7 @@ public class RequestDetailResDto {
         this.dateStart = request.getDateStart();
         this.dateEnd = request.getDateEnd();
         this.status = request.getStatus();
+        this.tutorLevel = request.getTutorLevel();
         this.rejectReason = request.getRejectReason();
     }
 }

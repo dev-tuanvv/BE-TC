@@ -183,23 +183,23 @@ public class RequestController {
     }
 
     @PostMapping("/create")
-    public ApiResponseDto<Request> createRequest(
+    public ApiResponseDto<Integer> createRequest(
             @RequestBody CreateRequestReqDto createRequestDto) {
         try {
             Request request = new Request();
             // TODO: lay Id tu Session
             createRequestDto.toRequest(request);
-            request.setParent(parentService.getParentById(4).orElse(null));
+            request.setParent(parentService.getParentById(Common.getCurrentUserId()).orElse(null));
             District district = districtService.getDistrictById(createRequestDto.getDistrictId()).orElse(null);
             if (district == null) {
-                return ApiResponseDto.<Request>builder().responseCode("404").message("District not found").build();
+                return ApiResponseDto.<Integer>builder().responseCode("404").message("District not found").build();
             }
             request.setDistrict(district);
             Request response = requestService.save(request);
             requestSubjectService.updateByRequestId(response.getId(), createRequestDto.getListSubjectId());
-            return ApiResponseDto.<Request>builder().message(null).data(response).build();
+            return ApiResponseDto.<Integer>builder().message(null).data(response.getId()).build();
         } catch (Exception e) {
-            return ApiResponseDto.<Request>builder().responseCode("500").message(e.getMessage()).build();
+            return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
         }
     }
 
