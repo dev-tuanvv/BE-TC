@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.ApiResponseDto;
-import com.tutorcenter.dto.requestverification.RequestVerificationReqDto;
-import com.tutorcenter.dto.requestverification.RequestVerificationResDto;
-import com.tutorcenter.dto.requestverification.UpdateRequestVerificationResDto;
+import com.tutorcenter.dto.requestVerification.RequestVerificationReqDto;
+import com.tutorcenter.dto.requestVerification.RequestVerificationResDto;
+import com.tutorcenter.dto.requestVerification.UpdateRequestVerificationResDto;
 import com.tutorcenter.model.RequestVerification;
 import com.tutorcenter.service.RequestVerificationService;
 import com.tutorcenter.service.TutorService;

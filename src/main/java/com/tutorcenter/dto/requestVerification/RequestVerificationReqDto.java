@@ -1,4 +1,4 @@
-package com.tutorcenter.dto.requestverification;
+package com.tutorcenter.dto.requestVerification;
 
 import com.tutorcenter.model.RequestVerification;
 
