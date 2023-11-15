@@ -8,6 +8,7 @@ import lombok.Data;
 @Data
 public class RegisterTutorReqDto {
     private String email;
+    private long idNumber;
     private String password;
     private String fullname;
     private String phone;
@@ -24,6 +25,7 @@ public class RegisterTutorReqDto {
 
     public void toTutor(Tutor tutor) {
         tutor.setEmail(this.email);
+        tutor.setIdNumber(this.idNumber);
         tutor.setPassword(this.password);
         tutor.setFullname(this.fullname);
         tutor.setPhone(this.phone);
