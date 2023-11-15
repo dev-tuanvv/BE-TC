@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.ApiResponseDto;
+import com.tutorcenter.dto.feedback.CreateFeedbackResDto;
 import com.tutorcenter.dto.feedback.FeedbackReqDto;
 import com.tutorcenter.dto.feedback.FeedbackResDto;
 import com.tutorcenter.model.Feedback;
@@ -25,9 +26,9 @@ public class FeedbackController {
     @Autowired
     private FeedbackService feedbackService;
 
-    @GetMapping("/tutor/{id}")
-    public ApiResponseDto<List<FeedbackResDto>> getFeedbackByTutorId(@PathVariable int id) {
-        List<Feedback> feedbacks = feedbackService.getFeedbacksByTutorId(id);
+    @GetMapping("/tutor/{tId}")
+    public ApiResponseDto<List<FeedbackResDto>> getFeedbackByTutorId(@PathVariable int tId) {
+        List<Feedback> feedbacks = feedbackService.getFeedbacksByTutorId(tId);
         List<FeedbackResDto> response = new ArrayList<>();
         for (Feedback feedback : feedbacks) {
             FeedbackResDto dto = new FeedbackResDto();
@@ -39,13 +40,15 @@ public class FeedbackController {
     }
 
     @PostMapping("/create")
-    public ApiResponseDto<Integer> create(@RequestBody FeedbackReqDto feedbackReqDto) {
+    public ApiResponseDto<CreateFeedbackResDto> create(@RequestBody FeedbackReqDto feedbackReqDto) {
         Feedback feedback = new Feedback();
         feedbackReqDto.toFeedback(feedback);
 
-        int fId = feedbackService.save(feedback).getId();
+        CreateFeedbackResDto dto = new CreateFeedbackResDto();
+        feedbackService.save(feedback);
+        dto.fromFeedback(feedback);
 
-        return ApiResponseDto.<Integer>builder().data(fId).build();
+        return ApiResponseDto.<CreateFeedbackResDto>builder().data(dto).build();
     }
 
     // @PutMapping("/delete/{id}")
