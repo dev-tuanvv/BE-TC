@@ -1,4 +1,4 @@
-package com.tutorcenter.dto.requestverification;
+package com.tutorcenter.dto.requestVerification;
 
 import java.sql.Date;
 
