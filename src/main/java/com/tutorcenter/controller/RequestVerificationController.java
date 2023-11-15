@@ -91,7 +91,7 @@ public class RequestVerificationController {
         return ApiResponseDto.<Integer>builder().data(rvId).build();
     }
 
-    @PutMapping("/update")
+    @PutMapping("/updateStatus")
     public ApiResponseDto<UpdateRequestVerificationResDto> update(@RequestBody RequestVerificationReqDto reqDto) {
 
         List<RequestVerification> reqs = requestVerificationService.getRVByTutorId(reqDto.getTutorId()).stream()
