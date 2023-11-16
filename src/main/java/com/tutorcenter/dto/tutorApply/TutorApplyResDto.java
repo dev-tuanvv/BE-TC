@@ -13,7 +13,7 @@ public class TutorApplyResDto {
 
     public void fromTutorApply(TutorApply tutorApply) {
         this.id = tutorApply.getId();
-        this.clazzId = tutorApply.getId();
+        this.clazzId = tutorApply.getClazz().getId();
         this.tutorId = tutorApply.getTutor().getId();
         this.status = tutorApply.getStatus();
     }
