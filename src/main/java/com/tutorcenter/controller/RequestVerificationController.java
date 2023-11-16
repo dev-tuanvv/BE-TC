@@ -19,9 +19,13 @@ import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.requestVerification.RequestVerificationReqDto;
 import com.tutorcenter.dto.requestVerification.RequestVerificationResDto;
 import com.tutorcenter.dto.requestVerification.UpdateRequestVerificationResDto;
+import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.RequestVerification;
+import com.tutorcenter.model.Subject;
 import com.tutorcenter.service.RequestVerificationService;
+import com.tutorcenter.service.SubjectService;
 import com.tutorcenter.service.TutorService;
+import com.tutorcenter.service.TutorSubjectService;
 
 @RestController
 @RequestMapping("/api/requestVerification")
@@ -31,6 +35,10 @@ public class RequestVerificationController {
     private RequestVerificationService requestVerificationService;
     @Autowired
     private TutorService tutorService;
+    @Autowired
+    private TutorSubjectService tutorSubjectService;
+    @Autowired
+    private SubjectService subjectService;
 
     @GetMapping("/{id}")
     public ApiResponseDto<RequestVerificationResDto> getRVById(@PathVariable int id) {
@@ -65,6 +73,19 @@ public class RequestVerificationController {
         for (RequestVerification requestVerification : requestVerifications) {
             RequestVerificationResDto dto = new RequestVerificationResDto();
             dto.fromRequestVerification(requestVerification);
+
+            List<Integer> listSId = tutorSubjectService
+                    .getListSIdByTId(requestVerification.getTutor().getId());
+            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+            List<SubjectLevelResDto> listSL = new ArrayList<>();
+            for (Subject subject : subjects) {
+                SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                sLDto.fromSubject(subject);
+                listSL.add(sLDto);
+            }
+            dto.setSubjects(listSL);
+
             response.add(dto);
         }
 

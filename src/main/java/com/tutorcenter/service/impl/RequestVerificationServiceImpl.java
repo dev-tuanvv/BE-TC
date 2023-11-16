@@ -1,5 +1,6 @@
 package com.tutorcenter.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,8 +42,11 @@ public class RequestVerificationServiceImpl implements RequestVerificationServic
 
     @Override
     public List<RequestVerification> getRVByManagerId(int mId) {
-        List<RequestVerification> list = requestVerificationRepository.findAll().stream()
-                .filter(rv -> rv.getManager().getId() == mId).collect(Collectors.toList());
+        List<RequestVerification> list = new ArrayList<>();
+        for (RequestVerification rv : requestVerificationRepository.findAll()) {
+            if (rv.getManager() != null && rv.getManager().getId() == mId)
+                list.add(rv);
+        }
         return list;
     }
 
