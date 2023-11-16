@@ -11,6 +11,7 @@ import lombok.Data;
 public class ListClazzResDto {
     private int id;
     private int requestId;
+    private String parentName;
     private List<SubjectLevelResDto> subjects;
     private int slots;
     private int slotsLength;
@@ -25,6 +26,7 @@ public class ListClazzResDto {
     public void fromClazz(Clazz clazz) {
         this.id = clazz.getId();
         this.requestId = clazz.getRequest().getId();
+        this.parentName = clazz.getRequest().getParent().getFullname();
         this.slots = clazz.getRequest().getSlots();
         this.slotsLength = clazz.getRequest().getSlotsLength();
         this.tutorLevel = clazz.getRequest().getTutorLevel();

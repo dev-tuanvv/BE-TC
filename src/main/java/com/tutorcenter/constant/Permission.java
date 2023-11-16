@@ -11,10 +11,10 @@ public enum Permission {
     ADMIN_CREATE("admin:create"),
     ADMIN_DELETE("admin:delete"),
 
-    MANAGER_READ("management:read"),
-    MANAGER_UPDATE("management:update"),
-    MANAGER_CREATE("management:create"),
-    MANAGER_DELETE("management:delete"),
+    MANAGER_READ("manager:read"),
+    MANAGER_UPDATE("manager:update"),
+    MANAGER_CREATE("manager:create"),
+    MANAGER_DELETE("manager:delete"),
 
     PARENT_READ("parent:read"),
     PARENT_UPDATE("parent:update"),
