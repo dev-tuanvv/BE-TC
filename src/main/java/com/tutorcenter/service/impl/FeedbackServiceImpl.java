@@ -45,7 +45,7 @@ public class FeedbackServiceImpl implements FeedbackService {
                 .collect(Collectors.toList());
 
         if (list.isEmpty()) {
-            return null;
+            return (float) 0;
         }
 
         List<Integer> ratings = list.stream().map(f -> f.getRating()).collect(Collectors.toList());
