@@ -14,15 +14,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tutorcenter.common.Common;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.dto.tutorapply.ListTutorApplyResDto;
+import com.tutorcenter.dto.tutorapply.TutorApplyForMobileResDto;
 import com.tutorcenter.dto.tutorapply.TutorApplyResDto;
 import com.tutorcenter.model.Clazz;
+import com.tutorcenter.model.RequestSubject;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorApply;
 import com.tutorcenter.service.ClazzService;
+import com.tutorcenter.service.RequestSubjectService;
 import com.tutorcenter.service.SubjectService;
 import com.tutorcenter.service.TutorApplyService;
 import com.tutorcenter.service.TutorService;
@@ -41,6 +45,8 @@ public class TutorApplyController {
     private TutorSubjectService tutorSubjectService;
     @Autowired
     private SubjectService subjectService;
+    @Autowired
+    private RequestSubjectService requestSubjectService;
 
     @GetMapping("/")
     public List<TutorApply> getAll() {
@@ -89,6 +95,21 @@ public class TutorApplyController {
         }
 
         return ApiResponseDto.<List<TutorApplyResDto>>builder().data(response).build();
+    }
+    @PreAuthorize("hasAnyAuthority('tutor:read','manager:read')")
+    @GetMapping("/tutor")
+    public ApiResponseDto<List<TutorApplyForMobileResDto>> getTutorAppliesByTutorIdMobile() {
+        List<TutorApply> taList = tutorApplyService.getTutorAppliesByTutorId(Common.getCurrentUserId());
+        List<TutorApplyForMobileResDto> response = new ArrayList<>();
+
+        for (TutorApply ta : taList) {
+            TutorApplyForMobileResDto dto = new TutorApplyForMobileResDto();
+           List<RequestSubject> listRequestSubject = requestSubjectService.findAllByRequestRequestId(ta.getClazz().getRequest().getId());
+            dto.fromTutorApply(ta,listRequestSubject);
+            response.add(dto);
+        }
+
+        return ApiResponseDto.<List<TutorApplyForMobileResDto>>builder().data(response).build();
     }
 
     @PreAuthorize("hasAnyAuthority('tutor:create')")
