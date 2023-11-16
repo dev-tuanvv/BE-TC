@@ -52,9 +52,12 @@ public class ClazzServiceImpl implements ClazzService {
 
     @Override
     public List<Clazz> getClazzByManagerId(int mId) {
-        List<Clazz> list = findAll().stream()
-                .filter(clazz -> clazz.getRequest().getManager().getId() == mId)
-                .collect(Collectors.toList());
+        List<Clazz> list = new ArrayList<>();
+
+        for (Clazz c : clazzRepository.findAll()) {
+            if (c.getRequest().getManager() != null && c.getRequest().getManager().getId() == mId)
+                list.add(c);
+        }
         return list;
     }
 
