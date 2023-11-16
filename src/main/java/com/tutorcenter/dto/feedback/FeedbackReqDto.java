@@ -18,7 +18,7 @@ public class FeedbackReqDto {
         feedback.setContent(this.content);
         feedback.setDateCreate(new Date(System.currentTimeMillis()));
         feedback.setDeleted(false);
-        feedback.setStatus(1);
+        feedback.setStatus(0);
     }
 
 }
