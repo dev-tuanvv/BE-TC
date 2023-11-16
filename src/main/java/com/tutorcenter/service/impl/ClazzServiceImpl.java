@@ -86,17 +86,23 @@ public class ClazzServiceImpl implements ClazzService {
 
     @Override
     public List<Clazz> getClazzByDistrict(int dId) {
-        List<Clazz> list = findAll().stream()
-                .filter(clazz -> clazz.getRequest().getDistrict().getId() == dId)
-                .collect(Collectors.toList());
+        List<Clazz> list = new ArrayList<>();
+
+        for (Clazz c : clazzRepository.findAll()) {
+            if (c.getRequest().getDistrict().getId() == dId)
+                list.add(c);
+        }
         return list;
     }
 
     @Override
     public List<Clazz> getClazzByStatus(int status) {
-        List<Clazz> list = findAll().stream()
-                .filter(clazz -> clazz.getRequest().getStatus() == status)
-                .collect(Collectors.toList());
+        List<Clazz> list = new ArrayList<>();
+
+        for (Clazz c : clazzRepository.findAll()) {
+            if (c.getStatus() == status)
+                list.add(c);
+        }
         return list;
     }
 
