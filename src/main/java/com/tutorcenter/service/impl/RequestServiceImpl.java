@@ -45,9 +45,11 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<Request> getRequestByManagerID(int mId) {
-        List<Request> list = findAll().stream()
-                .filter(rq -> rq.getManager().getId() == mId)
-                .collect(Collectors.toList());
+        List<Request> list = new ArrayList<>();
+        for (Request r : findAll()) {
+            if (r.getManager() != null && r.getManager().getId() == mId)
+                list.add(r);
+        }
         return list;
     }
 
