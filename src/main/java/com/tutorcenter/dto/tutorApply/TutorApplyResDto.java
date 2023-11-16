@@ -1,4 +1,4 @@
-package com.tutorcenter.dto.tutorApply;
+package com.tutorcenter.dto.tutorapply;
 
 import com.tutorcenter.model.TutorApply;
 

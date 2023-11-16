@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
-import com.tutorcenter.dto.tutorApply.ListTutorApplyResDto;
-import com.tutorcenter.dto.tutorApply.TutorApplyResDto;
+import com.tutorcenter.dto.tutorapply.ListTutorApplyResDto;
+import com.tutorcenter.dto.tutorapply.TutorApplyResDto;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Tutor;

@@ -1,5 +1,6 @@
 package com.tutorcenter.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -41,8 +42,11 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public Float getAverageRatingByTutorId(int tId) {
-        List<Feedback> list = feedbackRepository.findAll().stream().filter(fb -> fb.getTutor().getId() == tId)
-                .collect(Collectors.toList());
+        List<Feedback> list = new ArrayList<>();
+        for (Feedback f : feedbackRepository.findAll()) {
+            if (f.getTutor() != null && f.getTutor().getId() == tId)
+                list.add(f);
+        }
 
         if (list.isEmpty()) {
             return (float) 0;
