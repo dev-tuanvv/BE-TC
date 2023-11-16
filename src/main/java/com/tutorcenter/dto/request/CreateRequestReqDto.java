@@ -46,5 +46,6 @@ public class CreateRequestReqDto {
         request.setStatus(0);
         request.setDeleted(false);
         request.setTutorLevel(this.tutorLevel);
+        request.setGender(this.gender);
     }
 }
