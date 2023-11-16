@@ -1,5 +1,7 @@
 package com.tutorcenter.service.impl;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -56,9 +58,10 @@ public class FeedbackServiceImpl implements FeedbackService {
         int sum = 0;
         for (int rating : ratings)
             sum += rating;
-        float avgRating = sum / ratings.size();
-
-        return avgRating;
+        float avgRating = (float) sum / ratings.size();
+        BigDecimal bd = new BigDecimal(Float.toString(avgRating));
+        bd = bd.setScale(1, BigDecimal.ROUND_HALF_UP);
+        return bd.floatValue();
 
     }
 
