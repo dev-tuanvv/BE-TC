@@ -9,6 +9,7 @@ import lombok.Data;
 @Data
 public class RequestVerificationResDto {
     private int id;
+    private int tutorId;
     private String tutorName;
     private int managerId;
     private int status;
@@ -17,6 +18,7 @@ public class RequestVerificationResDto {
 
     public void fromRequestVerification(RequestVerification requestVerification) {
         this.id = requestVerification.getId();
+        this.tutorId = requestVerification.getTutor().getId();
         this.tutorName = requestVerification.getTutor().getFullname();
         this.managerId = (requestVerification.getManager() != null) ? requestVerification.getManager().getId()
                 : managerId;
