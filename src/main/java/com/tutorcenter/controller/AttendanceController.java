@@ -1,9 +1,11 @@
 package com.tutorcenter.controller;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,12 +17,15 @@ import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.attendance.AttendanceResDto;
 import com.tutorcenter.model.Attendance;
 import com.tutorcenter.service.AttendanceService;
+import com.tutorcenter.service.ClazzService;
 
 @RestController
 @RequestMapping("/api/attendance")
 public class AttendanceController {
     @Autowired
     private AttendanceService attendanceService;
+    @Autowired
+    private ClazzService clazzService;
 
     @GetMapping("")
     public ApiResponseDto<List<AttendanceResDto>> getListAttendance() {
@@ -53,11 +58,11 @@ public class AttendanceController {
             @RequestParam(name = "status") int status) {
         Attendance attendance = new Attendance();
         AttendanceResDto dto = new AttendanceResDto();
-        dto.setClazzId(clazzId);
-        dto.setStatus(status);
-        dto.fromAttendance(attendance);
+        attendance.setClazz(clazzService.getClazzById(clazzId).orElse(null));
+        attendance.setStatus(status);
+        attendance.setDateCreate(new Date(System.currentTimeMillis()));
 
-        attendanceService.save(attendance);
+        dto.fromAttendance(attendanceService.save(attendance));
 
         return ApiResponseDto.<AttendanceResDto>builder().data(dto).build();
     }

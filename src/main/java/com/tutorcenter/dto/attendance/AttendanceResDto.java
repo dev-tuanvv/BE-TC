@@ -19,4 +19,5 @@ public class AttendanceResDto {
         this.dateCreate = new Date(System.currentTimeMillis());
         this.status = attendance.getStatus();
     }
+
 }
