@@ -1,5 +1,6 @@
 package com.tutorcenter.dto.clazz;
 
+import java.sql.Date;
 import java.util.List;
 
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
@@ -22,6 +23,8 @@ public class ListClazzResDto {
     private String gender;
     private float tuition;
     private int status;
+    private Date dateStart;
+    private Date dateEnd;
 
     public void fromClazz(Clazz clazz) {
         this.id = clazz.getId();
@@ -36,5 +39,7 @@ public class ListClazzResDto {
         this.gender = clazz.getRequest().getGender();
         this.tuition = clazz.getRequest().getTuition();
         this.status = clazz.getStatus();
+        this.dateStart = clazz.getRequest().getDateStart();
+        this.dateEnd = clazz.getRequest().getDateEnd(); 
     }
 }
