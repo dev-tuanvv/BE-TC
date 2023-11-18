@@ -3,17 +3,26 @@ package com.tutorcenter.dto.authentication;
 import com.tutorcenter.constant.Role;
 import com.tutorcenter.model.Tutor;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
 public class RegisterTutorReqDto {
+    @NotEmpty
     private String email;
     private long idNumber;
+    @NotEmpty
     private String password;
+    @NotEmpty
     private String fullname;
+    @NotEmpty
     private String phone;
+    @NotEmpty
     private String address;
+    @NotNull
     private int districtId;
+    @NotEmpty
     private String gender;
     private String university;
     private String major;
