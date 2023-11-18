@@ -1,7 +1,8 @@
 package com.tutorcenter.model;
 
-import java.sql.Date;
+import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -32,8 +33,9 @@ public class Order {
     @Column
     private float amount;
     @Column
-    private String type;
+    private int type;
     @Column
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date timeCreate;
     @Column
     private int status;

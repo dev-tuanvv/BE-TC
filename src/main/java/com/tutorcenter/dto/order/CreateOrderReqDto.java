@@ -9,15 +9,15 @@ import lombok.Data;
 @Data
 public class CreateOrderReqDto {
     private int clazzId;
-    private int userId;
+    // private int userId;
     private float amount;
-    private String type;
-    private int status;
+    private int type;
+    // private int status;
 
     public void toOrder(Order order) {
         order.setAmount(this.amount);
         order.setType(this.type);
-        order.setStatus(this.status);
+        // order.setStatus(this.status);
         order.setTimeCreate(new Date(System.currentTimeMillis()));
 
     }
