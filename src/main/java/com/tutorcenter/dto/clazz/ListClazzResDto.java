@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.Clazz;
+import com.tutorcenter.model.Tutor;
 
 import lombok.Data;
 
@@ -25,6 +26,7 @@ public class ListClazzResDto {
     private int status;
     private Date dateStart;
     private Date dateEnd;
+    private TutorDto tutor = new TutorDto();
 
     public void fromClazz(Clazz clazz) {
         this.id = clazz.getId();
@@ -40,6 +42,25 @@ public class ListClazzResDto {
         this.tuition = clazz.getRequest().getTuition();
         this.status = clazz.getStatus();
         this.dateStart = clazz.getRequest().getDateStart();
-        this.dateEnd = clazz.getRequest().getDateEnd(); 
+        this.dateEnd = clazz.getRequest().getDateEnd();
     }
+
+    public void fromTutor(Tutor tutor) {
+        this.tutor.setId(tutor.getId());
+        this.tutor.setName(tutor.getFullname());
+        this.tutor.setUniversity(tutor.getUniversity());
+        this.tutor.setAddress(tutor.getAddress());
+        this.tutor.setDistrictName(tutor.getDistrict().getName());
+        this.tutor.setProvinceName(tutor.getDistrict().getProvince().getName());
+    }
+}
+
+@Data
+class TutorDto {
+    private int id;
+    private String name;
+    private String university;
+    private String address;
+    private String districtName;
+    private String provinceName;
 }

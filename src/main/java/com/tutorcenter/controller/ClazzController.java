@@ -210,6 +210,9 @@ public class ClazzController {
         for (Clazz c : clazzs) {
             ListClazzResDto dto = new ListClazzResDto();
             dto.fromClazz(c);
+            if (c.getTutor() != null) {
+                dto.fromTutor(c.getTutor());
+            }
             // Tạo list SubjectLevel từ requestId
             List<Integer> listSId = requestSubjectService
                     .getListSIdByRId(c.getRequest().getId());
