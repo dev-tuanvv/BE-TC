@@ -26,7 +26,7 @@ public class CreateRequestReqDto {
     private int slots;
     private int slotsLength;
     private float tuition;
-    private String note;
+    private String notes;
     private Date dateStart;
     private Date dateEnd;
     private int districtId;
@@ -38,7 +38,7 @@ public class CreateRequestReqDto {
         request.setSlots(this.slots);
         request.setSlotsLength(this.slotsLength);
         request.setTuition(this.tuition);
-        request.setNotes(this.note);
+        request.setNotes(this.notes);
         request.setDateStart(this.dateStart);
         request.setDateEnd(this.dateEnd);
         request.setDateCreate(new Date(Calendar.getInstance().getTimeInMillis()));

@@ -67,7 +67,6 @@ public class AuthenticationController {
     @PostMapping("/registerTutor")
     public ApiResponseDto<String> registerTutor(
             @RequestBody RegisterTutorReqDto request) {
-
         return ApiResponseDto.<String>builder().data(authenticationService.registerTutor(request))
                 .build();
     }

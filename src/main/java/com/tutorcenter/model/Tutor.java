@@ -34,7 +34,7 @@ public class Tutor extends User {
     @JoinColumn(name = "districtId")
     private District district;
     @Column
-    private long idNumber;
+    private String idNumber;
     @Column
     private String university;
     @Column

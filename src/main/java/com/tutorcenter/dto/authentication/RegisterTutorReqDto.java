@@ -11,7 +11,7 @@ import lombok.Data;
 public class RegisterTutorReqDto {
     @NotEmpty
     private String email;
-    private long idNumber;
+    private String idNumber;
     @NotEmpty
     private String password;
     @NotEmpty

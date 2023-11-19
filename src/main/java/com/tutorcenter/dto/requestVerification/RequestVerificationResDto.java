@@ -14,7 +14,7 @@ public class RequestVerificationResDto {
     private int tutorId;
     private String tutorName;
     private String phone;
-    private long idNumber;
+    private String idNumber;
     private String imgCertificate;
     private String imgId;
     private String university;

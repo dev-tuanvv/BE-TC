@@ -15,7 +15,7 @@ public class TutorProfileResDto {
     private String address;
     private String districtName;
     private String provinceName;
-    private long idNumber;
+    private String idNumber;
     private String gender;
     private String university;
     private String major;
