@@ -153,9 +153,9 @@ public class TutorApplyController {
                 ta.setStatus(2);// rejected
         }
         tutorApply.getClazz().setTutor(tutorApply.getTutor());
-
+        tutorApply.getClazz().setStatus(1);
         tutorApplyService.save(tutorApply);
-
+        clazzService.save(tutorApply.getClazz());
         return ApiResponseDto.<String>builder().data(tutorApply.getTutor().getFullname()).build();
     }
 
