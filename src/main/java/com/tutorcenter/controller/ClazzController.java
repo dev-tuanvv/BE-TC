@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tutorcenter.common.Common;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.PaginRes;
 import com.tutorcenter.dto.clazz.ClazzDetailResDto;
@@ -203,9 +204,9 @@ public class ClazzController {
     }
 
     @PreAuthorize("hasAnyAuthority('parent:read')")
-    @GetMapping("/parent/{pId}")
-    public ApiResponseDto<List<ListClazzResDto>> getClazzByParentId(@PathVariable int pId) {
-        List<Clazz> clazzs = clazzService.getClazzByParentId(pId);
+    @GetMapping("/parent")
+    public ApiResponseDto<List<ListClazzResDto>> getClazzByParentId() {
+        List<Clazz> clazzs = clazzService.getClazzByParentId(Common.getCurrentUserId());
         List<ListClazzResDto> response = new ArrayList<>();
         for (Clazz c : clazzs) {
             ListClazzResDto dto = new ListClazzResDto();
