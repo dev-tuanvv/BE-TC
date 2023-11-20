@@ -26,6 +26,7 @@ import com.tutorcenter.repository.TokenRepository;
 import com.tutorcenter.repository.TutorRepository;
 import com.tutorcenter.repository.UserRepository;
 import com.tutorcenter.service.DistrictService;
+import com.tutorcenter.service.UserWalletService;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,6 +46,8 @@ public class AuthenticationService {
     private ParentRepository parentRepository;
     @Autowired
     private TutorRepository tutorRepository;
+    @Autowired
+    private UserWalletService userWalletService;
 
     public AuthenticationResDto register(RegisterReqDto request) {
         var user = User.builder()
@@ -68,8 +71,8 @@ public class AuthenticationService {
         request.toParent(parent);
         parent.setPassword(passwordEncoder.encode(request.getPassword()));
         parent.setDistrict(districtService.getDistrictById(request.getDistrictId()).orElse(null));
-
-        return parentRepository.save(parent).getEmail();
+        userWalletService.create(parentRepository.save(parent).getId());
+        return parent.getEmail();
     }
 
     public String registerTutor(RegisterTutorReqDto request) {
@@ -78,8 +81,8 @@ public class AuthenticationService {
 
         tutor.setPassword(passwordEncoder.encode(request.getPassword()));
         tutor.setDistrict(districtService.getDistrictById(request.getDistrictId()).orElse(null));
-
-        return tutorRepository.save(tutor).getEmail();
+        userWalletService.create(tutorRepository.save(tutor).getId());
+        return tutor.getEmail();
     }
 
     public AuthenticationResDto authenticate(AuthenticationReqDto request) {

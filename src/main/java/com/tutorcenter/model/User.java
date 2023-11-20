@@ -55,8 +55,6 @@ public class User implements UserDetails {
     private List<Token> tokens;
     @Column
     private boolean isDeleted;
-    @OneToOne(mappedBy = "user")
-    private UserWallet userWallet;
 
     public User orElseThrow(Object object) {
         return null;
