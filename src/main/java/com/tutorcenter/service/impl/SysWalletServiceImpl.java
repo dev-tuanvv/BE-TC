@@ -15,9 +15,26 @@ public class SysWalletServiceImpl implements SysWalletService {
     @Autowired
     SysWalletRepository sysWalletRepository;
 
+    // SysWallet sysWallet = sysWalletRepository.findById(1).orElse(null);
+
     @Override
-    public List<SysWallet> findAll() {
-        return sysWalletRepository.findAll();
+    public SysWallet deposit(float amount) {
+        SysWallet sysWallet = sysWalletRepository.findById(1).orElse(null);
+        sysWallet.setBalance(sysWallet.getBalance() + amount);
+        return sysWalletRepository.save(sysWallet);
+    }
+
+    @Override
+    public SysWallet withdraw(float amount) {
+        SysWallet sysWallet = sysWalletRepository.findById(1).orElse(null);
+        sysWallet.setBalance(sysWallet.getBalance() - amount);
+        return sysWalletRepository.save(sysWallet);
+    }
+
+    @Override
+    public float getBalance() {
+        SysWallet sysWallet = sysWalletRepository.findById(1).orElse(null);
+        return sysWallet.getBalance();
     }
 
 }

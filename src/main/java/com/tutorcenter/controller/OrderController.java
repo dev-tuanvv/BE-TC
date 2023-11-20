@@ -43,10 +43,19 @@ public class OrderController {
         order.setStatus(0);
         order.setTimeCreate(new Date(System.currentTimeMillis()));
 
-        if (orderReqDto.getType() == 1)
+        if (orderReqDto.getType() == 1) {
             order.setUser(userService.getUserById(clazz.getRequest().getParent().getId()).orElse(null));
-        else if (orderReqDto.getType() == 2)
+            userWalletService.withdraw(clazz.getRequest().getParent().getId(), orderReqDto.getAmount());
+            sysWalletService.deposit(orderReqDto.getAmount());
+        } else if (orderReqDto.getType() == 2) {
             order.setUser(userService.getUserById(clazz.getTutor().getId()).orElse(null));
+            if (orderReqDto.getAmount() > sysWalletService.getBalance())
+                return ApiResponseDto.<CreateOrderResDto>builder().message("Số dư trong tài khoản hệ thống không đủ.")
+                        .build();
+            sysWalletService.withdraw(orderReqDto.getAmount());
+            userWalletService.deposit(clazz.getTutor().getId(), orderReqDto.getAmount());
+
+        }
 
         CreateOrderResDto dto = new CreateOrderResDto();
 

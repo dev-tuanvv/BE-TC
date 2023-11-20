@@ -11,7 +11,9 @@ import com.tutorcenter.model.UserWallet;
 public interface UserWalletService {
     List<UserWallet> findAll();
 
-    Optional<UserWallet> getWalletByUId(int uId);
+    Optional<UserWallet> getWalletByUId(int id);
+
+    // UserWallet getWalletByUId(int uId);
 
     UserWallet create(int uId);
 

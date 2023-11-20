@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.tutorcenter.model.User;
 import com.tutorcenter.model.UserWallet;
 import com.tutorcenter.repository.UserWalletRepository;
 import com.tutorcenter.service.UserWalletService;
@@ -38,8 +39,8 @@ public class UserWalletServiceImpl implements UserWalletService {
     @Override
     public UserWallet deposit(int uId, float amount) {
         UserWallet userWallet = userWalletRepository.findById(uId).orElse(null);
-
-        userWallet.setBalance(userWallet.getBalance() + amount);
+        float newBalance = userWallet.getBalance() + amount;
+        userWallet.setBalance(newBalance);
         userWalletRepository.save(userWallet);
 
         return userWallet;
