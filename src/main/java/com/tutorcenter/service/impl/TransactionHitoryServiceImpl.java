@@ -20,4 +20,8 @@ public class TransactionHitoryServiceImpl implements TransactionHistoryService {
         return transactionHistoryRepository.findAll();
     }
 
+    @Override
+    public TransactionHistory save(TransactionHistory transactionHistory) {
+        return transactionHistoryRepository.save(transactionHistory);
+    }
 }

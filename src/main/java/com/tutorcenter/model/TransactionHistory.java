@@ -1,6 +1,6 @@
 package com.tutorcenter.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,9 +21,7 @@ public class TransactionHistory {
     private int id;
     @ManyToOne
     @JoinColumn(name = "userId")
-    private User userId;
-    // @Column
-    // private int managerId;
+    private User user;
     @Column
     private String type;
     @Column

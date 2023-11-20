@@ -9,4 +9,6 @@ import com.tutorcenter.model.TransactionHistory;
 @Service
 public interface TransactionHistoryService {
     List<TransactionHistory> findAll();
+
+    TransactionHistory save(TransactionHistory transactionHistory);
 }

@@ -1,5 +1,7 @@
 package com.tutorcenter.controller;
 
+import java.util.Date;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -8,7 +10,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.wallet.UserWalletResDto;
+import com.tutorcenter.model.TransactionHistory;
 import com.tutorcenter.model.UserWallet;
+import com.tutorcenter.service.TransactionHistoryService;
 import com.tutorcenter.service.UserWalletService;
 
 @RestController
@@ -17,6 +21,8 @@ public class UserWalletController {
 
     @Autowired
     UserWalletService userWalletService;
+    @Autowired
+    TransactionHistoryService transactionHistoryService;
 
     @PutMapping("/deposit")
     public ApiResponseDto<UserWalletResDto> deposit(@RequestParam(name = "userId") int id,
@@ -25,6 +31,16 @@ public class UserWalletController {
             return ApiResponseDto.<UserWalletResDto>builder().message("Không thể nạp số tiền nhỏ hơn 0").build();
         }
         UserWallet userWallet = userWalletService.deposit(id, amount);
+
+        TransactionHistory transactionHistory = new TransactionHistory();
+        transactionHistory.setUser(userWallet);
+        transactionHistory.setAmount(amount);
+        transactionHistory.setType("Nạp");
+        transactionHistory.setTimeCreate(new Date(System.currentTimeMillis()));
+        transactionHistory.setContent("");
+
+        transactionHistoryService.save(transactionHistory);
+
         UserWalletResDto dto = new UserWalletResDto();
         dto.fromUserWallet(userWallet);
         return ApiResponseDto.<UserWalletResDto>builder().data(dto).build();
@@ -40,6 +56,16 @@ public class UserWalletController {
                     .message("Không thể rút số âm hoặc lớn hơn số tiền đang có.").build();
         }
         userWallet = userWalletService.withdraw(id, amount);
+
+        TransactionHistory transactionHistory = new TransactionHistory();
+        transactionHistory.setUser(userWallet);
+        transactionHistory.setAmount(amount);
+        transactionHistory.setType("Rút");
+        transactionHistory.setTimeCreate(new Date(System.currentTimeMillis()));
+        transactionHistory.setContent("");
+
+        transactionHistoryService.save(transactionHistory);
+
         UserWalletResDto dto = new UserWalletResDto();
         dto.fromUserWallet(userWallet);
         return ApiResponseDto.<UserWalletResDto>builder().data(dto).build();

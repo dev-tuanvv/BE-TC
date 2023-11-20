@@ -15,7 +15,9 @@ import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.Order;
 import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.OrderService;
+import com.tutorcenter.service.SysWalletService;
 import com.tutorcenter.service.UserService;
+import com.tutorcenter.service.UserWalletService;
 
 @RestController
 @RequestMapping("/api/order")
@@ -26,6 +28,10 @@ public class OrderController {
     private ClazzService clazzService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserWalletService userWalletService;
+    @Autowired
+    private SysWalletService sysWalletService;
 
     @PostMapping("/create")
     public ApiResponseDto<CreateOrderResDto> create(@RequestBody CreateOrderReqDto orderReqDto) {
