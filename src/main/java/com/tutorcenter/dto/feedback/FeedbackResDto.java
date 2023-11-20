@@ -11,6 +11,7 @@ public class FeedbackResDto {
     private int id;
     private int clazzId;
     private String parentName;
+    private String tutorName;
     private int rating;
     private String content;
     private int status;
@@ -20,6 +21,7 @@ public class FeedbackResDto {
         this.id = feedback.getId();
         this.clazzId = feedback.getClazz().getId();
         this.parentName = feedback.getClazz().getRequest().getParent().getFullname();
+        this.tutorName = feedback.getClazz().getTutor().getFullname();
         this.rating = feedback.getRating();
         this.content = feedback.getContent();
         this.status = feedback.getStatus();

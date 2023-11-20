@@ -17,5 +17,7 @@ public interface FeedbackService {
 
     List<Feedback> getFeedbacksByTutorId(int tId);
 
+    List<Feedback> getFeedbacksByClazzId(int cId);
+
     Float getAverageRatingByTutorId(int tId);
 }

@@ -44,6 +44,19 @@ public class FeedbackController {
         return ApiResponseDto.<List<FeedbackResDto>>builder().data(response).build();
     }
 
+    @GetMapping("/clazz/{cId}")
+    public ApiResponseDto<List<FeedbackResDto>> getFeedbackByClazzId(@PathVariable int cId) {
+        List<Feedback> feedbacks = feedbackService.getFeedbacksByClazzId(cId);
+        List<FeedbackResDto> response = new ArrayList<>();
+        for (Feedback feedback : feedbacks) {
+            FeedbackResDto dto = new FeedbackResDto();
+            dto.fromFeedback(feedback);
+            response.add(dto);
+        }
+
+        return ApiResponseDto.<List<FeedbackResDto>>builder().data(response).build();
+    }
+
     @PostMapping("/create")
     public ApiResponseDto<CreateFeedbackResDto> create(@RequestBody FeedbackReqDto feedbackReqDto) {
         Feedback feedback = new Feedback();

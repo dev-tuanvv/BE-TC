@@ -65,4 +65,14 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     }
 
+    @Override
+    public List<Feedback> getFeedbacksByClazzId(int cId) {
+        List<Feedback> list = new ArrayList<>();
+        for (Feedback f : feedbackRepository.findAll()) {
+            if (f.getClazz() != null && f.getClazz().getId() == cId)
+                list.add(f);
+        }
+        return list;
+    }
+
 }
