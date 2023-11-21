@@ -38,9 +38,9 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @Column
-    @OneToMany(mappedBy = "user")
-    private Set<Order> orders;
+    // @Column
+    // @OneToMany(mappedBy = "user")
+    // private Set<Order> orders;
     @Column(unique = true)
     private String email;
     @Column
