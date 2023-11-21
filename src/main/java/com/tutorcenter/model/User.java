@@ -2,7 +2,6 @@ package com.tutorcenter.model;
 
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,7 +19,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,9 +36,6 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    // @Column
-    // @OneToMany(mappedBy = "user")
-    // private Set<Order> orders;
     @Column(unique = true)
     private String email;
     @Column
@@ -56,7 +51,7 @@ public class User implements UserDetails {
     @Column
     private boolean isDeleted;
 
-    public User orElseThrow(Object object) {
+    public User orElseThrow() {
         return null;
     }
 

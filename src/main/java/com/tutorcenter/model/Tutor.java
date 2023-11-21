@@ -10,21 +10,14 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Data
 @PrimaryKeyJoinColumn(name = "userId")
 @Table(name = "tblTutor")
+@EqualsAndHashCode(callSuper = true)
 public class Tutor extends User {
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // private int id;
-    // @OneToOne
-    // @JoinColumn(name = "userID")
-    // private User user;
-    @Column
-    @OneToMany(mappedBy = "tutor")
-    private List<TutorApply> tutorApplies;
     @Column
     private String phone;
     @Column
@@ -38,9 +31,6 @@ public class Tutor extends User {
     private String university;
     @Column
     private String major;
-    @Column
-    @OneToMany(mappedBy = "tutor")
-    private List<TutorSubject> subjects;
     @Column
     private String imgAvatar;
     @Column

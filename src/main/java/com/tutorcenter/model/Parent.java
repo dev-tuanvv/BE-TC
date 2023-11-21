@@ -7,18 +7,14 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "userId")
 @Table(name = "tblParent")
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Parent extends User {
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // private int id;
-    // @OneToOne
-    // @JoinColumn(name = "userID")
-    // private User user;
     @Column
     private String phone;
     @Column

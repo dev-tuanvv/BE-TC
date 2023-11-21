@@ -1,7 +1,5 @@
 package com.tutorcenter.model;
 
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -11,7 +9,6 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 
@@ -28,12 +25,12 @@ public class District {
     @ManyToOne
     @JoinColumn(name = "provinceId")
     private Province province;
-    @JsonIgnore
-    @Column
-    @OneToMany(mappedBy = "district")
-    private Set<Tutor> tutors;
-    @JsonIgnore
-    @Column
-    @OneToMany(mappedBy = "district")
-    private Set<Request> requests;
+    // @JsonIgnore
+    // @Column
+    // @OneToMany(mappedBy = "district")
+    // private Set<Tutor> tutors;
+    // @JsonIgnore
+    // @Column
+    // @OneToMany(mappedBy = "district")
+    // private Set<Request> requests;
 }

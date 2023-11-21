@@ -5,7 +5,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import com.tutorcenter.model.CustomUserDetails;
+import com.tutorcenter.dto.CustomUserDetails;
 import com.tutorcenter.model.User;
 import com.tutorcenter.repository.UserRepository;
 

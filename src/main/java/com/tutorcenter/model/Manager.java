@@ -5,18 +5,14 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @PrimaryKeyJoinColumn(name = "userId")
 @Table(name = "tbl_Manager")
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Manager extends User {
-    // @Id
-    // @GeneratedValue(strategy = GenerationType.IDENTITY)
-    // private int id;
-    // @OneToOne
-    // @JoinColumn(name = "userID")
-    // private User user;
     @Column
     private String phone;
     @Column

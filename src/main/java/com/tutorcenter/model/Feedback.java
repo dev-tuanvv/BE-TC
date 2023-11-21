@@ -24,9 +24,9 @@ public class Feedback {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "clazzId", referencedColumnName = "id")
     private Clazz clazz;
-    @ManyToOne
-    @JoinColumn(name = "tutorId")
-    private Tutor tutor;
+    // @ManyToOne
+    // @JoinColumn(name = "tutorId")
+    // private Tutor tutor;
     @Column
     private int rating;
     @Column

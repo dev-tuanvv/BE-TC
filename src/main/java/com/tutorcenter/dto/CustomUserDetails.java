@@ -1,4 +1,4 @@
-package com.tutorcenter.model;
+package com.tutorcenter.dto;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -6,6 +6,8 @@ import java.util.Collections;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+
+import com.tutorcenter.model.User;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
