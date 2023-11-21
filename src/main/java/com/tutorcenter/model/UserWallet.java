@@ -15,10 +15,10 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tblUserWallet")
-public class UserWallet implements Serializable{
+public class UserWallet implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
