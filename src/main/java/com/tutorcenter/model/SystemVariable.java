@@ -1,5 +1,6 @@
 package com.tutorcenter.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import jakarta.persistence.Column;
@@ -13,7 +14,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tblSystemVariable")
-public class SystemVariable {
+public class SystemVariable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

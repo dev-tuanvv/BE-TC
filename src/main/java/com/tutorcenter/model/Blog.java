@@ -1,5 +1,6 @@
 package com.tutorcenter.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import jakarta.persistence.Column;
@@ -13,22 +14,22 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tblBlog")
-public class Blog {
+public class Blog  implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
     private int managerID;
     @Column
-    private String Thumbnail;
+    private String thumbnail;
     @Column
-    private String Category;
+    private String category;
     @Column
-    private String Title;
+    private String title;
     @Column
-    private String Content;
+    private String content;
     @Column
-    private int Status;
+    private int status;
     @Column
     private Date dateCreate;
     @Column

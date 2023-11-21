@@ -338,30 +338,18 @@ public class ClazzController {
         return PaginRes.<SearchResDto>builder().data(data).itemsPerPage(limit).page(offset).build();
     }
 
-    @PreAuthorize("hasAnyAuthority('manager:create')")
+    // @PreAuthorize("hasAnyAuthority('manager:create')")
     @PostMapping("/create")
-    public ApiResponseDto<Integer> create(@RequestParam(name = "requestId") int rId) {
+    public ApiResponseDto<Clazz> create(@RequestParam(name = "requestId") int rId) {
         Clazz clazz = new Clazz();
-
         Request request = requestService.getRequestById(rId).orElse(null);
-        Feedback feedback = null;
-        Tutor tutor = null;
-        List<Order> orders = null;
-        List<TutorApply> tutorApplies = null;
-        List<Attendance> attendances = null; // co the tao attendance luc tao class
-
         clazz.setRequest(request);
-        clazz.setFeedback(feedback);
-        clazz.setTutor(tutor);
-        clazz.setOrders(orders);
-        clazz.setTutorApplies(tutorApplies);
-        clazz.setAttendances(attendances);
         clazz.setStatus(0);
         clazz.setDeleted(false);
 
-        int clazzId = clazzService.save(clazz).getId();
+        Clazz rs = clazzService.save(clazz);
 
-        return ApiResponseDto.<Integer>builder().data(clazzId).build();
+        return ApiResponseDto.<Clazz>builder().data(rs).build();
     }
 
     @PutMapping("/update/{id}")

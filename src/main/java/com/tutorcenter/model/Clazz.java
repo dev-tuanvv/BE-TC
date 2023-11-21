@@ -1,5 +1,7 @@
 package com.tutorcenter.model;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
@@ -18,7 +20,7 @@ import lombok.Data;
 @Data
 @Table(name = "tblClazz")
 
-public class Clazz {
+public class Clazz implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

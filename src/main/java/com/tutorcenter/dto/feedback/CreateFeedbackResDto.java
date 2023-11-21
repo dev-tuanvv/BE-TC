@@ -13,6 +13,5 @@ public class CreateFeedbackResDto {
     public void fromFeedback(Feedback feedback) {
         this.id = feedback.getId();
         this.clazzId = feedback.getClazz().getId();
-        this.tutorId = feedback.getTutor().getId();
     }
 }

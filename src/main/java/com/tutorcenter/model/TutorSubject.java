@@ -1,5 +1,7 @@
 package com.tutorcenter.model;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -12,7 +14,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tblTutorSubject")
-public class TutorSubject {
+public class TutorSubject implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

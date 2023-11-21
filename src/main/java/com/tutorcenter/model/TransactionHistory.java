@@ -1,5 +1,6 @@
 package com.tutorcenter.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -15,7 +16,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tblTransactionHistory")
-public class TransactionHistory {
+public class TransactionHistory implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

@@ -1,5 +1,6 @@
 package com.tutorcenter.model;
 
+import java.io.Serializable;
 import java.sql.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -18,7 +19,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tblRequest")
-public class Request {
+public class Request implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

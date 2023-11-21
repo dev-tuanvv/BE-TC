@@ -30,7 +30,7 @@ public class UserWalletServiceImpl implements UserWalletService {
     @Override
     public UserWallet create(int uId) {
         UserWallet userWallet = new UserWallet();
-        userWallet.setId(uId);
+        // userWallet.setId(uId);
         userWallet.setBalance(0f);
 
         return userWalletRepository.save(userWallet);

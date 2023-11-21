@@ -11,8 +11,6 @@ public class UserWalletResDto {
     private float balance;
 
     public void fromUserWallet(UserWallet userWallet) {
-        this.id = userWallet.getId();
-        this.fullname = userWallet.getFullname();
         this.balance = userWallet.getBalance();
     }
 }

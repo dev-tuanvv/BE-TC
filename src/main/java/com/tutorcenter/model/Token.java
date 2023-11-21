@@ -1,5 +1,7 @@
 package com.tutorcenter.model;
 
+import java.io.Serializable;
+
 import com.tutorcenter.constant.TokenType;
 
 import jakarta.persistence.Column;
@@ -23,7 +25,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "tblTokens")
-public class Token {
+public class Token implements Serializable{
 
     @Id
     @GeneratedValue

@@ -1,5 +1,7 @@
 package com.tutorcenter.model;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -15,7 +17,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tblDistrict")
-public class District {
+public class District implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -25,12 +27,4 @@ public class District {
     @ManyToOne
     @JoinColumn(name = "provinceId")
     private Province province;
-    // @JsonIgnore
-    // @Column
-    // @OneToMany(mappedBy = "district")
-    // private Set<Tutor> tutors;
-    // @JsonIgnore
-    // @Column
-    // @OneToMany(mappedBy = "district")
-    // private Set<Request> requests;
 }

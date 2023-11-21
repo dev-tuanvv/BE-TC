@@ -1,5 +1,7 @@
 package com.tutorcenter.model;
 
+import java.io.Serializable;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.Column;
@@ -15,7 +17,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tblTutorApply")
-public class TutorApply {
+public class TutorApply implements Serializable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

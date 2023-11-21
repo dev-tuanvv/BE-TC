@@ -62,7 +62,6 @@ public class FeedbackController {
         Feedback feedback = new Feedback();
         feedbackReqDto.toFeedback(feedback);
         feedback.setClazz(clazzService.getClazzById(feedbackReqDto.getClazzId()).orElse(null));
-        feedback.setTutor(tutorService.getTutorById(feedbackReqDto.getTutorId()).orElse(null));
 
         feedbackService.save(feedback);
         CreateFeedbackResDto dto = new CreateFeedbackResDto();
@@ -71,10 +70,4 @@ public class FeedbackController {
         return ApiResponseDto.<CreateFeedbackResDto>builder().data(dto).build();
     }
 
-    // @PutMapping("/delete/{id}")
-    // public ResponseEntity<Feedback> disableFeedback(@PathVariable int id) {
-    // Feedback feedback = feedbackService.findById(id).orElseThrow();
-    // feedback.setDeleted(true);
-    // return ResponseEntity.ok(feedbackRepository.save(feedback));
-    // }
 }
