@@ -25,14 +25,9 @@ import com.tutorcenter.dto.clazz.ListClazzResDto;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
-import com.tutorcenter.model.Attendance;
 import com.tutorcenter.model.Clazz;
-import com.tutorcenter.model.Feedback;
-import com.tutorcenter.model.Order;
 import com.tutorcenter.model.Request;
 import com.tutorcenter.model.Subject;
-import com.tutorcenter.model.Tutor;
-import com.tutorcenter.model.TutorApply;
 import com.tutorcenter.service.AttendanceService;
 import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.FeedbackService;
@@ -307,25 +302,6 @@ public class ClazzController {
         }
         return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
     }
-    // @GetMapping("/subject/{sId}")
-    // public ApiResponseDto<List<CreateClazzResDto>>
-    // getClazzsBySubjectId(@PathVariable int sId) {
-    // List<CreateClazzResDto> response = new ArrayList<>();
-    // for (Clazz clazz : clazzService.findAll()) {
-    // List<RequestSubject> rsList =
-    // requestSubjectService.getRSubjectByRId(clazz.getRequest().getId());
-    // for (RequestSubject rs : rsList) {
-    // if (rs.getSubject().getId() == sId) {
-    // CreateClazzResDto dto = new CreateClazzResDto();
-    // dto.convertClazz(clazz);
-    // response.add(dto);
-    // }
-    // }
-    // }
-
-    // return
-    // ApiResponseDto.<List<CreateClazzResDto>>builder().data(response).build();
-    // }
 
     @PostMapping("/search")
     public PaginRes<SearchResDto> search(
@@ -356,23 +332,6 @@ public class ClazzController {
     public ResponseEntity<?> update(@PathVariable(value = "id") int id, @RequestBody CreateClazzResDto clazzDto) {
         Clazz clazz = new Clazz();
         clazzDto.convertClazzDto(clazz);
-        // Request request =
-        // requestService.getRequestById(clazzDto.getRequestId()).orElseThrow();
-        // Feedback feedback =
-        // feedbackService.getFeedBackById(clazzDto.getFeedbackId()).orElseThrow();
-        // Tutor tutor = tutorService.getTutorById(clazzDto.getTutorId()).orElseThrow();
-        // List<Order> orders = orderService.getOrdersById(clazzDto.getOrders());
-        // List<TutorApply> tutorApplies =
-        // tutorApplyService.getTutorAppliesById(clazzDto.getTutorApplies());
-        // List<Attendance> attendances =
-        // attendanceService.getAttendancesById(clazzDto.getAttendances());
-
-        // clazz.setRequest(request);
-        // clazz.setFeedback(feedback);
-        // clazz.setTutor(tutor);
-        // clazz.setOrders(orders);
-        // clazz.setTutorApplies(tutorApplies);
-        // clazz.setAttendances(attendances);
 
         clazzService.save(clazz);
 
