@@ -13,6 +13,7 @@ import com.tutorcenter.dto.order.CreateOrderReqDto;
 import com.tutorcenter.dto.order.CreateOrderResDto;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.Order;
+import com.tutorcenter.model.UserWallet;
 import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.OrderService;
 import com.tutorcenter.service.SysWalletService;
@@ -35,6 +36,8 @@ public class OrderController {
 
     @PostMapping("/create")
     public ApiResponseDto<CreateOrderResDto> create(@RequestBody CreateOrderReqDto orderReqDto) {
+        UserWallet userWallet = userWalletService.getWalletByUId(8).orElse(null);
+
         Clazz clazz = clazzService.getClazzById(orderReqDto.getClazzId()).orElse(null);
 
         Order order = new Order();
