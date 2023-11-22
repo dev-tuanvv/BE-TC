@@ -23,8 +23,14 @@ public class UserWalletServiceImpl implements UserWalletService {
     }
 
     @Override
-    public Optional<UserWallet> getWalletByUId(int uId) {
-        return userWalletRepository.findById(uId);
+    public float getBalanceByUId(int uId) {
+
+        for (UserWallet uw : findAll()) {
+            if (uw.getUser().getId() == uId) {
+                return uw.getBalance();
+            }
+        }
+        return 0;
     }
 
     @Override
@@ -38,7 +44,11 @@ public class UserWalletServiceImpl implements UserWalletService {
 
     @Override
     public UserWallet deposit(int uId, float amount) {
-        UserWallet userWallet = userWalletRepository.findById(uId).orElse(null);
+        UserWallet userWallet = new UserWallet();
+        for (UserWallet uw : findAll()) {
+            if (uw.getUser().getId() == uId)
+                userWallet = uw;
+        }
         float newBalance = userWallet.getBalance() + amount;
         userWallet.setBalance(newBalance);
         userWalletRepository.save(userWallet);
@@ -48,8 +58,11 @@ public class UserWalletServiceImpl implements UserWalletService {
 
     @Override
     public UserWallet withdraw(int uId, float amount) {
-        UserWallet userWallet = userWalletRepository.findById(uId).orElse(null);
-
+        UserWallet userWallet = new UserWallet();
+        for (UserWallet uw : userWalletRepository.findAll()) {
+            if (uw.getUser().getId() == uId)
+                userWallet = uw;
+        }
         userWallet.setBalance(userWallet.getBalance() - amount);
         userWalletRepository.save(userWallet);
 
