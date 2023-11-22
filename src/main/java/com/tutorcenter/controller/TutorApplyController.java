@@ -169,30 +169,4 @@ public class TutorApplyController {
 
         return ResponseEntity.ok("Disable thành công.");
     }
-
-    // @PutMapping("/accept")
-    // public ResponseEntity<?> acceptTutorApplied(
-    // @RequestParam(name = "pId") int pId,
-    // // @RequestParam(name = "tId") int tId,
-    // @RequestParam(name = "taId") int taId) {
-
-    // TutorApply tutorApply =
-    // tutorApplyService.getTutorApplyById(taId).orElseThrow();
-
-    // if (tutorApply.getClazz().getRequest().getParent().getId() != pId) {
-    // return null;
-    // }
-
-    // for (TutorApply ta : tutorApplyService.getTutorAppliesByTutorId(pId)) {
-    // if (ta.getId() == taId) {
-    // update(ta.getId(), 1);// 1 = accepted
-    // ta.getClazz().getTutor().setId(tutorApply.getTutor().getId());
-    // clazzService.save(ta.getClazz());
-    // } else {
-    // update(ta.getId(), 2);// 2 = rejected
-    // }
-    // }
-
-    // return ResponseEntity.ok("Chọn gia sư thành công.");
-    // }
 }

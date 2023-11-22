@@ -36,7 +36,7 @@ public class OrderController {
 
     @PostMapping("/create")
     public ApiResponseDto<CreateOrderResDto> create(@RequestBody CreateOrderReqDto orderReqDto) {
-        UserWallet userWallet = userWalletService.getWalletByUId(8).orElse(null);
+
 
         Clazz clazz = clazzService.getClazzById(orderReqDto.getClazzId()).orElse(null);
 
