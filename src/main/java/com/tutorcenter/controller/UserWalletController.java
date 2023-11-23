@@ -33,7 +33,7 @@ public class UserWalletController {
         UserWallet userWallet = userWalletService.deposit(id, amount);
 
         TransactionHistory transactionHistory = new TransactionHistory();
-        // transactionHistory.setUser(userWallet);
+        transactionHistory.setUser(userWallet.getUser());
         transactionHistory.setAmount(amount);
         transactionHistory.setType("Nạp");
         transactionHistory.setTimeCreate(new Date(System.currentTimeMillis()));
@@ -58,7 +58,7 @@ public class UserWalletController {
         userWallet = userWalletService.withdraw(id, amount);
 
         TransactionHistory transactionHistory = new TransactionHistory();
-        // transactionHistory.setUser(userWallet);
+        transactionHistory.setUser(userWallet.getUser());
         transactionHistory.setAmount(amount);
         transactionHistory.setType("Rút");
         transactionHistory.setTimeCreate(new Date(System.currentTimeMillis()));
