@@ -13,7 +13,7 @@ public interface UserWalletService {
 
     float getBalanceByUId(int uId);
 
-    // UserWallet getWalletByUId(int uId);
+    UserWallet getWalletByUId(int uId);
 
     UserWallet create(int uId);
 

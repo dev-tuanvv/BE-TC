@@ -69,4 +69,14 @@ public class UserWalletServiceImpl implements UserWalletService {
         return userWallet;
     }
 
+    @Override
+    public UserWallet getWalletByUId(int uId) {
+         UserWallet userWallet = new UserWallet();
+        for (UserWallet uw : findAll()) {
+            if (uw.getUser().getId() == uId)
+                userWallet = uw;
+        }
+        return userWallet;
+    }
+
 }

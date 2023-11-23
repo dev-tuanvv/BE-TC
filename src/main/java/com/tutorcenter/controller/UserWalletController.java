@@ -50,7 +50,7 @@ public class UserWalletController {
     @PutMapping("/withdraw")
     public ApiResponseDto<UserWalletResDto> withdraw(@RequestParam(name = "userId") int id,
             @RequestParam(name = "amount") float amount) {
-        UserWallet userWallet = userWalletService.getWalletByUId(id).orElse(null);
+        UserWallet userWallet = userWalletService.getWalletByUId(id);
         if (amount <= 0 || userWallet.getBalance() < amount) {
             return ApiResponseDto.<UserWalletResDto>builder()
                     .message("Không thể rút số âm hoặc lớn hơn số tiền đang có.").build();
