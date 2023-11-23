@@ -12,6 +12,10 @@ import lombok.Data;
 public class ClazzDetailResDto {
     private int id;
 
+    private String parentName;
+
+    private float tuition;
+
     private String phone;
 
     private String address;
@@ -32,6 +36,8 @@ public class ClazzDetailResDto {
 
     public void fromClazz(Clazz clazz) {
         this.id = clazz.getId();
+        this.parentName = clazz.getRequest().getParent().getFullname();
+        this.tuition = clazz.getRequest().getTuition();
         this.phone = clazz.getRequest().getPhone();
         this.address = clazz.getRequest().getAddress();
         this.districtName = clazz.getRequest().getDistrict().getName();
