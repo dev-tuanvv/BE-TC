@@ -24,4 +24,11 @@ public class TransactionHitoryServiceImpl implements TransactionHistoryService {
     public TransactionHistory save(TransactionHistory transactionHistory) {
         return transactionHistoryRepository.save(transactionHistory);
     }
+
+    @Override
+    public List<TransactionHistory> findAllByUserId(int userId) {
+        return transactionHistoryRepository.findAll().stream()
+                .filter(transaction -> transaction.getUser() != null && transaction.getUser().getId() == userId)
+                .toList();
+    }
 }

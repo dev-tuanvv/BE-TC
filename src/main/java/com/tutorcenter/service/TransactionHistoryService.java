@@ -10,5 +10,7 @@ import com.tutorcenter.model.TransactionHistory;
 public interface TransactionHistoryService {
     List<TransactionHistory> findAll();
 
+    List<TransactionHistory> findAllByUserId(int userId);
+
     TransactionHistory save(TransactionHistory transactionHistory);
 }
