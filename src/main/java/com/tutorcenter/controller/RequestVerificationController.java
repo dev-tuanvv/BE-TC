@@ -43,100 +43,125 @@ public class RequestVerificationController {
     @GetMapping("/{id}")
     public ApiResponseDto<RequestVerificationResDto> getRVById(@PathVariable int id) {
         RequestVerificationResDto dto = new RequestVerificationResDto();
-        RequestVerification requestVerification = requestVerificationService.getRVById(id).orElse(null);
-        dto.fromRequestVerification(requestVerification);
+        try {
 
+            RequestVerification requestVerification = requestVerificationService.getRVById(id).orElse(null);
+            dto.fromRequestVerification(requestVerification);
+        } catch (Exception e) {
+            return ApiResponseDto.<RequestVerificationResDto>builder().responseCode("500").message(e.getMessage())
+                    .build();
+        }
         return ApiResponseDto.<RequestVerificationResDto>builder().data(dto).build();
     }
 
     @PreAuthorize("hasAnyAuthority('manager:read','tutor:read')")
     @GetMapping("/tutor/{tId}")
     public ApiResponseDto<List<RequestVerificationResDto>> getRVByTutorId(@PathVariable int tId) {
+        try {
 
-        List<RequestVerification> requestVerifications = requestVerificationService.getRVByTutorId(tId);
-        List<RequestVerificationResDto> response = new ArrayList<>();
-        for (RequestVerification requestVerification : requestVerifications) {
-            RequestVerificationResDto dto = new RequestVerificationResDto();
-            dto.fromRequestVerification(requestVerification);
-            response.add(dto);
+            List<RequestVerification> requestVerifications = requestVerificationService.getRVByTutorId(tId);
+            List<RequestVerificationResDto> response = new ArrayList<>();
+            for (RequestVerification requestVerification : requestVerifications) {
+                RequestVerificationResDto dto = new RequestVerificationResDto();
+                dto.fromRequestVerification(requestVerification);
+                response.add(dto);
+            }
+
+            return ApiResponseDto.<List<RequestVerificationResDto>>builder().data(response).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<List<RequestVerificationResDto>>builder().responseCode("500").message(e.getMessage())
+                    .build();
         }
-
-        return ApiResponseDto.<List<RequestVerificationResDto>>builder().data(response).build();
     }
 
     @PreAuthorize("hasAnyAuthority('manager:read')")
     @GetMapping("/manager/{mId}")
     public ApiResponseDto<List<RequestVerificationResDto>> getRVByManagerId(@PathVariable int mId) {
+        try {
 
-        List<RequestVerification> requestVerifications = requestVerificationService.getRVByManagerId(mId);
-        List<RequestVerificationResDto> response = new ArrayList<>();
-        for (RequestVerification requestVerification : requestVerifications) {
-            RequestVerificationResDto dto = new RequestVerificationResDto();
-            dto.fromRequestVerification(requestVerification);
+            List<RequestVerification> requestVerifications = requestVerificationService.getRVByManagerId(mId);
+            List<RequestVerificationResDto> response = new ArrayList<>();
+            for (RequestVerification requestVerification : requestVerifications) {
+                RequestVerificationResDto dto = new RequestVerificationResDto();
+                dto.fromRequestVerification(requestVerification);
 
-            List<Integer> listSId = tutorSubjectService
-                    .getListSIdByTId(requestVerification.getTutor().getId());
-            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+                List<Integer> listSId = tutorSubjectService
+                        .getListSIdByTId(requestVerification.getTutor().getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
-            List<SubjectLevelResDto> listSL = new ArrayList<>();
-            for (Subject subject : subjects) {
-                SubjectLevelResDto sLDto = new SubjectLevelResDto();
-                sLDto.fromSubject(subject);
-                listSL.add(sLDto);
+                List<SubjectLevelResDto> listSL = new ArrayList<>();
+                for (Subject subject : subjects) {
+                    SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                    sLDto.fromSubject(subject);
+                    listSL.add(sLDto);
+                }
+                dto.setSubjects(listSL);
+
+                response.add(dto);
             }
-            dto.setSubjects(listSL);
 
-            response.add(dto);
+            return ApiResponseDto.<List<RequestVerificationResDto>>builder().data(response).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<List<RequestVerificationResDto>>builder().responseCode("500").message(e.getMessage())
+                    .build();
         }
-
-        return ApiResponseDto.<List<RequestVerificationResDto>>builder().data(response).build();
     }
 
     @PreAuthorize("hasAnyAuthority('tutor:create')")
     @PostMapping("/create")
     public ApiResponseDto<Integer> create(@RequestParam(name = "tutorId") int tId) {
-        RequestVerification requestVerification = new RequestVerification();
-        // check RequestVerification đã tồn tại ở trạng thái chờ duyệt
-        List<RequestVerification> reqs = requestVerificationService.getRVByTutorId(tId).stream()
-                .filter(req -> req.getStatus() == 0)
-                .toList();
-        if (reqs.size() > 0) {
-            return ApiResponseDto.<Integer>builder().data(-1)
-                    .message("Đã tồn tại RequestVerification với TutorId: " + tId + " ở trạng thái đang chờ duyệt")
-                    .build();
+        try {
+
+            RequestVerification requestVerification = new RequestVerification();
+            // check RequestVerification đã tồn tại ở trạng thái chờ duyệt
+            List<RequestVerification> reqs = requestVerificationService.getRVByTutorId(tId).stream()
+                    .filter(req -> req.getStatus() == 0)
+                    .toList();
+            if (reqs.size() > 0) {
+                return ApiResponseDto.<Integer>builder().data(-1)
+                        .message("Đã tồn tại RequestVerification với TutorId: " + tId + " ở trạng thái đang chờ duyệt")
+                        .build();
+            }
+            requestVerification.setTutor(tutorService.getTutorById(tId).orElse(null));
+            requestVerification.setManager(null);
+            requestVerification.setStatus(0);
+            requestVerification.setRejectReason(null);
+            requestVerification.setDateCreate(new Date(System.currentTimeMillis()));
+
+            int rvId = requestVerificationService.save(requestVerification).getId();
+
+            return ApiResponseDto.<Integer>builder().data(rvId).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
         }
-        requestVerification.setTutor(tutorService.getTutorById(tId).orElse(null));
-        requestVerification.setManager(null);
-        requestVerification.setStatus(0);
-        requestVerification.setRejectReason(null);
-        requestVerification.setDateCreate(new Date(System.currentTimeMillis()));
-
-        int rvId = requestVerificationService.save(requestVerification).getId();
-
-        return ApiResponseDto.<Integer>builder().data(rvId).build();
     }
 
     @PreAuthorize("hasAnyAuthority('manager:update')")
     @PutMapping("/updateStatus")
     public ApiResponseDto<UpdateRequestVerificationResDto> update(@RequestBody RequestVerificationReqDto reqDto) {
+        try {
 
-        List<RequestVerification> reqs = requestVerificationService.getRVByTutorId(reqDto.getTutorId()).stream()
-                .filter(req -> req.getStatus() == 0)
-                .toList();
-        if (reqs.isEmpty()) {
-            return ApiResponseDto.<UpdateRequestVerificationResDto>builder()
-                    .message("Không tồn tại RequestVerification với TutorId: " + reqDto.getTutorId()
-                            + " ở trạng thái đang chờ duyệt")
+            List<RequestVerification> reqs = requestVerificationService.getRVByTutorId(reqDto.getTutorId()).stream()
+                    .filter(req -> req.getStatus() == 0)
+                    .toList();
+            if (reqs.isEmpty()) {
+                return ApiResponseDto.<UpdateRequestVerificationResDto>builder()
+                        .message("Không tồn tại RequestVerification với TutorId: " + reqDto.getTutorId()
+                                + " ở trạng thái đang chờ duyệt")
+                        .build();
+            }
+
+            RequestVerification requestVerification = reqs.get(0);
+
+            reqDto.toRequestVerification(requestVerification);
+            UpdateRequestVerificationResDto resDto = new UpdateRequestVerificationResDto();
+            resDto.fromRequestVerification(requestVerificationService.save(requestVerification));
+
+            return ApiResponseDto.<UpdateRequestVerificationResDto>builder().data(resDto).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<UpdateRequestVerificationResDto>builder().responseCode("500").message(e.getMessage())
                     .build();
         }
-
-        RequestVerification requestVerification = reqs.get(0);
-
-        reqDto.toRequestVerification(requestVerification);
-        UpdateRequestVerificationResDto resDto = new UpdateRequestVerificationResDto();
-        resDto.fromRequestVerification(requestVerificationService.save(requestVerification));
-
-        return ApiResponseDto.<UpdateRequestVerificationResDto>builder().data(resDto).build();
     }
 
 }

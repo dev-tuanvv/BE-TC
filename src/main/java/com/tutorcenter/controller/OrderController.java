@@ -36,34 +36,36 @@ public class OrderController {
 
     @PostMapping("/create")
     public ApiResponseDto<CreateOrderResDto> create(@RequestBody CreateOrderReqDto orderReqDto) {
-
-
-        Clazz clazz = clazzService.getClazzById(orderReqDto.getClazzId()).orElse(null);
-
-        Order order = new Order();
-        orderReqDto.toOrder(order);
-        order.setClazz(clazz);
-        order.setStatus(0);
-        order.setTimeCreate(new Date(System.currentTimeMillis()));
-
-        if (orderReqDto.getType() == 1) {
-            order.setUser(userService.getUserById(clazz.getRequest().getParent().getId()).orElse(null));
-            userWalletService.withdraw(clazz.getRequest().getParent().getId(), orderReqDto.getAmount());
-            sysWalletService.deposit(orderReqDto.getAmount());
-        } else if (orderReqDto.getType() == 2) {
-            order.setUser(userService.getUserById(clazz.getTutor().getId()).orElse(null));
-            if (orderReqDto.getAmount() > sysWalletService.getBalance())
-                return ApiResponseDto.<CreateOrderResDto>builder().message("Số dư trong tài khoản hệ thống không đủ.")
-                        .build();
-            sysWalletService.withdraw(orderReqDto.getAmount());
-            userWalletService.deposit(clazz.getTutor().getId(), orderReqDto.getAmount());
-
-        }
-
         CreateOrderResDto dto = new CreateOrderResDto();
+        try {
 
-        dto.fromOrder(orderService.save(order));
+            Clazz clazz = clazzService.getClazzById(orderReqDto.getClazzId()).orElse(null);
 
+            Order order = new Order();
+            orderReqDto.toOrder(order);
+            order.setClazz(clazz);
+            order.setStatus(0);
+            order.setTimeCreate(new Date(System.currentTimeMillis()));
+
+            if (orderReqDto.getType() == 1) {
+                order.setUser(userService.getUserById(clazz.getRequest().getParent().getId()).orElse(null));
+                userWalletService.withdraw(clazz.getRequest().getParent().getId(), orderReqDto.getAmount());
+                sysWalletService.deposit(orderReqDto.getAmount());
+            } else if (orderReqDto.getType() == 2) {
+                order.setUser(userService.getUserById(clazz.getTutor().getId()).orElse(null));
+                if (orderReqDto.getAmount() > sysWalletService.getBalance())
+                    return ApiResponseDto.<CreateOrderResDto>builder()
+                            .message("Số dư trong tài khoản hệ thống không đủ.")
+                            .build();
+                sysWalletService.withdraw(orderReqDto.getAmount());
+                userWalletService.deposit(clazz.getTutor().getId(), orderReqDto.getAmount());
+
+            }
+
+            dto.fromOrder(orderService.save(order));
+        } catch (Exception e) {
+            return ApiResponseDto.<CreateOrderResDto>builder().responseCode("500").message(e.getMessage()).build();
+        }
         return ApiResponseDto.<CreateOrderResDto>builder().data(dto).build();
     }
 }

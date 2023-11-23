@@ -28,27 +28,37 @@ public class AttendanceController {
 
     @GetMapping("")
     public ApiResponseDto<List<AttendanceResDto>> getListAttendance() {
-        List<Attendance> attendances = attendanceService.findAll();
-        List<AttendanceResDto> response = new ArrayList<>();
-        for (Attendance attendance : attendances) {
-            AttendanceResDto dto = new AttendanceResDto();
-            dto.fromAttendance(attendance);
-            response.add(dto);
-        }
 
+        List<AttendanceResDto> response = new ArrayList<>();
+        try {
+            List<Attendance> attendances = attendanceService.findAll();
+
+            for (Attendance attendance : attendances) {
+                AttendanceResDto dto = new AttendanceResDto();
+                dto.fromAttendance(attendance);
+                response.add(dto);
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<AttendanceResDto>>builder().responseCode("500").message(e.getMessage()).build();
+        }
         return ApiResponseDto.<List<AttendanceResDto>>builder().data(response).build();
+
     }
 
     @GetMapping("/clazz/{cId}")
     public ApiResponseDto<List<AttendanceResDto>> getListAttendanceByClazzId(@PathVariable int cId) {
-        List<Attendance> attendances = attendanceService.getAttendancesByClazzId(cId);
         List<AttendanceResDto> response = new ArrayList<>();
-        for (Attendance attendance : attendances) {
-            AttendanceResDto dto = new AttendanceResDto();
-            dto.fromAttendance(attendance);
-            response.add(dto);
-        }
+        try {
+            List<Attendance> attendances = attendanceService.getAttendancesByClazzId(cId);
 
+            for (Attendance attendance : attendances) {
+                AttendanceResDto dto = new AttendanceResDto();
+                dto.fromAttendance(attendance);
+                response.add(dto);
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<AttendanceResDto>>builder().responseCode("500").message(e.getMessage()).build();
+        }
         return ApiResponseDto.<List<AttendanceResDto>>builder().data(response).build();
     }
 
@@ -57,12 +67,15 @@ public class AttendanceController {
             @RequestParam(name = "status") int status) {
         Attendance attendance = new Attendance();
         AttendanceResDto dto = new AttendanceResDto();
-        attendance.setClazz(clazzService.getClazzById(clazzId).orElse(null));
-        attendance.setStatus(status);
-        attendance.setDateCreate(new Date(System.currentTimeMillis()));
+        try {
+            attendance.setClazz(clazzService.getClazzById(clazzId).orElse(null));
+            attendance.setStatus(status);
+            attendance.setDateCreate(new Date(System.currentTimeMillis()));
 
-        dto.fromAttendance(attendanceService.save(attendance));
-
+            dto.fromAttendance(attendanceService.save(attendance));
+        } catch (Exception e) {
+            return ApiResponseDto.<AttendanceResDto>builder().responseCode("500").message(e.getMessage()).build();
+        }
         return ApiResponseDto.<AttendanceResDto>builder().data(dto).build();
     }
 }

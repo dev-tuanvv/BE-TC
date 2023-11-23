@@ -22,21 +22,29 @@ public class SubjectController {
 
     @GetMapping("")
     public ApiResponseDto<List<Subject>> getAllSubjects() {
-        List<Subject> data = subjectService.findAll();
-        return ApiResponseDto.<List<Subject>>builder().data(data).build();
+        try {
+
+            List<Subject> data = subjectService.findAll();
+            return ApiResponseDto.<List<Subject>>builder().data(data).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<List<Subject>>builder().responseCode("500").message(e.getMessage()).build();
+        }
     }
 
     @GetMapping("/level")
     public ApiResponseDto<List<SubjectResDto>> getSubjectsByLevel(@RequestParam String level) {
         List<SubjectResDto> data = new ArrayList<>();
+        try {
 
-        List<Subject> subjects = subjectService.getSubjectsByLevel(level);
-        for (Subject s : subjects) {
-            SubjectResDto dto = new SubjectResDto();
-            dto.fromSubject(s);
-            data.add(dto);
+            List<Subject> subjects = subjectService.getSubjectsByLevel(level);
+            for (Subject s : subjects) {
+                SubjectResDto dto = new SubjectResDto();
+                dto.fromSubject(s);
+                data.add(dto);
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<SubjectResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
-
         return ApiResponseDto.<List<SubjectResDto>>builder().data(data).build();
     }
 

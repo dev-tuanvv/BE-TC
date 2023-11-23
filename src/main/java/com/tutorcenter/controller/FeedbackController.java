@@ -33,40 +33,55 @@ public class FeedbackController {
 
     @GetMapping("/tutor/{tId}")
     public ApiResponseDto<List<FeedbackResDto>> getFeedbackByTutorId(@PathVariable int tId) {
-        List<Feedback> feedbacks = feedbackService.getFeedbacksByTutorId(tId);
         List<FeedbackResDto> response = new ArrayList<>();
-        for (Feedback feedback : feedbacks) {
-            FeedbackResDto dto = new FeedbackResDto();
-            dto.fromFeedback(feedback);
-            response.add(dto);
-        }
+        try {
 
+            List<Feedback> feedbacks = feedbackService.getFeedbacksByTutorId(tId);
+
+            for (Feedback feedback : feedbacks) {
+                FeedbackResDto dto = new FeedbackResDto();
+                dto.fromFeedback(feedback);
+                response.add(dto);
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<FeedbackResDto>>builder().responseCode("500").message(e.getMessage()).build();
+        }
         return ApiResponseDto.<List<FeedbackResDto>>builder().data(response).build();
     }
 
     @GetMapping("/clazz/{cId}")
     public ApiResponseDto<List<FeedbackResDto>> getFeedbackByClazzId(@PathVariable int cId) {
-        List<Feedback> feedbacks = feedbackService.getFeedbacksByClazzId(cId);
         List<FeedbackResDto> response = new ArrayList<>();
-        for (Feedback feedback : feedbacks) {
-            FeedbackResDto dto = new FeedbackResDto();
-            dto.fromFeedback(feedback);
-            response.add(dto);
-        }
+        try {
 
+            List<Feedback> feedbacks = feedbackService.getFeedbacksByClazzId(cId);
+
+            for (Feedback feedback : feedbacks) {
+                FeedbackResDto dto = new FeedbackResDto();
+                dto.fromFeedback(feedback);
+                response.add(dto);
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<FeedbackResDto>>builder().responseCode("500").message(e.getMessage()).build();
+        }
         return ApiResponseDto.<List<FeedbackResDto>>builder().data(response).build();
     }
 
     @PostMapping("/create")
     public ApiResponseDto<CreateFeedbackResDto> create(@RequestBody FeedbackReqDto feedbackReqDto) {
-        Feedback feedback = new Feedback();
-        feedbackReqDto.toFeedback(feedback);
-        feedback.setClazz(clazzService.getClazzById(feedbackReqDto.getClazzId()).orElse(null));
-
-        feedbackService.save(feedback);
         CreateFeedbackResDto dto = new CreateFeedbackResDto();
-        dto.fromFeedback(feedback);
+        try {
 
+            Feedback feedback = new Feedback();
+            feedbackReqDto.toFeedback(feedback);
+            feedback.setClazz(clazzService.getClazzById(feedbackReqDto.getClazzId()).orElse(null));
+
+            feedbackService.save(feedback);
+
+            dto.fromFeedback(feedback);
+        } catch (Exception e) {
+            return ApiResponseDto.<CreateFeedbackResDto>builder().responseCode("500").message(e.getMessage()).build();
+        }
         return ApiResponseDto.<CreateFeedbackResDto>builder().data(dto).build();
     }
 

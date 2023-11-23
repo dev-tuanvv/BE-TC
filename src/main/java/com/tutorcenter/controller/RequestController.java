@@ -59,26 +59,29 @@ public class RequestController {
     public ApiResponseDto<List<RequestResDto>> getListRequest() {
 
         List<RequestResDto> response = new ArrayList<>();
+        try {
 
-        for (Request request : requestService.findAll()) {
-            RequestResDto dto = new RequestResDto();
-            dto.fromRequest(request);
-            // Tạo list SubjectLevel
-            List<Integer> listSId = requestSubjectService
-                    .getListSIdByRId(request.getId());
-            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+            for (Request request : requestService.findAll()) {
+                RequestResDto dto = new RequestResDto();
+                dto.fromRequest(request);
+                // Tạo list SubjectLevel
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(request.getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
-            List<SubjectLevelResDto> listSL = new ArrayList<>();
-            for (Subject subject : subjects) {
-                SubjectLevelResDto sLDto = new SubjectLevelResDto();
-                sLDto.fromSubject(subject);
-                listSL.add(sLDto);
+                List<SubjectLevelResDto> listSL = new ArrayList<>();
+                for (Subject subject : subjects) {
+                    SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                    sLDto.fromSubject(subject);
+                    listSL.add(sLDto);
+                }
+                dto.setSubjects(listSL);
+
+                response.add(dto);
             }
-            dto.setSubjects(listSL);
-
-            response.add(dto);
+        } catch (Exception e) {
+            return ApiResponseDto.<List<RequestResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
-
         return ApiResponseDto.<List<RequestResDto>>builder().data(response).build();
     }
 
@@ -86,51 +89,18 @@ public class RequestController {
     // này test trường hợp k author được, vì admin:readd chứ k phải admin:read
     @GetMapping("/{id}")
     public ApiResponseDto<RequestDetailResDto> getRequestDetailById(@PathVariable(value = "id") int id) {
-        Request request = requestService.getRequestById(id).orElse(null);
-        if (request == null) {
-            return ApiResponseDto.<RequestDetailResDto>builder().responseCode("404").message("Request not found")
-                    .build();
-        }
         RequestDetailResDto response = new RequestDetailResDto();
-        response.fromRequest(request);
-        List<Integer> listSId = requestSubjectService
-                .getListSIdByRId(id);
-        List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+        try {
 
-        List<SubjectLevelResDto> listSL = new ArrayList<>();
-        for (Subject subject : subjects) {
-            SubjectLevelResDto sLDto = new SubjectLevelResDto();
-            sLDto.fromSubject(subject);
-            listSL.add(sLDto);
-        }
-        response.setSubjects(listSL);
-        ;
+            Request request = requestService.getRequestById(id).orElse(null);
+            if (request == null) {
+                return ApiResponseDto.<RequestDetailResDto>builder().responseCode("404").message("Request not found")
+                        .build();
+            }
 
-        return ApiResponseDto.<RequestDetailResDto>builder().data(response).build();
-    }
-
-    @PreAuthorize("hasAnyAuthority('parent:read')")
-    @GetMapping("/parent/{pId}")
-    public ApiResponseDto<List<ParentRequestResDto>> getRequestByParentId(@PathVariable(value = "pId") int pId) {
-        Parent parent = parentService.getParentById(pId).orElse(null);
-        if (parent == null || pId != Common.getCurrentUserId()) {
-            return ApiResponseDto.<List<ParentRequestResDto>>builder().responseCode("404").message("Parent not found")
-                    .build();
-        }
-        List<ParentRequestResDto> response = new ArrayList<>();
-        List<Request> listRequests = requestService.getRequestByParentID(pId);
-
-        if (listRequests == null || listRequests.isEmpty()) {
-            return ApiResponseDto.<List<ParentRequestResDto>>builder().responseCode("404")
-                    .message("Parent don't have any request")
-                    .build();
-        }
-        for (Request r : listRequests) {
-            ParentRequestResDto dto = new ParentRequestResDto();
-            dto.fromRequest(r);
-            // Tạo list SubjectLevel từ requestId
+            response.fromRequest(request);
             List<Integer> listSId = requestSubjectService
-                    .getListSIdByRId(r.getId());
+                    .getListSIdByRId(id);
             List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
             List<SubjectLevelResDto> listSL = new ArrayList<>();
@@ -139,9 +109,55 @@ public class RequestController {
                 sLDto.fromSubject(subject);
                 listSL.add(sLDto);
             }
+            response.setSubjects(listSL);
 
-            dto.setSubjects(listSL);
-            response.add(dto);
+        } catch (Exception e) {
+            return ApiResponseDto.<RequestDetailResDto>builder().responseCode("500").message(e.getMessage()).build();
+        }
+        return ApiResponseDto.<RequestDetailResDto>builder().data(response).build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('parent:read')")
+    @GetMapping("/parent/{pId}")
+    public ApiResponseDto<List<ParentRequestResDto>> getRequestByParentId(@PathVariable(value = "pId") int pId) {
+        List<ParentRequestResDto> response = new ArrayList<>();
+        try {
+
+            Parent parent = parentService.getParentById(pId).orElse(null);
+            if (parent == null || pId != Common.getCurrentUserId()) {
+                return ApiResponseDto.<List<ParentRequestResDto>>builder().responseCode("404")
+                        .message("Parent not found")
+                        .build();
+            }
+
+            List<Request> listRequests = requestService.getRequestByParentID(pId);
+
+            if (listRequests == null || listRequests.isEmpty()) {
+                return ApiResponseDto.<List<ParentRequestResDto>>builder().responseCode("404")
+                        .message("Parent don't have any request")
+                        .build();
+            }
+            for (Request r : listRequests) {
+                ParentRequestResDto dto = new ParentRequestResDto();
+                dto.fromRequest(r);
+                // Tạo list SubjectLevel từ requestId
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(r.getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+                List<SubjectLevelResDto> listSL = new ArrayList<>();
+                for (Subject subject : subjects) {
+                    SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                    sLDto.fromSubject(subject);
+                    listSL.add(sLDto);
+                }
+
+                dto.setSubjects(listSL);
+                response.add(dto);
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<ParentRequestResDto>>builder().responseCode("500").message(e.getMessage())
+                    .build();
         }
         return ApiResponseDto.<List<ParentRequestResDto>>builder().data(response).build();
     }
@@ -149,37 +165,42 @@ public class RequestController {
     @PreAuthorize("hasAnyAuthority('manager:read')")
     @GetMapping("/manager/{mId}")
     public ApiResponseDto<List<RequestResDto>> getRequestByManagerId(@PathVariable(value = "mId") int mId) {
-        Manager manager = managerService.getManagerById(mId).orElse(null);
-        if (manager == null || mId != Common.getCurrentUserId()) {
-            return ApiResponseDto.<List<RequestResDto>>builder().responseCode("404").message("Manager not found")
-                    .build();
-        }
         List<RequestResDto> response = new ArrayList<>();
-        List<Request> listRequests = requestService.getRequestByManagerID(mId);
-        if (listRequests == null || listRequests.isEmpty()) {
-            return ApiResponseDto.<List<RequestResDto>>builder().responseCode("404")
-                    .message("Manager don't have any request")
-                    .build();
-        }
-        for (Request request : listRequests) {
-            RequestResDto requestResDto = new RequestResDto();
-            requestResDto.fromRequest(request);
-            // tạo list SubjectLevel từ requestId
-            List<Integer> listSId = requestSubjectService
-                    .getListSIdByRId(request.getId());
-            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+        try {
 
-            List<SubjectLevelResDto> listSL = new ArrayList<>();
-            for (Subject subject : subjects) {
-                SubjectLevelResDto sLDto = new SubjectLevelResDto();
-                sLDto.fromSubject(subject);
-                listSL.add(sLDto);
+            Manager manager = managerService.getManagerById(mId).orElse(null);
+            if (manager == null || mId != Common.getCurrentUserId()) {
+                return ApiResponseDto.<List<RequestResDto>>builder().responseCode("404").message("Manager not found")
+                        .build();
             }
 
-            requestResDto.setSubjects(listSL);
-            response.add(requestResDto);
-        }
+            List<Request> listRequests = requestService.getRequestByManagerID(mId);
+            if (listRequests == null || listRequests.isEmpty()) {
+                return ApiResponseDto.<List<RequestResDto>>builder().responseCode("404")
+                        .message("Manager don't have any request")
+                        .build();
+            }
+            for (Request request : listRequests) {
+                RequestResDto requestResDto = new RequestResDto();
+                requestResDto.fromRequest(request);
+                // tạo list SubjectLevel từ requestId
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(request.getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
+                List<SubjectLevelResDto> listSL = new ArrayList<>();
+                for (Subject subject : subjects) {
+                    SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                    sLDto.fromSubject(subject);
+                    listSL.add(sLDto);
+                }
+
+                requestResDto.setSubjects(listSL);
+                response.add(requestResDto);
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<RequestResDto>>builder().responseCode("500").message(e.getMessage()).build();
+        }
         return ApiResponseDto.<List<RequestResDto>>builder().data(response).build();
     }
 
@@ -209,15 +230,19 @@ public class RequestController {
     @PutMapping("/updateStatus")
     public ApiResponseDto<Integer> updateSubjects(@RequestParam(name = "requestId") int rId,
             @RequestParam(name = "status") int status, @RequestParam(name = "rejectReason") String rr) {
-        Request rq = requestService.getRequestById(rId).orElse(null);
-        if (rq == null) {
-            return ApiResponseDto.<Integer>builder().data(null).responseCode("404").message("Not found").build();
+        try {
+
+            Request rq = requestService.getRequestById(rId).orElse(null);
+            if (rq == null) {
+                return ApiResponseDto.<Integer>builder().data(null).responseCode("404").message("Not found").build();
+            }
+            rq.setStatus(status);
+            rq.setRejectReason(rr);
+
+            requestService.save(rq);
+        } catch (Exception e) {
+            return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
         }
-        rq.setStatus(status);
-        rq.setRejectReason(rr);
-
-        requestService.save(rq);
-
         return ApiResponseDto.<Integer>builder().data(rId).build();
     }
 
@@ -226,24 +251,34 @@ public class RequestController {
     public ApiResponseDto<Request> updateRequest(
             @PathVariable(value = "id") int id,
             @RequestBody RequestDto requestDto) {
-        Request rq = requestService.getRequestById(id).orElse(null);
-        if (rq == null) {
-            return ApiResponseDto.<Request>builder().data(null).responseCode("404").message("Not found").build();
-        }
-        requestDto.convertRequestDto(rq);
-        rq.setParent(parentService.getParentById(requestDto.getParentId()).orElse(null));
-        rq.setManager(managerService.getManagerById(requestDto.getManagerId()).orElse(null));
-        rq.setClazz(clazzService.getClazzById(requestDto.getClazzId()).orElse(null));
-        rq.setDistrict(districtService.getDistrictById(requestDto.getDistrictId()).orElse(null));
+        try {
 
-        return ApiResponseDto.<Request>builder().data(requestService.save(rq)).build();
+            Request rq = requestService.getRequestById(id).orElse(null);
+            if (rq == null) {
+                return ApiResponseDto.<Request>builder().data(null).responseCode("404").message("Not found").build();
+            }
+            requestDto.convertRequestDto(rq);
+            rq.setParent(parentService.getParentById(requestDto.getParentId()).orElse(null));
+            rq.setManager(managerService.getManagerById(requestDto.getManagerId()).orElse(null));
+            rq.setClazz(clazzService.getClazzById(requestDto.getClazzId()).orElse(null));
+            rq.setDistrict(districtService.getDistrictById(requestDto.getDistrictId()).orElse(null));
+
+            return ApiResponseDto.<Request>builder().data(requestService.save(rq)).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<Request>builder().responseCode("500").message(e.getMessage()).build();
+        }
     }
 
     @PreAuthorize("hasAnyAuthority('parent:delete')")
     @DeleteMapping("/delete/{id}")
     public ApiResponseDto<Integer> disableRequest(@PathVariable int id) {
-        Request rq = requestService.getRequestById(id).orElseThrow();
-        rq.setDeleted(true);
-        return ApiResponseDto.<Integer>builder().data(id).build();
+        try {
+
+            Request rq = requestService.getRequestById(id).orElseThrow();
+            rq.setDeleted(true);
+            return ApiResponseDto.<Integer>builder().data(id).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
+        }
     }
 }

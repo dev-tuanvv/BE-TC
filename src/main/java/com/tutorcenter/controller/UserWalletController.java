@@ -32,49 +32,57 @@ public class UserWalletController {
     @PutMapping("/deposit")
     public ApiResponseDto<UserWalletResDto> deposit(@RequestParam(name = "userId") int id,
             @RequestParam(name = "amount") float amount) {
-        if (amount <= 0) {
-            return ApiResponseDto.<UserWalletResDto>builder().message("Không thể nạp số tiền nhỏ hơn 0").build();
+        try {
+
+            if (amount <= 0) {
+                return ApiResponseDto.<UserWalletResDto>builder().message("Không thể nạp số tiền nhỏ hơn 0").build();
+            }
+            UserWallet userWallet = userWalletService.deposit(id, amount);
+
+            TransactionHistory transactionHistory = new TransactionHistory();
+            transactionHistory.setUser(userWallet.getUser());
+            transactionHistory.setAmount(amount);
+            transactionHistory.setType("Nạp");
+            transactionHistory.setTimeCreate(new Date(System.currentTimeMillis()));
+            transactionHistory.setContent("");
+
+            transactionHistoryService.save(transactionHistory);
+
+            UserWalletResDto dto = new UserWalletResDto();
+            dto.fromUserWallet(userWallet);
+            return ApiResponseDto.<UserWalletResDto>builder().data(dto).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<UserWalletResDto>builder().responseCode("500").message(e.getMessage()).build();
         }
-        UserWallet userWallet = userWalletService.deposit(id, amount);
-
-        TransactionHistory transactionHistory = new TransactionHistory();
-        transactionHistory.setUser(userWallet.getUser());
-        transactionHistory.setAmount(amount);
-        transactionHistory.setType("Nạp");
-        transactionHistory.setTimeCreate(new Date(System.currentTimeMillis()));
-        transactionHistory.setContent("");
-
-        transactionHistoryService.save(transactionHistory);
-
-        UserWalletResDto dto = new UserWalletResDto();
-        dto.fromUserWallet(userWallet);
-        return ApiResponseDto.<UserWalletResDto>builder().data(dto).build();
-
     }
 
     @PutMapping("/withdraw")
     public ApiResponseDto<UserWalletResDto> withdraw(@RequestParam(name = "userId") int id,
             @RequestParam(name = "amount") float amount) {
-        UserWallet userWallet = userWalletService.getWalletByUId(id);
-        if (amount <= 0 || userWallet.getBalance() < amount) {
-            return ApiResponseDto.<UserWalletResDto>builder()
-                    .message("Không thể rút số âm hoặc lớn hơn số tiền đang có.").build();
+        try {
+
+            UserWallet userWallet = userWalletService.getWalletByUId(id);
+            if (amount <= 0 || userWallet.getBalance() < amount) {
+                return ApiResponseDto.<UserWalletResDto>builder()
+                        .message("Không thể rút số âm hoặc lớn hơn số tiền đang có.").build();
+            }
+            userWallet = userWalletService.withdraw(id, amount);
+
+            TransactionHistory transactionHistory = new TransactionHistory();
+            transactionHistory.setUser(userWallet.getUser());
+            transactionHistory.setAmount(amount);
+            transactionHistory.setType("Rút");
+            transactionHistory.setTimeCreate(new Date(System.currentTimeMillis()));
+            transactionHistory.setContent("");
+
+            transactionHistoryService.save(transactionHistory);
+
+            UserWalletResDto dto = new UserWalletResDto();
+            dto.fromUserWallet(userWallet);
+            return ApiResponseDto.<UserWalletResDto>builder().data(dto).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<UserWalletResDto>builder().responseCode("500").message(e.getMessage()).build();
         }
-        userWallet = userWalletService.withdraw(id, amount);
-
-        TransactionHistory transactionHistory = new TransactionHistory();
-        transactionHistory.setUser(userWallet.getUser());
-        transactionHistory.setAmount(amount);
-        transactionHistory.setType("Rút");
-        transactionHistory.setTimeCreate(new Date(System.currentTimeMillis()));
-        transactionHistory.setContent("");
-
-        transactionHistoryService.save(transactionHistory);
-
-        UserWalletResDto dto = new UserWalletResDto();
-        dto.fromUserWallet(userWallet);
-        return ApiResponseDto.<UserWalletResDto>builder().data(dto).build();
-
     }
 
     @GetMapping("/balance")

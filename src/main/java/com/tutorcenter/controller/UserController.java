@@ -24,13 +24,18 @@ public class UserController {
 
     @GetMapping("/authProfile")
     public ApiResponseDto<AuthProfileDto> getAuthProfile() {
-        User user = userService.getUserById(Common.getCurrentUserId()).orElse(null);
-        AuthProfileDto dto = new AuthProfileDto();
-        dto.fromUser(user);
-        if (dto.getRole().equals(Role.TUTOR))
-            dto.setImgAvatar(tutorService.getTutorById(dto.getId()).orElse(null).getImgAvatar());
+        try {
 
-        return ApiResponseDto.<AuthProfileDto>builder().data(dto).build();
+            User user = userService.getUserById(Common.getCurrentUserId()).orElse(null);
+            AuthProfileDto dto = new AuthProfileDto();
+            dto.fromUser(user);
+            if (dto.getRole().equals(Role.TUTOR))
+                dto.setImgAvatar(tutorService.getTutorById(dto.getId()).orElse(null).getImgAvatar());
+
+            return ApiResponseDto.<AuthProfileDto>builder().data(dto).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<AuthProfileDto>builder().responseCode("500").message(e.getMessage()).build();
+        }
     }
 
 }

@@ -36,10 +36,42 @@ public class TutorController {
 
   @GetMapping("")
   public ApiResponseDto<List<TutorResDto>> getAllTutors() {
-    List<TutorResDto> response = new ArrayList<>();
-    List<Tutor> tutors = tutorService.findAll();
-    for (Tutor tutor : tutors) {
-      TutorResDto dto = new TutorResDto();
+    try {
+
+      List<TutorResDto> response = new ArrayList<>();
+      List<Tutor> tutors = tutorService.findAll();
+      for (Tutor tutor : tutors) {
+        TutorResDto dto = new TutorResDto();
+        dto.fromTutor(tutor);
+
+        // Tạo list SubjectLevel từ tutorId
+        List<Integer> listSId = tutorSubjectService
+            .getListSIdByTId(tutor.getId());
+        List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+        List<SubjectLevelResDto> listSL = new ArrayList<>();
+        for (Subject subject : subjects) {
+          SubjectLevelResDto sLDto = new SubjectLevelResDto();
+          sLDto.fromSubject(subject);
+          listSL.add(sLDto);
+        }
+
+        dto.setSubjects(listSL);
+
+        response.add(dto);
+      }
+      return ApiResponseDto.<List<TutorResDto>>builder().data(response).build();
+    } catch (Exception e) {
+      return ApiResponseDto.<List<TutorResDto>>builder().responseCode("500").message(e.getMessage()).build();
+    }
+  }
+
+  @GetMapping("/{id}")
+  public ApiResponseDto<TutorDetailResDto> getTutorById(@PathVariable int id) {
+    try {
+
+      Tutor tutor = tutorService.getTutorById(id).orElse(null);
+      TutorDetailResDto dto = new TutorDetailResDto();
       dto.fromTutor(tutor);
 
       // Tạo list SubjectLevel từ tutorId
@@ -53,57 +85,40 @@ public class TutorController {
         sLDto.fromSubject(subject);
         listSL.add(sLDto);
       }
-
       dto.setSubjects(listSL);
 
-      response.add(dto);
+      dto.setRating(feedbackService.getAverageRatingByTutorId(id));
+
+      return ApiResponseDto.<TutorDetailResDto>builder().data(dto).build();
+    } catch (Exception e) {
+      return ApiResponseDto.<TutorDetailResDto>builder().responseCode("500").message(e.getMessage()).build();
     }
-    return ApiResponseDto.<List<TutorResDto>>builder().data(response).build();
-  }
-
-  @GetMapping("/{id}")
-  public ApiResponseDto<TutorDetailResDto> getTutorById(@PathVariable int id) {
-    Tutor tutor = tutorService.getTutorById(id).orElse(null);
-    TutorDetailResDto dto = new TutorDetailResDto();
-    dto.fromTutor(tutor);
-
-    // Tạo list SubjectLevel từ tutorId
-    List<Integer> listSId = tutorSubjectService
-        .getListSIdByTId(tutor.getId());
-    List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
-
-    List<SubjectLevelResDto> listSL = new ArrayList<>();
-    for (Subject subject : subjects) {
-      SubjectLevelResDto sLDto = new SubjectLevelResDto();
-      sLDto.fromSubject(subject);
-      listSL.add(sLDto);
-    }
-    dto.setSubjects(listSL);
-
-    dto.setRating(feedbackService.getAverageRatingByTutorId(id));
-
-    return ApiResponseDto.<TutorDetailResDto>builder().data(dto).build();
   }
 
   @GetMapping("/profile")
   public ApiResponseDto<TutorProfileResDto> getProfileParentById() {
-    Tutor model = tutorService.getTutorById(Common.getCurrentUserId()).orElse(null);
-    if (model == null) {
-      return ApiResponseDto.<TutorProfileResDto>builder().responseCode("404").build();
-    }
-    TutorProfileResDto dto = new TutorProfileResDto();
-    dto.fromTutor(model);
-    List<Integer> listSId = tutorSubjectService
-        .getListSIdByTId(model.getId());
-    List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+    try {
 
-    List<SubjectLevelResDto> listSL = new ArrayList<>();
-    for (Subject subject : subjects) {
-      SubjectLevelResDto sLDto = new SubjectLevelResDto();
-      sLDto.fromSubject(subject);
-      listSL.add(sLDto);
+      Tutor model = tutorService.getTutorById(Common.getCurrentUserId()).orElse(null);
+      if (model == null) {
+        return ApiResponseDto.<TutorProfileResDto>builder().responseCode("404").build();
+      }
+      TutorProfileResDto dto = new TutorProfileResDto();
+      dto.fromTutor(model);
+      List<Integer> listSId = tutorSubjectService
+          .getListSIdByTId(model.getId());
+      List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+      List<SubjectLevelResDto> listSL = new ArrayList<>();
+      for (Subject subject : subjects) {
+        SubjectLevelResDto sLDto = new SubjectLevelResDto();
+        sLDto.fromSubject(subject);
+        listSL.add(sLDto);
+      }
+      dto.setSubjects(listSL);
+      return ApiResponseDto.<TutorProfileResDto>builder().data(dto).build();
+    } catch (Exception e) {
+      return ApiResponseDto.<TutorProfileResDto>builder().responseCode("500").message(e.getMessage()).build();
     }
-    dto.setSubjects(listSL);
-    return ApiResponseDto.<TutorProfileResDto>builder().data(dto).build();
   }
 }

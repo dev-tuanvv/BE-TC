@@ -56,79 +56,103 @@ public class TutorApplyController {
     @PreAuthorize("hasAnyAuthority('parent:read','manager:read')")
     @GetMapping("/clazz/{id}")
     public ApiResponseDto<List<ListTutorApplyResDto>> getTutorAppliesByClazzId(@PathVariable int id) {
-        List<TutorApply> taList = tutorApplyService.getTutorAppliesByClazzId(id);
-        List<ListTutorApplyResDto> response = new ArrayList<>();
+        try {
 
-        for (TutorApply ta : taList) {
-            ListTutorApplyResDto dto = new ListTutorApplyResDto();
-            dto.fromTutorApply(ta);
-            // Tạo list SubjectLevel từ tutorId
-            List<Integer> listSId = tutorSubjectService
-                    .getListSIdByTId(ta.getTutor().getId());
-            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+            List<TutorApply> taList = tutorApplyService.getTutorAppliesByClazzId(id);
+            List<ListTutorApplyResDto> response = new ArrayList<>();
 
-            List<SubjectLevelResDto> listSL = new ArrayList<>();
-            for (Subject subject : subjects) {
-                SubjectLevelResDto sLDto = new SubjectLevelResDto();
-                sLDto.fromSubject(subject);
-                listSL.add(sLDto);
+            for (TutorApply ta : taList) {
+                ListTutorApplyResDto dto = new ListTutorApplyResDto();
+                dto.fromTutorApply(ta);
+                // Tạo list SubjectLevel từ tutorId
+                List<Integer> listSId = tutorSubjectService
+                        .getListSIdByTId(ta.getTutor().getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+                List<SubjectLevelResDto> listSL = new ArrayList<>();
+                for (Subject subject : subjects) {
+                    SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                    sLDto.fromSubject(subject);
+                    listSL.add(sLDto);
+                }
+
+                dto.setTutorSubjects(listSL);
+                response.add(dto);
             }
 
-            dto.setTutorSubjects(listSL);
-            response.add(dto);
+            return ApiResponseDto.<List<ListTutorApplyResDto>>builder().data(response).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<List<ListTutorApplyResDto>>builder().responseCode("500").message(e.getMessage())
+                    .build();
         }
-
-        return ApiResponseDto.<List<ListTutorApplyResDto>>builder().data(response).build();
     }
 
     @PreAuthorize("hasAnyAuthority('tutor:read','manager:read')")
     @GetMapping("/tutor/{id}")
     public ApiResponseDto<List<TutorApplyResDto>> getTutorAppliesByTutorId(@PathVariable int id) {
-        List<TutorApply> taList = tutorApplyService.getTutorAppliesByTutorId(id);
-        List<TutorApplyResDto> response = new ArrayList<>();
+        try {
 
-        for (TutorApply ta : taList) {
-            TutorApplyResDto dto = new TutorApplyResDto();
-            dto.fromTutorApply(ta);
-            response.add(dto);
+            List<TutorApply> taList = tutorApplyService.getTutorAppliesByTutorId(id);
+            List<TutorApplyResDto> response = new ArrayList<>();
 
+            for (TutorApply ta : taList) {
+                TutorApplyResDto dto = new TutorApplyResDto();
+                dto.fromTutorApply(ta);
+                response.add(dto);
+
+            }
+
+            return ApiResponseDto.<List<TutorApplyResDto>>builder().data(response).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<List<TutorApplyResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
-
-        return ApiResponseDto.<List<TutorApplyResDto>>builder().data(response).build();
     }
+
     @PreAuthorize("hasAnyAuthority('tutor:read','manager:read')")
     @GetMapping("/tutor")
     public ApiResponseDto<List<TutorApplyForMobileResDto>> getTutorAppliesByTutorIdMobile() {
-        List<TutorApply> taList = tutorApplyService.getTutorAppliesByTutorId(Common.getCurrentUserId());
-        List<TutorApplyForMobileResDto> response = new ArrayList<>();
+        try {
 
-        for (TutorApply ta : taList) {
-            TutorApplyForMobileResDto dto = new TutorApplyForMobileResDto();
-           List<RequestSubject> listRequestSubject = requestSubjectService.findAllByRequestRequestId(ta.getClazz().getRequest().getId());
-            dto.fromTutorApply(ta,listRequestSubject);
-            response.add(dto);
+            List<TutorApply> taList = tutorApplyService.getTutorAppliesByTutorId(Common.getCurrentUserId());
+            List<TutorApplyForMobileResDto> response = new ArrayList<>();
+
+            for (TutorApply ta : taList) {
+                TutorApplyForMobileResDto dto = new TutorApplyForMobileResDto();
+                List<RequestSubject> listRequestSubject = requestSubjectService
+                        .findAllByRequestRequestId(ta.getClazz().getRequest().getId());
+                dto.fromTutorApply(ta, listRequestSubject);
+                response.add(dto);
+            }
+
+            return ApiResponseDto.<List<TutorApplyForMobileResDto>>builder().data(response).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<List<TutorApplyForMobileResDto>>builder().responseCode("500").message(e.getMessage())
+                    .build();
         }
-
-        return ApiResponseDto.<List<TutorApplyForMobileResDto>>builder().data(response).build();
     }
 
     @PreAuthorize("hasAnyAuthority('tutor:create')")
     @PostMapping("/create")
     public ApiResponseDto<TutorApplyResDto> create(@RequestParam(name = "clazzId") int cId,
             @RequestParam(name = "tutorId") int tId) {
-        TutorApply tutorApply = new TutorApply();
-        Clazz clazz = clazzService.getClazzById(cId).orElse(null);
-        Tutor tutor = tutorService.getTutorById(tId).orElse(null);
+        try {
 
-        tutorApply.setClazz(clazz);
-        tutorApply.setTutor(tutor);
-        tutorApply.setDeleted(false);
-        tutorApply.setStatus(0);
+            TutorApply tutorApply = new TutorApply();
+            Clazz clazz = clazzService.getClazzById(cId).orElse(null);
+            Tutor tutor = tutorService.getTutorById(tId).orElse(null);
 
-        TutorApplyResDto dto = new TutorApplyResDto();
-        dto.fromTutorApply(tutorApplyService.save(tutorApply));
+            tutorApply.setClazz(clazz);
+            tutorApply.setTutor(tutor);
+            tutorApply.setDeleted(false);
+            tutorApply.setStatus(0);
 
-        return ApiResponseDto.<TutorApplyResDto>builder().data(dto).build();
+            TutorApplyResDto dto = new TutorApplyResDto();
+            dto.fromTutorApply(tutorApplyService.save(tutorApply));
+
+            return ApiResponseDto.<TutorApplyResDto>builder().data(dto).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<TutorApplyResDto>builder().responseCode("500").message(e.getMessage()).build();
+        }
     }
 
     // @PutMapping("/updateStatus/{id}")
@@ -145,28 +169,38 @@ public class TutorApplyController {
     @PreAuthorize("hasAnyAuthority('parent:update')")
     @PutMapping("/acceptTutor/{taId}")
     public ApiResponseDto<String> update(@PathVariable int taId) {
-        TutorApply tutorApply = tutorApplyService.getTutorApplyById(taId).orElse(null);
-        for (TutorApply ta : tutorApplyService.getTutorAppliesByClazzId(tutorApply.getClazz().getId())) {
-            if (ta.getId() == taId)
-                ta.setStatus(1);// accepted
-            else
-                ta.setStatus(2);// rejected
+        try {
+
+            TutorApply tutorApply = tutorApplyService.getTutorApplyById(taId).orElse(null);
+            for (TutorApply ta : tutorApplyService.getTutorAppliesByClazzId(tutorApply.getClazz().getId())) {
+                if (ta.getId() == taId)
+                    ta.setStatus(1);// accepted
+                else
+                    ta.setStatus(2);// rejected
+            }
+            tutorApply.getClazz().setTutor(tutorApply.getTutor());
+            tutorApply.getClazz().setStatus(1);
+            tutorApplyService.save(tutorApply);
+            clazzService.save(tutorApply.getClazz());
+            return ApiResponseDto.<String>builder().data(tutorApply.getTutor().getFullname()).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<String>builder().responseCode("500").message(e.getMessage()).build();
         }
-        tutorApply.getClazz().setTutor(tutorApply.getTutor());
-        tutorApply.getClazz().setStatus(1);
-        tutorApplyService.save(tutorApply);
-        clazzService.save(tutorApply.getClazz());
-        return ApiResponseDto.<String>builder().data(tutorApply.getTutor().getFullname()).build();
     }
 
     @PreAuthorize("hasAnyAuthority('tutor:delete')")
     @PutMapping("/disable/{id}")
     public ResponseEntity<?> disable(@PathVariable int id) {
-        TutorApply tutorApply = tutorApplyService.getTutorApplyById(id).orElseThrow();
-        tutorApply.setDeleted(true);
+        try {
 
-        tutorApplyService.save(tutorApply);
+            TutorApply tutorApply = tutorApplyService.getTutorApplyById(id).orElseThrow();
+            tutorApply.setDeleted(true);
 
-        return ResponseEntity.ok("Disable thành công.");
+            tutorApplyService.save(tutorApply);
+
+            return ResponseEntity.ok("Disable thành công.");
+        } catch (Exception e) {
+            return ResponseEntity.ok("Disable không thành công.");
+        }
     }
 }

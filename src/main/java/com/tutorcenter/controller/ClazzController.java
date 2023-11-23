@@ -63,15 +63,44 @@ public class ClazzController {
 
     @GetMapping("")
     public ApiResponseDto<List<ListClazzResDto>> getAllClazzs() {
-
-        List<Clazz> clazzs = clazzService.findAll();
         List<ListClazzResDto> response = new ArrayList<>();
-        for (Clazz c : clazzs) {
-            ListClazzResDto dto = new ListClazzResDto();
-            dto.fromClazz(c);
+        try {
+            List<Clazz> clazzs = clazzService.findAll();
+
+            for (Clazz c : clazzs) {
+                ListClazzResDto dto = new ListClazzResDto();
+                dto.fromClazz(c);
+                // Tạo list SubjectLevel từ requestId
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(c.getRequest().getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+                List<SubjectLevelResDto> listSL = new ArrayList<>();
+                for (Subject subject : subjects) {
+                    SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                    sLDto.fromSubject(subject);
+                    listSL.add(sLDto);
+                }
+
+                dto.setSubjects(listSL);
+                response.add(dto);
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("500").message(e.getMessage()).build();
+        }
+        return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponseDto<ClazzDetailResDto> getClazzDetail(@PathVariable int id) {
+        ClazzDetailResDto dto = new ClazzDetailResDto();
+        try {
+            Clazz clazz = clazzService.getClazzById(id).orElse(null);
+
+            dto.fromClazz(clazz);
             // Tạo list SubjectLevel từ requestId
             List<Integer> listSId = requestSubjectService
-                    .getListSIdByRId(c.getRequest().getId());
+                    .getListSIdByRId(clazz.getRequest().getId());
             List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
 
             List<SubjectLevelResDto> listSL = new ArrayList<>();
@@ -80,120 +109,116 @@ public class ClazzController {
                 sLDto.fromSubject(subject);
                 listSL.add(sLDto);
             }
-
+            // set list SubjectLevel vào subjectDto
             dto.setSubjects(listSL);
-            response.add(dto);
+        } catch (Exception e) {
+            return ApiResponseDto.<ClazzDetailResDto>builder().responseCode("500").message(e.getMessage()).build();
         }
-
-        return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
-    }
-
-    @GetMapping("/{id}")
-    public ApiResponseDto<ClazzDetailResDto> getClazzDetail(@PathVariable int id) {
-        Clazz clazz = clazzService.getClazzById(id).orElse(null);
-        ClazzDetailResDto dto = new ClazzDetailResDto();
-        dto.fromClazz(clazz);
-        // Tạo list SubjectLevel từ requestId
-        List<Integer> listSId = requestSubjectService
-                .getListSIdByRId(clazz.getRequest().getId());
-        List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
-
-        List<SubjectLevelResDto> listSL = new ArrayList<>();
-        for (Subject subject : subjects) {
-            SubjectLevelResDto sLDto = new SubjectLevelResDto();
-            sLDto.fromSubject(subject);
-            listSL.add(sLDto);
-        }
-        // set list SubjectLevel vào subjectDto
-        dto.setSubjects(listSL);
-
         return ApiResponseDto.<ClazzDetailResDto>builder().data(dto).build();
     }
 
     @GetMapping("/subject/{sId}")
     public ApiResponseDto<List<ListClazzResDto>> getClazzBySubjectId(@PathVariable int sId) {
-        List<Clazz> clazzs = clazzService.findAll();
         List<ListClazzResDto> response = new ArrayList<>();
-        for (Clazz c : clazzs) {
-            List<Integer> listSId = requestSubjectService
-                    .getListSIdByRId(c.getRequest().getId());
+        try {
 
-            for (int i : listSId) {
-                if (i == sId) {
-                    // tạo subjectDto
-                    ListClazzResDto dto = new ListClazzResDto();
-                    dto.fromClazz(c);
-                    // tạo SubjectLevel từ requestId
-                    List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+            List<Clazz> clazzs = clazzService.findAll();
 
-                    List<SubjectLevelResDto> listSL = new ArrayList<>();
-                    for (Subject subject : subjects) {
-                        SubjectLevelResDto sLDto = new SubjectLevelResDto();
-                        sLDto.fromSubject(subject);
-                        listSL.add(sLDto);
+            for (Clazz c : clazzs) {
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(c.getRequest().getId());
+
+                for (int i : listSId) {
+                    if (i == sId) {
+                        // tạo subjectDto
+                        ListClazzResDto dto = new ListClazzResDto();
+                        dto.fromClazz(c);
+                        // tạo SubjectLevel từ requestId
+                        List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+                        List<SubjectLevelResDto> listSL = new ArrayList<>();
+                        for (Subject subject : subjects) {
+                            SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                            sLDto.fromSubject(subject);
+                            listSL.add(sLDto);
+                        }
+                        // set list SubjectLevel
+                        dto.setSubjects(listSL);
+                        response.add(dto);
                     }
-                    // set list SubjectLevel
-                    dto.setSubjects(listSL);
-                    response.add(dto);
                 }
-            }
 
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
         return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
     }
 
     @GetMapping("/level/{lId}")
     public ApiResponseDto<List<ListClazzResDto>> getClazzByLevel(@PathVariable String level) {
-        List<Clazz> clazzs = clazzService.findAll();
         List<ListClazzResDto> response = new ArrayList<>();
-        for (Clazz c : clazzs) {
-            List<Integer> listSId = requestSubjectService
-                    .getListSIdByRId(c.getRequest().getId());
-            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
-            for (Subject s : subjects) {
-                if (s.getLevel().equalsIgnoreCase(level)) {
-                    // tạo subjectDto
-                    ListClazzResDto dto = new ListClazzResDto();
-                    dto.fromClazz(c);
-                    // tạo SubjectLevel từ requestId
+        try {
 
-                    List<SubjectLevelResDto> listSL = new ArrayList<>();
-                    for (Subject subject : subjects) {
-                        SubjectLevelResDto sLDto = new SubjectLevelResDto();
-                        sLDto.fromSubject(subject);
-                        listSL.add(sLDto);
+            List<Clazz> clazzs = clazzService.findAll();
+
+            for (Clazz c : clazzs) {
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(c.getRequest().getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+                for (Subject s : subjects) {
+                    if (s.getLevel().equalsIgnoreCase(level)) {
+                        // tạo subjectDto
+                        ListClazzResDto dto = new ListClazzResDto();
+                        dto.fromClazz(c);
+                        // tạo SubjectLevel từ requestId
+
+                        List<SubjectLevelResDto> listSL = new ArrayList<>();
+                        for (Subject subject : subjects) {
+                            SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                            sLDto.fromSubject(subject);
+                            listSL.add(sLDto);
+                        }
+                        // set list SubjectLevel
+                        dto.setSubjects(listSL);
+                        response.add(dto);
                     }
-                    // set list SubjectLevel
-                    dto.setSubjects(listSL);
-                    response.add(dto);
                 }
-            }
 
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
         return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
     }
 
     @GetMapping("/district/{dId}")
     public ApiResponseDto<List<ListClazzResDto>> getClazzByDistrictId(@PathVariable int dId) {
-        List<Clazz> clazzs = clazzService.getClazzByDistrict(dId);
         List<ListClazzResDto> response = new ArrayList<>();
-        for (Clazz c : clazzs) {
-            ListClazzResDto dto = new ListClazzResDto();
-            dto.fromClazz(c);
-            // Tạo list SubjectLevel từ requestId
-            List<Integer> listSId = requestSubjectService
-                    .getListSIdByRId(c.getRequest().getId());
-            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+        try {
 
-            List<SubjectLevelResDto> listSL = new ArrayList<>();
-            for (Subject subject : subjects) {
-                SubjectLevelResDto sLDto = new SubjectLevelResDto();
-                sLDto.fromSubject(subject);
-                listSL.add(sLDto);
+            List<Clazz> clazzs = clazzService.getClazzByDistrict(dId);
+
+            for (Clazz c : clazzs) {
+                ListClazzResDto dto = new ListClazzResDto();
+                dto.fromClazz(c);
+                // Tạo list SubjectLevel từ requestId
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(c.getRequest().getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+                List<SubjectLevelResDto> listSL = new ArrayList<>();
+                for (Subject subject : subjects) {
+                    SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                    sLDto.fromSubject(subject);
+                    listSL.add(sLDto);
+                }
+
+                dto.setSubjects(listSL);
+                response.add(dto);
             }
-
-            dto.setSubjects(listSL);
-            response.add(dto);
+        } catch (Exception e) {
+            return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
         return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
     }
@@ -201,28 +226,34 @@ public class ClazzController {
     @PreAuthorize("hasAnyAuthority('parent:read')")
     @GetMapping("/parent")
     public ApiResponseDto<List<ListClazzResDto>> getClazzByParentId() {
-        List<Clazz> clazzs = clazzService.getClazzByParentId(Common.getCurrentUserId());
         List<ListClazzResDto> response = new ArrayList<>();
-        for (Clazz c : clazzs) {
-            ListClazzResDto dto = new ListClazzResDto();
-            dto.fromClazz(c);
-            if (c.getTutor() != null) {
-                dto.fromTutor(c.getTutor());
-            }
-            // Tạo list SubjectLevel từ requestId
-            List<Integer> listSId = requestSubjectService
-                    .getListSIdByRId(c.getRequest().getId());
-            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+        try {
 
-            List<SubjectLevelResDto> listSL = new ArrayList<>();
-            for (Subject subject : subjects) {
-                SubjectLevelResDto sLDto = new SubjectLevelResDto();
-                sLDto.fromSubject(subject);
-                listSL.add(sLDto);
-            }
+            List<Clazz> clazzs = clazzService.getClazzByParentId(Common.getCurrentUserId());
 
-            dto.setSubjects(listSL);
-            response.add(dto);
+            for (Clazz c : clazzs) {
+                ListClazzResDto dto = new ListClazzResDto();
+                dto.fromClazz(c);
+                if (c.getTutor() != null) {
+                    dto.fromTutor(c.getTutor());
+                }
+                // Tạo list SubjectLevel từ requestId
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(c.getRequest().getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+                List<SubjectLevelResDto> listSL = new ArrayList<>();
+                for (Subject subject : subjects) {
+                    SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                    sLDto.fromSubject(subject);
+                    listSL.add(sLDto);
+                }
+
+                dto.setSubjects(listSL);
+                response.add(dto);
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
         return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
     }
@@ -230,75 +261,94 @@ public class ClazzController {
     @PreAuthorize("hasAnyAuthority('manager:read')")
     @GetMapping("/manager/{mId}")
     public ApiResponseDto<List<ListClazzResDto>> getClazzByManagerId(@PathVariable int mId) {
-        List<Clazz> clazzs = clazzService.getClazzByManagerId(mId);
         List<ListClazzResDto> response = new ArrayList<>();
-        for (Clazz c : clazzs) {
-            ListClazzResDto dto = new ListClazzResDto();
-            dto.fromClazz(c);
-            // Tạo list SubjectLevel từ requestId
-            List<Integer> listSId = requestSubjectService
-                    .getListSIdByRId(c.getRequest().getId());
-            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+        try {
 
-            List<SubjectLevelResDto> listSL = new ArrayList<>();
-            for (Subject subject : subjects) {
-                SubjectLevelResDto sLDto = new SubjectLevelResDto();
-                sLDto.fromSubject(subject);
-                listSL.add(sLDto);
+            List<Clazz> clazzs = clazzService.getClazzByManagerId(mId);
+
+            for (Clazz c : clazzs) {
+                ListClazzResDto dto = new ListClazzResDto();
+                dto.fromClazz(c);
+                // Tạo list SubjectLevel từ requestId
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(c.getRequest().getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+                List<SubjectLevelResDto> listSL = new ArrayList<>();
+                for (Subject subject : subjects) {
+                    SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                    sLDto.fromSubject(subject);
+                    listSL.add(sLDto);
+                }
+
+                dto.setSubjects(listSL);
+                response.add(dto);
             }
-
-            dto.setSubjects(listSL);
-            response.add(dto);
+        } catch (Exception e) {
+            return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
         return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
     }
 
     @GetMapping("/tutor/{tId}")
     public ApiResponseDto<List<ListClazzResDto>> getClazzByTutorId(@PathVariable int tId) {
-        List<Clazz> clazzs = clazzService.getClazzByTutorId(tId);
         List<ListClazzResDto> response = new ArrayList<>();
-        for (Clazz c : clazzs) {
-            ListClazzResDto dto = new ListClazzResDto();
-            dto.fromClazz(c);
-            // Tạo list SubjectLevel từ requestId
-            List<Integer> listSId = requestSubjectService
-                    .getListSIdByRId(c.getRequest().getId());
-            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+        try {
 
-            List<SubjectLevelResDto> listSL = new ArrayList<>();
-            for (Subject subject : subjects) {
-                SubjectLevelResDto sLDto = new SubjectLevelResDto();
-                sLDto.fromSubject(subject);
-                listSL.add(sLDto);
+            List<Clazz> clazzs = clazzService.getClazzByTutorId(tId);
+
+            for (Clazz c : clazzs) {
+                ListClazzResDto dto = new ListClazzResDto();
+                dto.fromClazz(c);
+                // Tạo list SubjectLevel từ requestId
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(c.getRequest().getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+                List<SubjectLevelResDto> listSL = new ArrayList<>();
+                for (Subject subject : subjects) {
+                    SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                    sLDto.fromSubject(subject);
+                    listSL.add(sLDto);
+
+                    dto.setSubjects(listSL);
+                    response.add(dto);
+                }
             }
-
-            dto.setSubjects(listSL);
-            response.add(dto);
+        } catch (Exception e) {
+            return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
+
         return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
     }
 
     @GetMapping("/status/{status}")
     public ApiResponseDto<List<ListClazzResDto>> getClazzByStatus(@PathVariable int status) {
-        List<Clazz> clazzs = clazzService.getClazzByStatus(status);
         List<ListClazzResDto> response = new ArrayList<>();
-        for (Clazz c : clazzs) {
-            ListClazzResDto dto = new ListClazzResDto();
-            dto.fromClazz(c);
-            // Tạo list SubjectLevel từ requestId
-            List<Integer> listSId = requestSubjectService
-                    .getListSIdByRId(c.getRequest().getId());
-            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+        try {
 
-            List<SubjectLevelResDto> listSL = new ArrayList<>();
-            for (Subject subject : subjects) {
-                SubjectLevelResDto sLDto = new SubjectLevelResDto();
-                sLDto.fromSubject(subject);
-                listSL.add(sLDto);
+            List<Clazz> clazzs = clazzService.getClazzByStatus(status);
+
+            for (Clazz c : clazzs) {
+                ListClazzResDto dto = new ListClazzResDto();
+                dto.fromClazz(c);
+                // Tạo list SubjectLevel từ requestId
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(c.getRequest().getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+                List<SubjectLevelResDto> listSL = new ArrayList<>();
+                for (Subject subject : subjects) {
+                    SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                    sLDto.fromSubject(subject);
+                    listSL.add(sLDto);
+                }
+
+                dto.setSubjects(listSL);
+                response.add(dto);
             }
-
-            dto.setSubjects(listSL);
-            response.add(dto);
+        } catch (Exception e) {
+            return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
         return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
     }
@@ -318,14 +368,18 @@ public class ClazzController {
     @PostMapping("/create")
     public ApiResponseDto<Clazz> create(@RequestParam(name = "requestId") int rId) {
         Clazz clazz = new Clazz();
-        Request request = requestService.getRequestById(rId).orElse(null);
-        clazz.setRequest(request);
-        clazz.setStatus(0);
-        clazz.setDeleted(false);
+        try {
 
-        Clazz rs = clazzService.save(clazz);
+            Request request = requestService.getRequestById(rId).orElse(null);
+            clazz.setRequest(request);
+            clazz.setStatus(0);
+            clazz.setDeleted(false);
 
-        return ApiResponseDto.<Clazz>builder().data(rs).build();
+            clazzService.save(clazz);
+        } catch (Exception e) {
+            return ApiResponseDto.<Clazz>builder().responseCode("500").message(e.getMessage()).build();
+        }
+        return ApiResponseDto.<Clazz>builder().data(clazz).build();
     }
 
     @PutMapping("/update/{id}")
@@ -342,15 +396,27 @@ public class ClazzController {
     @PutMapping("/updateStatus")
     public ApiResponseDto<Integer> updateClazzStatus(@RequestParam(name = "clazzId") int id,
             @RequestParam(name = "status") int status) {
-        Clazz clazz = clazzService.getClazzById(id).orElseThrow();
-        clazz.setStatus(status);
+        Clazz clazz = new Clazz();
+        try {
+
+            clazz = clazzService.getClazzById(id).orElseThrow();
+            clazz.setStatus(status);
+        } catch (Exception e) {
+            return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
+        }
         return ApiResponseDto.<Integer>builder().data(clazzService.save(clazz).getId()).build();
     }
 
     @DeleteMapping("/delete/{id}")
     public ApiResponseDto<Integer> disableClazz(@PathVariable int id) {
-        Clazz clazz = clazzService.getClazzById(id).orElseThrow();
-        clazz.setDeleted(true);
+        Clazz clazz = new Clazz();
+        try {
+
+            clazz = clazzService.getClazzById(id).orElseThrow();
+            clazz.setDeleted(true);
+        } catch (Exception e) {
+            return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
+        }
         return ApiResponseDto.<Integer>builder().data(clazzService.save(clazz).getId()).build();
     }
 }
