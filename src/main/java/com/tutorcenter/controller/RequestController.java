@@ -28,6 +28,7 @@ import com.tutorcenter.model.Manager;
 import com.tutorcenter.model.Parent;
 import com.tutorcenter.model.Request;
 import com.tutorcenter.model.Subject;
+import com.tutorcenter.model.Task;
 import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.DistrictService;
 import com.tutorcenter.service.ManagerService;
@@ -35,6 +36,7 @@ import com.tutorcenter.service.ParentService;
 import com.tutorcenter.service.RequestService;
 import com.tutorcenter.service.RequestSubjectService;
 import com.tutorcenter.service.SubjectService;
+import com.tutorcenter.service.TaskService;
 
 @RestController
 // @PreAuthorize("hasAnyAuthority('admin:read')")
@@ -54,6 +56,8 @@ public class RequestController {
     private ClazzService clazzService;
     @Autowired
     private SubjectService subjectService;
+    @Autowired
+    private TaskService taskService;
 
     @GetMapping("")
     public ApiResponseDto<List<RequestResDto>> getListRequest() {
@@ -220,6 +224,14 @@ public class RequestController {
             request.setDistrict(district);
             Request response = requestService.save(request);
             requestSubjectService.updateByRequestId(response.getId(), createRequestDto.getListSubjectId());
+
+            
+            Task task = new Task();
+            task.setManager(managerService.getManagerById(taskService.findBestSuitManagerId()).get());
+            task.setName("Request");
+            task.setType(1);
+            task.setStatus(0);
+            taskService.save(task);
             return ApiResponseDto.<Integer>builder().message(null).data(response.getId()).build();
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();

@@ -22,8 +22,11 @@ import com.tutorcenter.dto.requestverification.UpdateRequestVerificationResDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.RequestVerification;
 import com.tutorcenter.model.Subject;
+import com.tutorcenter.model.Task;
+import com.tutorcenter.service.ManagerService;
 import com.tutorcenter.service.RequestVerificationService;
 import com.tutorcenter.service.SubjectService;
+import com.tutorcenter.service.TaskService;
 import com.tutorcenter.service.TutorService;
 import com.tutorcenter.service.TutorSubjectService;
 
@@ -39,6 +42,10 @@ public class RequestVerificationController {
     private TutorSubjectService tutorSubjectService;
     @Autowired
     private SubjectService subjectService;
+    @Autowired
+    private TaskService taskService;
+    @Autowired
+    private ManagerService managerService;
 
     @GetMapping("/{id}")
     public ApiResponseDto<RequestVerificationResDto> getRVById(@PathVariable int id) {
@@ -129,6 +136,13 @@ public class RequestVerificationController {
             requestVerification.setDateCreate(new Date(System.currentTimeMillis()));
 
             int rvId = requestVerificationService.save(requestVerification).getId();
+
+            Task task = new Task();
+            task.setManager(managerService.getManagerById(taskService.findBestSuitManagerId()).get());
+            task.setName("Request");
+            task.setType(1);
+            task.setStatus(0);
+            taskService.save(task);
 
             return ApiResponseDto.<Integer>builder().data(rvId).build();
         } catch (Exception e) {
