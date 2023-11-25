@@ -37,5 +37,5 @@ logs/
 LOG_PATH_IS_UNDEFINED/
 release/
 bin/
-upload/
+uploads/
 .DS_Store
