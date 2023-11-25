@@ -63,7 +63,7 @@ public class UserController {
 
         Files.createFile(pathFile);
         Files.write(pathFile, file.getBytes());
-        return new ResponseEntity<>("Image uploaded successfully!", HttpStatus.OK);
+        return new ResponseEntity<>(pathFile.getFileName().toString(), HttpStatus.OK);
     }
 
 }
