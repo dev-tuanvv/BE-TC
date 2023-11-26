@@ -21,6 +21,7 @@ import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.PaginRes;
 import com.tutorcenter.dto.clazz.ClazzDetailResDto;
 import com.tutorcenter.dto.clazz.CreateClazzResDto;
+import com.tutorcenter.dto.clazz.ListClazzByTutorResDto;
 import com.tutorcenter.dto.clazz.ListClazzResDto;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
@@ -256,6 +257,38 @@ public class ClazzController {
             return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
         return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('tutor:read')")
+    @GetMapping("/tutor")
+    public ApiResponseDto<List<ListClazzByTutorResDto>> getClazzByTutorId() {
+        List<ListClazzByTutorResDto> response = new ArrayList<>();
+        try {
+
+            List<Clazz> clazzs = clazzService.getClazzByParentId(Common.getCurrentUserId());
+
+            for (Clazz c : clazzs) {
+                ListClazzByTutorResDto dto = new ListClazzByTutorResDto();
+                dto.fromClazz(c);
+                // Tạo list SubjectLevel từ requestId
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(c.getRequest().getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+                List<SubjectLevelResDto> listSL = new ArrayList<>();
+                for (Subject subject : subjects) {
+                    SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                    sLDto.fromSubject(subject);
+                    listSL.add(sLDto);
+                }
+                dto.setSubjects(listSL);
+                response.add(dto);
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<ListClazzByTutorResDto>>builder().responseCode("500").message(e.getMessage())
+                    .build();
+        }
+        return ApiResponseDto.<List<ListClazzByTutorResDto>>builder().data(response).build();
     }
 
     @PreAuthorize("hasAnyAuthority('manager:read')")
