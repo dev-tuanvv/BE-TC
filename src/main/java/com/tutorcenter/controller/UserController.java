@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,15 @@ import com.tutorcenter.common.Common;
 import com.tutorcenter.constant.Role;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.authentication.AuthProfileDto;
+import com.tutorcenter.dto.clazz.ListClazzResDto;
+import com.tutorcenter.dto.order.OrderByUserResDto;
+import com.tutorcenter.dto.subject.SubjectLevelResDto;
+import com.tutorcenter.model.Order;
+import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.User;
+import com.tutorcenter.service.OrderService;
+import com.tutorcenter.service.RequestSubjectService;
+import com.tutorcenter.service.SubjectService;
 import com.tutorcenter.service.TutorService;
 import com.tutorcenter.service.UserService;
 
@@ -33,6 +43,12 @@ public class UserController {
     private UserService userService;
     @Autowired
     private TutorService tutorService;
+    @Autowired
+    private RequestSubjectService requestSubjectService;
+    @Autowired
+    private OrderService orderService;
+    @Autowired
+    SubjectService subjectService;
 
     @GetMapping("/authProfile")
     public ApiResponseDto<AuthProfileDto> getAuthProfile() {
@@ -48,6 +64,40 @@ public class UserController {
         } catch (Exception e) {
             return ApiResponseDto.<AuthProfileDto>builder().responseCode("500").message(e.getMessage()).build();
         }
+    }
+
+    @GetMapping("/order")
+    public ApiResponseDto<List<OrderByUserResDto>> getOrders() {
+        List<OrderByUserResDto> response = new ArrayList<>();
+        try {
+            List<Order> orders = orderService.findAll().stream()
+                    .filter(o -> o.getUser() != null && o.getUser().getId() == Common.getCurrentUserId())
+                    .toList();
+            for (Order o : orders) {
+                OrderByUserResDto dto = new OrderByUserResDto();
+                dto.fromOrder(o);
+
+                // Tạo list SubjectLevel từ requestId
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(o.getClazz().getRequest().getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+                List<SubjectLevelResDto> listSL = new ArrayList<>();
+                for (Subject subject : subjects) {
+                    SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                    sLDto.fromSubject(subject);
+                    listSL.add(sLDto);
+                }
+
+                dto.setSubjects(listSL);
+                response.add(dto);
+
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<OrderByUserResDto>>builder().responseCode("500").message(e.getMessage())
+                    .build();
+        }
+        return ApiResponseDto.<List<OrderByUserResDto>>builder().data(response).build();
     }
 
     @PostMapping("/upload")
