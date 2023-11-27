@@ -1,5 +1,6 @@
 package com.tutorcenter.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tutorcenter.common.Common;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.parent.ParentProfileResDto;
+import com.tutorcenter.dto.parent.ParentResDto;
 import com.tutorcenter.model.Parent;
 import com.tutorcenter.service.ParentService;
 
@@ -42,6 +44,22 @@ public class ParentController {
             return ApiResponseDto.<ParentProfileResDto>builder().responseCode("500").message(e.getMessage()).build();
         }
         return ApiResponseDto.<ParentProfileResDto>builder().data(dto).build();
+    }
+
+    @GetMapping("/list")
+    public ApiResponseDto<List<ParentResDto>> getListParents() {
+        List<ParentResDto> dto = new ArrayList<>();
+        try {
+            List<Parent> listParents = parentService.findAll();
+            for (Parent parent : listParents) {
+                ParentResDto parentResDto = new ParentResDto();
+                parentResDto.fromParent(parent);
+                dto.add(parentResDto);
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<ParentResDto>>builder().responseCode("500").message(e.getMessage()).build();
+        }
+        return ApiResponseDto.<List<ParentResDto>>builder().data(dto).build();
     }
 
     @PreAuthorize("hasAnyAuthority('parent:read')")
