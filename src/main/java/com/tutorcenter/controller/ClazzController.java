@@ -265,7 +265,7 @@ public class ClazzController {
         List<ListClazzByTutorResDto> response = new ArrayList<>();
         try {
 
-            List<Clazz> clazzs = clazzService.getClazzByParentId(Common.getCurrentUserId());
+            List<Clazz> clazzs = clazzService.getClazzByTutorId(Common.getCurrentUserId());
 
             for (Clazz c : clazzs) {
                 ListClazzByTutorResDto dto = new ListClazzByTutorResDto();
