@@ -20,4 +20,6 @@ public interface FeedbackService {
     List<Feedback> getFeedbacksByClazzId(int cId);
 
     Float getAverageRatingByTutorId(int tId);
+
+    int getAttendedByCId(int cId);
 }

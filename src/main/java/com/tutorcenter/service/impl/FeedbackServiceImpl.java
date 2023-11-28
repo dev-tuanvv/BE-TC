@@ -44,8 +44,8 @@ public class FeedbackServiceImpl implements FeedbackService {
     public Float getAverageRatingByTutorId(int tId) {
         List<Feedback> list = new ArrayList<>();
         // for (Feedback f : feedbackRepository.findAll()) {
-        //     if (f.getTutor() != null && f.getTutor().getId() == tId)
-        //         list.add(f);
+        // if (f.getTutor() != null && f.getTutor().getId() == tId)
+        // list.add(f);
         // }
 
         if (list.isEmpty()) {
@@ -71,6 +71,12 @@ public class FeedbackServiceImpl implements FeedbackService {
                 list.add(f);
         }
         return list;
+    }
+
+    @Override
+    public int getAttendedByCId(int cId) {
+
+        return (int) feedbackRepository.findAll().stream().filter(f -> f.getClazz().getId() == cId).count();
     }
 
 }

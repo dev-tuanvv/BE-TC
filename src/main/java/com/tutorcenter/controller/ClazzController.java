@@ -99,6 +99,7 @@ public class ClazzController {
             Clazz clazz = clazzService.getClazzById(id).orElse(null);
 
             dto.fromClazz(clazz);
+            dto.setAttendances(feedbackService.getAttendedByCId(clazz.getId()));
             // Tạo list SubjectLevel từ requestId
             List<Integer> listSId = requestSubjectService
                     .getListSIdByRId(clazz.getRequest().getId());
