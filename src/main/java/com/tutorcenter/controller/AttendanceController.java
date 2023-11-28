@@ -71,7 +71,7 @@ public class AttendanceController {
         try {
             Clazz c = clazzService.getClazzById(clazzId).orElse(null);
             attendance.setClazz(c);
-            if (attendance.getClazz().getRequest().getSlots() == attendanceService.getAttendedByCId(clazzId) - 1) {
+            if (attendance.getClazz().getRequest().getSlots() <= (attendanceService.getAttendedByCId(clazzId) + 1)) {
                 c.setStatus(2);
                 clazzService.save(c);
             }
