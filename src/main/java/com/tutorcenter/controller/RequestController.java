@@ -216,6 +216,8 @@ public class RequestController {
             Request request = new Request();
             // TODO: lay Id tu Session
             createRequestDto.toRequest(request);
+            Manager manager = managerService.getManagerById(taskService.findBestSuitManagerId()).get();
+            request.setManager(manager);
             request.setParent(parentService.getParentById(Common.getCurrentUserId()).orElse(null));
             District district = districtService.getDistrictById(createRequestDto.getDistrictId()).orElse(null);
             if (district == null) {
@@ -227,7 +229,7 @@ public class RequestController {
 
             
             Task task = new Task();
-            task.setManager(managerService.getManagerById(taskService.findBestSuitManagerId()).get());
+            task.setManager(manager);
             task.setName("Request");
             task.setType(1);
             task.setStatus(0);
