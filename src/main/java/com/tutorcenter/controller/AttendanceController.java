@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.attendance.AttendanceResDto;
 import com.tutorcenter.model.Attendance;
+import com.tutorcenter.model.Clazz;
 import com.tutorcenter.service.AttendanceService;
 import com.tutorcenter.service.ClazzService;
 
@@ -68,7 +69,12 @@ public class AttendanceController {
         Attendance attendance = new Attendance();
         AttendanceResDto dto = new AttendanceResDto();
         try {
-            attendance.setClazz(clazzService.getClazzById(clazzId).orElse(null));
+            Clazz c = clazzService.getClazzById(clazzId).orElse(null);
+            attendance.setClazz(c);
+            if (attendance.getClazz().getRequest().getSlots() == attendanceService.getAttendedByCId(clazzId) - 1) {
+                c.setStatus(2);
+                clazzService.save(c);
+            }
             attendance.setStatus(status);
             attendance.setDateCreate(new Date(System.currentTimeMillis()));
 
