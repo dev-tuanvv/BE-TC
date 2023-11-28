@@ -73,10 +73,4 @@ public class FeedbackServiceImpl implements FeedbackService {
         return list;
     }
 
-    @Override
-    public int getAttendedByCId(int cId) {
-
-        return (int) feedbackRepository.findAll().stream().filter(f -> f.getClazz().getId() == cId).count();
-    }
-
 }

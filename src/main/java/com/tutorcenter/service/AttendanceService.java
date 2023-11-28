@@ -18,4 +18,6 @@ public interface AttendanceService {
     List<Attendance> getAttendancesByClazzId(int cId);
 
     Attendance save(Attendance attendance);
+
+    int getAttendedByCId(int cId);
 }

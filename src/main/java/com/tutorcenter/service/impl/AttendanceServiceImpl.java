@@ -43,4 +43,9 @@ public class AttendanceServiceImpl implements AttendanceService {
         return attendanceRepository.save(attendance);
     }
 
+    @Override
+    public int getAttendedByCId(int cId) {
+        return (int) attendanceRepository.findAll().stream().filter(a -> a.getClazz().getId() == cId).count();
+    }
+
 }

@@ -21,5 +21,4 @@ public interface FeedbackService {
 
     Float getAverageRatingByTutorId(int tId);
 
-    int getAttendedByCId(int cId);
 }
