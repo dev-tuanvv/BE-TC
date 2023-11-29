@@ -14,10 +14,10 @@ import lombok.Data;
 @Data
 @Table(name = "tblTask")
 public class Task {
-     @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-     @Column
+    @Column
     private String name;
     @Column
     private int type;

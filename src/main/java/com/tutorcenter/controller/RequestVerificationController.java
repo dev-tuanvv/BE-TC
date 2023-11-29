@@ -24,6 +24,7 @@ import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.RequestVerification;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Task;
+import com.tutorcenter.model.Tutor;
 import com.tutorcenter.service.ManagerService;
 import com.tutorcenter.service.RequestVerificationService;
 import com.tutorcenter.service.SubjectService;
@@ -138,6 +139,10 @@ public class RequestVerificationController {
 
             int rvId = requestVerificationService.save(requestVerification).getId();
 
+            Tutor tutor = tutorService.getTutorById(tId).orElse(null);
+            tutor.setStatus(1);
+            tutorService.save(tutor);
+
             Task task = new Task();
             task.setManager(managerService.getManagerById(taskService.findBestSuitManagerId()).get());
             task.setName("Request");
@@ -157,7 +162,7 @@ public class RequestVerificationController {
         try {
 
             List<RequestVerification> reqs = requestVerificationService.getRVByTutorId(reqDto.getTutorId()).stream()
-                    .filter(req -> req.getStatus() == 0)
+                    .filter(req -> req.getStatus() != 1) // khác với đang chờ duyệt
                     .toList();
             if (reqs.isEmpty()) {
                 return ApiResponseDto.<UpdateRequestVerificationResDto>builder()
@@ -171,6 +176,14 @@ public class RequestVerificationController {
             reqDto.toRequestVerification(requestVerification);
             UpdateRequestVerificationResDto resDto = new UpdateRequestVerificationResDto();
             resDto.fromRequestVerification(requestVerificationService.save(requestVerification));
+
+            Tutor tutor = tutorService.getTutorById(reqDto.getTutorId()).orElse(null);
+            if (reqDto.getStatus() == 2) {
+                tutor.setStatus(2);
+            } else if (reqDto.getStatus() == 3) {
+                tutor.setStatus(3);
+            }
+            tutorService.save(tutor);
 
             return ApiResponseDto.<UpdateRequestVerificationResDto>builder().data(resDto).build();
         } catch (Exception e) {

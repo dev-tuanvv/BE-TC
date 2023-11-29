@@ -31,4 +31,9 @@ public class TutorServiceImpl implements TutorService {
         return tutorRepository.findAllById(idList);
     }
 
+    @Override
+    public Tutor save(Tutor tutor) {
+        return tutorRepository.save(tutor);
+    }
+
 }

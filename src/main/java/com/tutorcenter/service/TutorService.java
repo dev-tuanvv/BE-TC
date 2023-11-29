@@ -14,4 +14,7 @@ public interface TutorService {
     Optional<Tutor> getTutorById(int id);
 
     List<Tutor> getTutorsById(List<Integer> idList);
+
+    Tutor save(Tutor tutor);
+
 }
