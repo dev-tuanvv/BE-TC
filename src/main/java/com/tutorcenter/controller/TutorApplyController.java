@@ -140,7 +140,10 @@ public class TutorApplyController {
             TutorApply tutorApply = new TutorApply();
             Clazz clazz = clazzService.getClazzById(cId).orElse(null);
             Tutor tutor = tutorService.getTutorById(tId).orElse(null);
-
+            if (tutor.getStatus() != 2) {
+                return ApiResponseDto.<TutorApplyResDto>builder()
+                        .message("Gia sư cần phải được xác nhận trước khi đăng ký lớp.").build();
+            }
             tutorApply.setClazz(clazz);
             tutorApply.setTutor(tutor);
             tutorApply.setDeleted(false);
