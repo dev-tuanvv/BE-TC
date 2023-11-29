@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tutorcenter.common.Common;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.requestverification.RequestVerificationReqDto;
 import com.tutorcenter.dto.requestverification.RequestVerificationResDto;
@@ -116,9 +117,9 @@ public class RequestVerificationController {
 
     @PreAuthorize("hasAnyAuthority('tutor:create')")
     @PostMapping("/create")
-    public ApiResponseDto<Integer> create(@RequestParam(name = "tutorId") int tId) {
+    public ApiResponseDto<Integer> create() {
         try {
-
+            int tId = Common.getCurrentUserId();
             RequestVerification requestVerification = new RequestVerification();
             // check RequestVerification đã tồn tại ở trạng thái chờ duyệt
             List<RequestVerification> reqs = requestVerificationService.getRVByTutorId(tId).stream()
