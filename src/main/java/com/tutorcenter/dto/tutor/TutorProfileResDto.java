@@ -23,6 +23,7 @@ public class TutorProfileResDto {
     private String imgCertificate;
     private String imgId;
     private List<SubjectLevelResDto> subjects;
+    private int status;
 
     public void fromTutor(Tutor tutor) {
         this.fullName = tutor.getFullname();
@@ -39,5 +40,6 @@ public class TutorProfileResDto {
         this.university = tutor.getUniversity();
         this.major = tutor.getMajor();
         this.imgCertificate = tutor.getImgCertificate();
+        this.status = tutor.getStatus();
     }
 }
