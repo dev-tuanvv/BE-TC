@@ -179,9 +179,9 @@ public class RequestVerificationController {
             resDto.fromRequestVerification(requestVerificationService.save(requestVerification));
 
             Tutor tutor = tutorService.getTutorById(reqDto.getTutorId()).orElse(null);
-            if (reqDto.getStatus() == 2) {
+            if (reqDto.getStatus() == 1) {
                 tutor.setStatus(2);
-            } else if (reqDto.getStatus() == 3) {
+            } else if (reqDto.getStatus() == 2) {
                 tutor.setStatus(3);
             }
             tutorService.save(tutor);
