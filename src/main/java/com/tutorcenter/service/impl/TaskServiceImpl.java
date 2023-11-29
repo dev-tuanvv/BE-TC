@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.tutorcenter.model.Manager;
 import com.tutorcenter.model.Task;
 import com.tutorcenter.repository.TaskRepository;
+import com.tutorcenter.service.ManagerService;
 import com.tutorcenter.service.TaskService;
 
 import lombok.AllArgsConstructor;
@@ -19,9 +20,9 @@ import lombok.Data;
 public class TaskServiceImpl implements TaskService {
     @Autowired
     TaskRepository taskRepository;
-
+    @Autowired
+    private ManagerService managerService;
     public int findBestSuitManagerId() {
-        ManagerServiceImpl managerService = new ManagerServiceImpl();
         List<Manager> managers = managerService.findAll();
         List<ManagerTask> managerTasks = new ArrayList<>();
         for (Manager manager : managers) {
