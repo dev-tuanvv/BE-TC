@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import com.tutorcenter.model.User;
 import com.tutorcenter.model.UserWallet;
 import com.tutorcenter.repository.UserWalletRepository;
+import com.tutorcenter.service.UserService;
 import com.tutorcenter.service.UserWalletService;
 
 @Component
@@ -16,6 +17,8 @@ public class UserWalletServiceImpl implements UserWalletService {
 
     @Autowired
     UserWalletRepository userWalletRepository;
+    @Autowired
+    UserService userService;
 
     @Override
     public List<UserWallet> findAll() {
@@ -38,6 +41,7 @@ public class UserWalletServiceImpl implements UserWalletService {
         UserWallet userWallet = new UserWallet();
         // userWallet.setId(uId);
         userWallet.setBalance(0f);
+        userWallet.setUser(userService.getUserById(uId).orElse(null));
 
         return userWalletRepository.save(userWallet);
     }
@@ -71,7 +75,7 @@ public class UserWalletServiceImpl implements UserWalletService {
 
     @Override
     public UserWallet getWalletByUId(int uId) {
-         UserWallet userWallet = new UserWallet();
+        UserWallet userWallet = new UserWallet();
         for (UserWallet uw : findAll()) {
             if (uw.getUser().getId() == uId)
                 userWallet = uw;
