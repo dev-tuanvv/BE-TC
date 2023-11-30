@@ -35,7 +35,6 @@ public class FeedbackController {
     public ApiResponseDto<List<FeedbackResDto>> getFeedbackByTutorId(@PathVariable int tId) {
         List<FeedbackResDto> response = new ArrayList<>();
         try {
-
             List<Feedback> feedbacks = feedbackService.getFeedbacksByTutorId(tId);
 
             for (Feedback feedback : feedbacks) {
