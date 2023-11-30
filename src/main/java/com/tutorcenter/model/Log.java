@@ -20,7 +20,7 @@ public class Log {
     @Column
     private String object;
     @Column
-    private String table;
+    private String logTable;
     @Column
     private String field;
     @Column

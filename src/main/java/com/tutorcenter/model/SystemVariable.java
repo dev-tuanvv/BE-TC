@@ -13,13 +13,13 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "tblSystemVariable")
+@Table(name = "tblSysVar")
 public class SystemVariable implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
-    private String key;
+    private String varKey;
     @Column
     private String value;
     @Column
