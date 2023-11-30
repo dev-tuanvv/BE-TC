@@ -23,7 +23,6 @@ public class SystemVariableServiceImpl implements SystemVariableService {
 
     @Override
     public SystemVariable getSysVarByVarKey(String varKey) {
-        SystemVariable sysVar = new SystemVariable();
         for (SystemVariable sv : systemVariableRepository.findAll()) {
             if (sv.getVarKey().equals(varKey))
                 return sv;
