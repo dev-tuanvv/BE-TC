@@ -6,7 +6,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.common.Common;
@@ -14,6 +16,7 @@ import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.dto.tutor.TutorDetailResDto;
 import com.tutorcenter.dto.tutor.TutorProfileResDto;
+import com.tutorcenter.dto.tutor.TutorReqDto;
 import com.tutorcenter.dto.tutor.TutorResDto;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Tutor;
@@ -119,6 +122,19 @@ public class TutorController {
       return ApiResponseDto.<TutorProfileResDto>builder().data(dto).build();
     } catch (Exception e) {
       return ApiResponseDto.<TutorProfileResDto>builder().responseCode("500").message(e.getMessage()).build();
+    }
+  }
+
+  @PutMapping("/update")
+  public ApiResponseDto<Integer> update(@RequestParam TutorReqDto tutorReqDto) {
+    try {
+      Tutor tutor = tutorService.getTutorById(tutorReqDto.getId()).orElse(null);
+      tutorReqDto.toTutor(tutor);
+      tutor.setStatus(1);
+      tutorService.save(tutor);
+      return ApiResponseDto.<Integer>builder().data(tutorReqDto.getId()).build();
+    } catch (Exception e) {
+      return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
     }
   }
 }
