@@ -9,9 +9,12 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,7 +25,6 @@ import com.tutorcenter.common.Common;
 import com.tutorcenter.constant.Role;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.authentication.AuthProfileDto;
-import com.tutorcenter.dto.clazz.ListClazzResDto;
 import com.tutorcenter.dto.order.OrderByUserResDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.Order;
@@ -116,4 +118,34 @@ public class UserController {
         return new ResponseEntity<>(pathFile.getFileName().toString(), HttpStatus.OK);
     }
 
+    @GetMapping("/image/{imageName}")
+    public ResponseEntity<byte[]> getImage(@PathVariable String imageName) throws IOException {
+        try {
+            byte[] array = Files.readAllBytes(Paths.get(UPLOAD_DIRECTORY + imageName));
+            HttpHeaders headers = new HttpHeaders();
+
+            String mediaType = getMediaTypeForImage(imageName);
+            headers.add(HttpHeaders.CONTENT_TYPE, mediaType);
+
+            return ResponseEntity.ok()
+                    .headers(headers)
+                    .body(array);
+        } catch (Exception e) {
+            return ResponseEntity.ok()
+                    .body(null);
+        }
+    }
+
+    private String getMediaTypeForImage(String imageName) {
+        if (imageName.endsWith(".png")) {
+            return MediaType.IMAGE_PNG_VALUE;
+        } else if (imageName.endsWith(".jpg") || imageName.endsWith(".jpeg")) {
+            return MediaType.IMAGE_JPEG_VALUE;
+        } else if (imageName.endsWith(".gif")) {
+            return MediaType.IMAGE_GIF_VALUE;
+        } else {
+            // default to png
+            return MediaType.IMAGE_PNG_VALUE;
+        }
+    }
 }
