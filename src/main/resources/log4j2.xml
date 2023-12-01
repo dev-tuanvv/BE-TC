@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+
+    <Appenders>
+        <!-- Console Appender (for testing purposes) -->
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+
+        <!-- JDBC Appender for MySQL -->
+         <JDBC name="databaseAppender" tableName="tbl_log">
+        <ConnectionFactory class="com.tutorcenter.configuration.LogsConnectionFactory" method="getDatabaseConnection"/>
+            <Column name="timestamp" isEventTimestamp="true"/>
+            <Column name="level" pattern="%level"/>
+            <Column name="logger" pattern="%logger"/>
+            <Column name="message" pattern="%message"/>
+        </JDBC>
+    </Appenders>
+
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Console"/>
+            <AppenderRef ref="databaseAppender"/>
+        </Root>
+    </Loggers>
+
+</Configuration>

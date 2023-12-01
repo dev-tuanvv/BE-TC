@@ -1,6 +1,6 @@
 package com.tutorcenter.model;
 
-import java.sql.Date;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,15 +18,11 @@ public class Log {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @Column
-    private String object;
+    private String level;
     @Column
-    private String logTable;
+    private String logger;
     @Column
-    private String field;
+    private String message;
     @Column
-    private String userId;
-    @Column
-    private String activity;
-    @Column
-    private Date timeCreate;
+    private Date timestamp;
 }

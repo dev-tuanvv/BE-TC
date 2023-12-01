@@ -56,6 +56,18 @@ public class RequestVerificationController {
 
             RequestVerification requestVerification = requestVerificationService.getRVById(id).orElse(null);
             dto.fromRequestVerification(requestVerification);
+
+            List<Integer> listSId = tutorSubjectService
+                    .getListSIdByTId(dto.getTutorId());
+            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+            List<SubjectLevelResDto> listSL = new ArrayList<>();
+            for (Subject subject : subjects) {
+                SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                sLDto.fromSubject(subject);
+                listSL.add(sLDto);
+            }
+            dto.setSubjects(listSL);
         } catch (Exception e) {
             return ApiResponseDto.<RequestVerificationResDto>builder().responseCode("500").message(e.getMessage())
                     .build();
