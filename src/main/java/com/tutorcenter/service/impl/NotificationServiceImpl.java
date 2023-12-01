@@ -1,5 +1,6 @@
 package com.tutorcenter.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +17,26 @@ public class NotificationServiceImpl implements NotificationService {
     NotificationRepository notificationRepository;
 
     @Override
-    public List<Notification> findAll() {
-        return notificationRepository.findAll();
+    public List<Notification> getNotificationsByUserId(int uId) {
+        return notificationRepository.getNotificationsByUserId(uId);
     }
 
+    @Override
+    public Notification save(Notification notification) {
+        return notificationRepository.save(notification);
+    }
+
+    @Override
+    public void read(int id) {
+        Notification notification = notificationRepository.findById(id).orElse(null);
+        notification.setRead(true);
+        notificationRepository.save(notification);
+    }
+
+    @Override
+    public void unRead(int id) {
+        Notification notification = notificationRepository.findById(id).orElse(null);
+        notification.setRead(false);
+        notificationRepository.save(notification);
+    }
 }

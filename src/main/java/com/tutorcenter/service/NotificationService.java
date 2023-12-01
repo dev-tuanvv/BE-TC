@@ -8,5 +8,11 @@ import com.tutorcenter.model.Notification;
 
 @Service
 public interface NotificationService {
-    List<Notification> findAll();
+    List<Notification> getNotificationsByUserId(int uId);
+
+    Notification save(Notification notification);
+
+    void read(int id);
+
+    void unRead(int id);
 }

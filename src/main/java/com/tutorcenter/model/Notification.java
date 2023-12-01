@@ -1,7 +1,7 @@
 package com.tutorcenter.model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,4 +27,6 @@ public class Notification implements Serializable {
     private String content;
     @Column
     private Date timeCreate;
+    @Column
+    private boolean read;
 }
