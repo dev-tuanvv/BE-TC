@@ -45,7 +45,7 @@ public class BlogController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{bId}")
     public ApiResponseDto<BlogResDto> getBlogById(@PathVariable int bId) {
         try {
             Blog blog = blogService.getBlogById(bId).orElse(null);
