@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,13 +64,13 @@ public class BlogController {
 
     @PreAuthorize("hasAnyAuthority('manager:create')")
     @PostMapping("/create")
-    public ApiResponseDto<Integer> createBlog(@RequestParam BlogReqDto dto) {
+    public ApiResponseDto<Integer> createBlog(@RequestBody BlogReqDto dto) {
         try {
             Blog blog = new Blog();
             dto.toBlog(blog);
             blog.setDateCreate(new Date(System.currentTimeMillis()));
             blog.setManager(managerService.getManagerById(Common.getCurrentUserId()).orElse(null));
-            notificationService.add(blog.getManager(), "Tạo bài blog thành công");
+            notificationService.add(blog.getManager(), "Tao blog thanh cong");
             return ApiResponseDto.<Integer>builder().data(blogService.save(blog).getId()).build();
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();

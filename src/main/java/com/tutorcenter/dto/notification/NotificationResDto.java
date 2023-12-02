@@ -2,6 +2,7 @@ package com.tutorcenter.dto.notification;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorcenter.model.Notification;
 
 import lombok.Data;
@@ -10,6 +11,7 @@ import lombok.Data;
 public class NotificationResDto {
     private int id;
     private String content;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date time_create;
     private boolean read;
 

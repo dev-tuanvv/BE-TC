@@ -28,5 +28,5 @@ public class Notification implements Serializable {
     @Column
     private Date timeCreate;
     @Column
-    private boolean read;
+    private boolean isRead;
 }

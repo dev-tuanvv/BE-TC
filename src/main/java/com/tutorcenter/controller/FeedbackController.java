@@ -81,9 +81,14 @@ public class FeedbackController {
             feedbackService.save(feedback);
 
             dto.fromFeedback(feedback);
+            notificationService.add(feedback.getClazz().getTutor(),
+                    "Bạn đã nhận được đánh giá sau khi dạy lớp " + feedback.getClazz().getId());
+            notificationService.add(feedback.getClazz().getRequest().getParent(),
+                    "Bạn đã đánh giá lớp " + feedback.getClazz().getId() + " thành công");
         } catch (Exception e) {
             return ApiResponseDto.<CreateFeedbackResDto>builder().responseCode("500").message(e.getMessage()).build();
         }
+
         return ApiResponseDto.<CreateFeedbackResDto>builder().data(dto).build();
     }
 

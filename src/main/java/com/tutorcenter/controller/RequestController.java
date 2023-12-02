@@ -32,6 +32,7 @@ import com.tutorcenter.model.Task;
 import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.DistrictService;
 import com.tutorcenter.service.ManagerService;
+import com.tutorcenter.service.NotificationService;
 import com.tutorcenter.service.ParentService;
 import com.tutorcenter.service.RequestService;
 import com.tutorcenter.service.RequestSubjectService;
@@ -58,6 +59,8 @@ public class RequestController {
     private SubjectService subjectService;
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("")
     public ApiResponseDto<List<RequestResDto>> getListRequest() {
@@ -167,11 +170,11 @@ public class RequestController {
     }
 
     @PreAuthorize("hasAnyAuthority('manager:read')")
-    @GetMapping("/manager/{mId}")
-    public ApiResponseDto<List<RequestResDto>> getRequestByManagerId(@PathVariable(value = "mId") int mId) {
+    @GetMapping("/manager")
+    public ApiResponseDto<List<RequestResDto>> getRequestByManagerId() {
         List<RequestResDto> response = new ArrayList<>();
         try {
-
+            int mId = Common.getCurrentUserId();
             Manager manager = managerService.getManagerById(mId).orElse(null);
             if (manager == null || mId != Common.getCurrentUserId()) {
                 return ApiResponseDto.<List<RequestResDto>>builder().responseCode("404").message("Manager not found")
@@ -235,6 +238,7 @@ public class RequestController {
             task.setType(1);
             task.setStatus(0);
             taskService.save(task);
+            notificationService.add(request.getParent(), "Tạo yêu cầu tìm gia sư thành công");
             return ApiResponseDto.<Integer>builder().message(null).data(response.getId()).build();
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
@@ -255,9 +259,11 @@ public class RequestController {
             rq.setRejectReason(rr);
 
             requestService.save(rq);
+            notificationService.add(rq.getParent(), "Yêu cầu tìm gia sư đã được xét duyệt");
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
         }
+
         return ApiResponseDto.<Integer>builder().data(rId).build();
     }
 
@@ -278,6 +284,7 @@ public class RequestController {
             rq.setClazz(clazzService.getClazzById(requestDto.getClazzId()).orElse(null));
             rq.setDistrict(districtService.getDistrictById(requestDto.getDistrictId()).orElse(null));
 
+            notificationService.add(rq.getParent(), "Yêu cầu tìm gia sư đã được cập nhật");
             return ApiResponseDto.<Request>builder().data(requestService.save(rq)).build();
         } catch (Exception e) {
             return ApiResponseDto.<Request>builder().responseCode("500").message(e.getMessage()).build();
@@ -291,6 +298,7 @@ public class RequestController {
 
             Request rq = requestService.getRequestById(id).orElseThrow();
             rq.setDeleted(true);
+            notificationService.add(rq.getParent(), "Yêu cầu tìm gia sư đã được hủy bỏ");
             return ApiResponseDto.<Integer>builder().data(id).build();
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
