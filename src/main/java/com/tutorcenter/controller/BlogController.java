@@ -70,7 +70,7 @@ public class BlogController {
             dto.toBlog(blog);
             blog.setDateCreate(new Date(System.currentTimeMillis()));
             blog.setManager(managerService.getManagerById(Common.getCurrentUserId()).orElse(null));
-            notificationService.add(blog.getManager(), "Tao blog thanh cong");
+            notificationService.add(blog.getManager(), "Tạo blog thành công");
             return ApiResponseDto.<Integer>builder().data(blogService.save(blog).getId()).build();
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();

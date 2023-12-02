@@ -406,20 +406,23 @@ public class ClazzController {
 
     // @PreAuthorize("hasAnyAuthority('manager:create')")
     @PostMapping("/create")
-    public ApiResponseDto<Clazz> create(@RequestParam(name = "requestId") int rId) {
-        Clazz clazz = new Clazz();
-        try {
+    public ApiResponseDto<Integer> create(@RequestParam(name = "requestId") int rId) {
 
+        int response = 0;
+        try {
+            Clazz clazz = new Clazz();
             Request request = requestService.getRequestById(rId).orElse(null);
             clazz.setRequest(request);
             clazz.setStatus(0);
             clazz.setDeleted(false);
 
-            clazzService.save(clazz);
+            response = clazzService.save(clazz).getId();
+
+            notificationService.add(request.getParent(), "Yêu cầu của bạn đã được tạo thành lớp " + response);
         } catch (Exception e) {
-            return ApiResponseDto.<Clazz>builder().responseCode("500").message(e.getMessage()).build();
+            return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
         }
-        return ApiResponseDto.<Clazz>builder().data(clazz).build();
+        return ApiResponseDto.<Integer>builder().data(response).build();
     }
 
     @PutMapping("/update/{id}")
