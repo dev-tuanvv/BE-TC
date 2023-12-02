@@ -18,7 +18,12 @@ public class NotificationServiceImpl implements NotificationService {
 
     @Override
     public List<Notification> getNotificationsByUserId(int uId) {
-        return notificationRepository.getNotificationsByUserId(uId);
+        List<Notification> response = new ArrayList<>();
+        for (Notification n : notificationRepository.findAll()) {
+            if (n.getUser().getId() == uId)
+                response.add(n);
+        }
+        return response;
     }
 
     @Override
