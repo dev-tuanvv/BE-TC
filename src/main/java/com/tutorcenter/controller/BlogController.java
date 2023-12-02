@@ -21,6 +21,7 @@ import com.tutorcenter.dto.blog.BlogResDto;
 import com.tutorcenter.model.Blog;
 import com.tutorcenter.service.BlogService;
 import com.tutorcenter.service.ManagerService;
+import com.tutorcenter.service.NotificationService;
 
 @RestController
 @RequestMapping("/api/blog")
@@ -30,6 +31,8 @@ public class BlogController {
     private BlogService blogService;
     @Autowired
     private ManagerService managerService;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("")
     public ApiResponseDto<List<BlogResDto>> getAllBlogs() {
@@ -66,7 +69,7 @@ public class BlogController {
             dto.toBlog(blog);
             blog.setDateCreate(new Date(System.currentTimeMillis()));
             blog.setManager(managerService.getManagerById(Common.getCurrentUserId()).orElse(null));
-
+            notificationService.add(blog.getManager(), "Tạo bài blog thành công");
             return ApiResponseDto.<Integer>builder().data(blogService.save(blog).getId()).build();
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();

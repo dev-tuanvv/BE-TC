@@ -18,6 +18,7 @@ import com.tutorcenter.dto.feedback.FeedbackResDto;
 import com.tutorcenter.model.Feedback;
 import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.FeedbackService;
+import com.tutorcenter.service.NotificationService;
 import com.tutorcenter.service.TutorService;
 
 @RestController
@@ -30,6 +31,8 @@ public class FeedbackController {
     private ClazzService clazzService;
     @Autowired
     private TutorService tutorService;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("/tutor/{tId}")
     public ApiResponseDto<List<FeedbackResDto>> getFeedbackByTutorId(@PathVariable int tId) {
