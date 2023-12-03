@@ -123,12 +123,12 @@ public class RequestController {
 
     @PreAuthorize("hasAnyAuthority('parent:read')")
     @GetMapping("/parent/{pId}")
-    public ApiResponseDto<List<ParentRequestResDto>> getRequestByParentId(@PathVariable(value = "pId") int pId) {
+    public ApiResponseDto<List<ParentRequestResDto>> getRequestByParentId() {
         List<ParentRequestResDto> response = new ArrayList<>();
         try {
-
+            int pId = Common.getCurrentUserId();
             Parent parent = parentService.getParentById(pId).orElse(null);
-            if (parent == null || pId != Common.getCurrentUserId()) {
+            if (parent == null) {
                 return ApiResponseDto.<List<ParentRequestResDto>>builder().responseCode("404")
                         .message("Parent not found")
                         .build();
