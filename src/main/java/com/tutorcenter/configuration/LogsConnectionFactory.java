@@ -22,11 +22,15 @@ public class LogsConnectionFactory {
 
     private final DataSource dataSource;
 
-    private String datasourceURL = "jdbc:mysql://d216150.tino.org/vietnamt1_tc?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC";
-
+    private String datasourceURL = "jdbc:mysql://d216150.tino.org/vietnamt1_tc?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false";
     private String userName = "vietnamt1_tc";
-
     private String pass = "abc123456";
+
+    // Hoang local test
+    // private String datasourceURL =
+    // "jdbc:mysql://localhost:3306/vietnamt1_tc?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false";
+    // private String userName = "root";
+    // private String pass = "123456";
 
     private LogsConnectionFactory() {
 
