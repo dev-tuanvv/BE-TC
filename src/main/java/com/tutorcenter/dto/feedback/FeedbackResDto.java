@@ -1,7 +1,9 @@
 package com.tutorcenter.dto.feedback;
 
 import java.sql.Date;
+import java.util.List;
 
+import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.Feedback;
 
 import lombok.Data;
@@ -12,10 +14,12 @@ public class FeedbackResDto {
     private int clazzId;
     private String parentName;
     private String tutorName;
+    private String address;
     private int rating;
     private String content;
     private int status;
     private Date dateCreate;
+    private List<SubjectLevelResDto> subjects;
 
     public void fromFeedback(Feedback feedback) {
         this.id = feedback.getId();
@@ -26,5 +30,6 @@ public class FeedbackResDto {
         this.content = feedback.getContent();
         this.status = feedback.getStatus();
         this.dateCreate = feedback.getDateCreate();
+        this.address = feedback.getClazz().getRequest().getAddress();
     }
 }

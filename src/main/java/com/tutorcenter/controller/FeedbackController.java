@@ -15,10 +15,14 @@ import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.feedback.CreateFeedbackResDto;
 import com.tutorcenter.dto.feedback.FeedbackReqDto;
 import com.tutorcenter.dto.feedback.FeedbackResDto;
+import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.Feedback;
+import com.tutorcenter.model.Subject;
 import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.FeedbackService;
 import com.tutorcenter.service.NotificationService;
+import com.tutorcenter.service.RequestSubjectService;
+import com.tutorcenter.service.SubjectService;
 import com.tutorcenter.service.TutorService;
 
 @RestController
@@ -33,6 +37,10 @@ public class FeedbackController {
     private TutorService tutorService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private RequestSubjectService requestSubjectService;
+    @Autowired
+    SubjectService subjectService;
 
     @GetMapping("/tutor/{tId}")
     public ApiResponseDto<List<FeedbackResDto>> getFeedbackByTutorId(@PathVariable int tId) {
@@ -43,6 +51,20 @@ public class FeedbackController {
             for (Feedback feedback : feedbacks) {
                 FeedbackResDto dto = new FeedbackResDto();
                 dto.fromFeedback(feedback);
+
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(feedback.getClazz().getRequest().getId());
+                List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+                List<SubjectLevelResDto> listSL = new ArrayList<>();
+                for (Subject subject : subjects) {
+                    SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                    sLDto.fromSubject(subject);
+                    listSL.add(sLDto);
+                }
+
+                dto.setSubjects(listSL);
+
                 response.add(dto);
             }
         } catch (Exception e) {
