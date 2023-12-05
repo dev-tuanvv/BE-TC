@@ -21,6 +21,8 @@ public class ParentRequestResDto {
 
     private String address;
 
+    private int daysOfWeek;
+
     private int slots;
 
     private int slotsLength;
@@ -37,6 +39,7 @@ public class ParentRequestResDto {
         this.gender = request.getGender();
         this.tutorLevel = request.getTutorLevel();
         this.address = request.getAddress();
+        this.daysOfWeek = request.getDaysOfWeek();
         this.slots = request.getSlots();
         this.slotsLength = request.getSlotsLength();
         this.tuition = request.getTuition();
