@@ -18,7 +18,7 @@ public class RequestResDto {
     private String districtName;
     private String provinceName;
     private float tuition; // fee
-    private int daysOfWeek;
+    private String daysOfWeek;
     private int slots;
     private int slotsLength;
     private int status;

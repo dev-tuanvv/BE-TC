@@ -21,7 +21,7 @@ public class ParentRequestResDto {
 
     private String address;
 
-    private int daysOfWeek;
+    private String daysOfWeek;
 
     private int slots;
 

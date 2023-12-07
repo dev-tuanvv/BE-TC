@@ -17,7 +17,7 @@ public class RequestDto {
     private String address;
     private int districtId;
     private List<Integer> rSubjects;
-    private int daysOfWeek;
+    private String daysOfWeek;
     private int slots;
     private int slotsLength;
     private float tuition;

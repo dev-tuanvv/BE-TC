@@ -18,6 +18,7 @@ public class TutorProfileResDto {
     private String idNumber;
     private String gender;
     private String university;
+    private String tutorLevel;
     private String major;
     private String imgAvatar;
     private String imgCertificate;
@@ -38,6 +39,7 @@ public class TutorProfileResDto {
         this.districtName = tutor.getDistrict().getName();
         this.provinceName = tutor.getDistrict().getProvince().getName();
         this.university = tutor.getUniversity();
+        this.tutorLevel = tutor.getTutorLevel();
         this.major = tutor.getMajor();
         this.imgCertificate = tutor.getImgCertificate();
         this.status = tutor.getStatus();

@@ -15,6 +15,7 @@ public class TutorDetailResDto {
     private String districtName;
     private String provinceName;
     private String university;
+    private String tutorLevel;
     private String major;
     private String imgCert;
     private float rating;
@@ -25,6 +26,7 @@ public class TutorDetailResDto {
         this.districtName = tutor.getDistrict().getName();
         this.provinceName = tutor.getDistrict().getProvince().getName();
         this.university = tutor.getUniversity();
+        this.tutorLevel = tutor.getTutorLevel();
         this.major = tutor.getMajor();
         this.imgCert = tutor.getImgCertificate();
     }

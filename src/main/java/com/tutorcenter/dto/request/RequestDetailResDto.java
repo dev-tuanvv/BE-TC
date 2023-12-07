@@ -19,7 +19,7 @@ public class RequestDetailResDto {
 
     private String phone;
 
-    private int daysOfWeek;
+    private String daysOfWeek;
 
     private int slots;
 

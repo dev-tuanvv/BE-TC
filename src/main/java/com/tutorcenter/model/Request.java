@@ -40,7 +40,7 @@ public class Request implements Serializable {
     @JoinColumn(name = "districtId")
     private District district;
     @Column
-    private int daysOfWeek;
+    private String daysOfWeek;
     @Column
     private int slots;
     @Column

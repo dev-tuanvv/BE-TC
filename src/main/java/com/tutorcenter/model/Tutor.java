@@ -40,4 +40,6 @@ public class Tutor extends User {
     private String gender;
     @Column
     private String area;
+    @Column
+    private String tutorLevel;
 }

@@ -21,7 +21,7 @@ public class CreateRequestReqDto {
     @NotEmpty
     private List<Integer> listSubjectId;
     private String gender;
-    private int daysOfWeek;
+    private String daysOfWeek;
     @NotNull
     @Min(0)
     private int slots;
