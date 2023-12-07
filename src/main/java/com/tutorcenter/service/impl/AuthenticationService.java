@@ -26,6 +26,7 @@ import com.tutorcenter.repository.TokenRepository;
 import com.tutorcenter.repository.TutorRepository;
 import com.tutorcenter.repository.UserRepository;
 import com.tutorcenter.service.DistrictService;
+import com.tutorcenter.service.NotificationService;
 import com.tutorcenter.service.UserWalletService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -48,6 +49,8 @@ public class AuthenticationService {
     private TutorRepository tutorRepository;
     @Autowired
     private UserWalletService userWalletService;
+    @Autowired
+    private NotificationService notificationService;
 
     public AuthenticationResDto register(RegisterReqDto request) {
         var user = User.builder()
@@ -72,6 +75,8 @@ public class AuthenticationService {
         parent.setPassword(passwordEncoder.encode(request.getPassword()));
         parent.setDistrict(districtService.getDistrictById(request.getDistrictId()).orElse(null));
         userWalletService.create(parentRepository.save(parent).getId());
+        notificationService.add(parent,
+                "Chào mừng phụ huynh đến hệ thống Tutor Center, hãy bắt đầu với tạo yêu cầu tìm gia sư.");
         return parent.getEmail();
     }
 
@@ -82,6 +87,8 @@ public class AuthenticationService {
         tutor.setPassword(passwordEncoder.encode(request.getPassword()));
         tutor.setDistrict(districtService.getDistrictById(request.getDistrictId()).orElse(null));
         userWalletService.create(tutorRepository.save(tutor).getId());
+        notificationService.add(tutor,
+                "Chào mừng gia sư đến hệ thống Tutor Center, hãy bắt đầu với cập nhật thông tin cá nhân và tạo yêu cầu xác minh.");
         return tutor.getEmail();
     }
 

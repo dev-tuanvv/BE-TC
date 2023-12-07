@@ -19,6 +19,8 @@ public class RequestDetailResDto {
 
     private String phone;
 
+    private String daysOfWeek;
+
     private int slots;
 
     private int slotsLength;
@@ -44,6 +46,7 @@ public class RequestDetailResDto {
         this.parentName = request.getParent().getFullname();
         this.email = request.getParent().getEmail();
         this.phone = request.getPhone();
+        this.daysOfWeek = request.getDaysOfWeek();
         this.slots = request.getSlots();
         this.slotsLength = request.getSlotsLength();
         this.tuition = request.getTuition();

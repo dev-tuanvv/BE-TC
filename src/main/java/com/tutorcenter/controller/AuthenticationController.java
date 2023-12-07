@@ -2,6 +2,8 @@ package com.tutorcenter.controller;
 
 import java.io.IOException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,15 +34,20 @@ public class AuthenticationController {
     @Autowired
     private UserService userService;
 
+    private static final Logger logger = LogManager.getLogger(AuthenticationController.class);
+
     @PostMapping("/register")
     public ApiResponseDto<AuthenticationResDto> register(
             @RequestBody RegisterReqDto request) {
+        logger.info("Register new user");
         return ApiResponseDto.<AuthenticationResDto>builder().data(authenticationService.register(request)).build();
     }
 
     @PostMapping("/authenticate")
     public ApiResponseDto<AuthenticationResDto> authenticate(
             @RequestBody AuthenticationReqDto request) {
+        logger.info(request.getEmail() + " logged in");
+
         return ApiResponseDto.<AuthenticationResDto>builder().data(authenticationService.authenticate(request)).build();
     }
 

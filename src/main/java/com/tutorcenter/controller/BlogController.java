@@ -5,21 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tutorcenter.common.Common;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.blog.BlogReqDto;
 import com.tutorcenter.dto.blog.BlogResDto;
 import com.tutorcenter.model.Blog;
 import com.tutorcenter.service.BlogService;
 import com.tutorcenter.service.ManagerService;
+import com.tutorcenter.service.NotificationService;
 
 @RestController
 @RequestMapping("/api/blog")
@@ -29,6 +32,8 @@ public class BlogController {
     private BlogService blogService;
     @Autowired
     private ManagerService managerService;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("")
     public ApiResponseDto<List<BlogResDto>> getAllBlogs() {
@@ -45,7 +50,7 @@ public class BlogController {
         }
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/{bId}")
     public ApiResponseDto<BlogResDto> getBlogById(@PathVariable int bId) {
         try {
             Blog blog = blogService.getBlogById(bId).orElse(null);
@@ -58,14 +63,14 @@ public class BlogController {
     }
 
     @PreAuthorize("hasAnyAuthority('manager:create')")
-    @PutMapping("/create")
-    public ApiResponseDto<Integer> createBlog(@RequestParam BlogReqDto dto) {
+    @PostMapping("/create")
+    public ApiResponseDto<Integer> createBlog(@RequestBody BlogReqDto dto) {
         try {
             Blog blog = new Blog();
             dto.toBlog(blog);
             blog.setDateCreate(new Date(System.currentTimeMillis()));
-            blog.setManager(managerService.getManagerById(dto.getManagerId()).orElse(null));
-
+            blog.setManager(managerService.getManagerById(Common.getCurrentUserId()).orElse(null));
+            notificationService.add(blog.getManager(), "Tạo blog thành công");
             return ApiResponseDto.<Integer>builder().data(blogService.save(blog).getId()).build();
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();

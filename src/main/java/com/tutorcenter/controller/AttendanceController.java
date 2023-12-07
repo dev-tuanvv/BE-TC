@@ -4,6 +4,8 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +20,7 @@ import com.tutorcenter.model.Attendance;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.service.AttendanceService;
 import com.tutorcenter.service.ClazzService;
+import com.tutorcenter.service.NotificationService;
 
 @RestController
 @RequestMapping("/api/attendance")
@@ -26,6 +29,10 @@ public class AttendanceController {
     private AttendanceService attendanceService;
     @Autowired
     private ClazzService clazzService;
+    @Autowired
+    private NotificationService notificationService;
+
+    private static final Logger logger = LogManager.getLogger(AuthenticationController.class);
 
     @GetMapping("")
     public ApiResponseDto<List<AttendanceResDto>> getListAttendance() {
@@ -42,6 +49,7 @@ public class AttendanceController {
         } catch (Exception e) {
             return ApiResponseDto.<List<AttendanceResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
+        logger.info("Get list attendance");
         return ApiResponseDto.<List<AttendanceResDto>>builder().data(response).build();
 
     }
@@ -60,6 +68,7 @@ public class AttendanceController {
         } catch (Exception e) {
             return ApiResponseDto.<List<AttendanceResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
+        logger.info("Get attendance by class Id");
         return ApiResponseDto.<List<AttendanceResDto>>builder().data(response).build();
     }
 
@@ -77,11 +86,17 @@ public class AttendanceController {
             }
             attendance.setStatus(status);
             attendance.setDateCreate(new Date(System.currentTimeMillis()));
-
+            notificationService.add(c.getTutor(),
+                    "Phụ huynh " + c.getRequest().getParent().getFullname()
+                            + "đã tạo điểm danh lớp" + c.getId() + " thành công");
+            notificationService.add(c.getRequest().getParent(),
+                    "Phụ huynh " + c.getRequest().getParent().getFullname()
+                            + "đã tạo điểm danh lớp" + c.getId() + " thành công");
             dto.fromAttendance(attendanceService.save(attendance));
         } catch (Exception e) {
             return ApiResponseDto.<AttendanceResDto>builder().responseCode("500").message(e.getMessage()).build();
         }
+        logger.info("Create attendance");
         return ApiResponseDto.<AttendanceResDto>builder().data(dto).build();
     }
 }

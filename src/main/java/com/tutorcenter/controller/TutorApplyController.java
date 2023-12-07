@@ -26,6 +26,7 @@ import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorApply;
 import com.tutorcenter.service.ClazzService;
+import com.tutorcenter.service.NotificationService;
 import com.tutorcenter.service.RequestSubjectService;
 import com.tutorcenter.service.SubjectService;
 import com.tutorcenter.service.TutorApplyService;
@@ -47,6 +48,8 @@ public class TutorApplyController {
     private SubjectService subjectService;
     @Autowired
     private RequestSubjectService requestSubjectService;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("/")
     public List<TutorApply> getAll() {
@@ -176,10 +179,16 @@ public class TutorApplyController {
 
             TutorApply tutorApply = tutorApplyService.getTutorApplyById(taId).orElse(null);
             for (TutorApply ta : tutorApplyService.getTutorAppliesByClazzId(tutorApply.getClazz().getId())) {
-                if (ta.getId() == taId)
+                if (ta.getId() == taId) {
                     ta.setStatus(1);// accepted
-                else
+                    notificationService.add(ta.getTutor(),
+                            "Bạn đã được chọn làm gia sư cho lớp " + tutorApply.getClazz().getId());
+                } else {
                     ta.setStatus(2);// rejected
+                    notificationService.add(ta.getTutor(),
+                            "Yêu cầu làm gia sư cho lớp " + tutorApply.getClazz().getId() + " đã bị từ chối");
+                }
+
             }
             tutorApply.getClazz().setTutor(tutorApply.getTutor());
             tutorApply.getClazz().setStatus(1);

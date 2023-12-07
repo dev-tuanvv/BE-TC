@@ -19,7 +19,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tblRequest")
-public class Request implements Serializable{
+public class Request implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -39,6 +39,8 @@ public class Request implements Serializable{
     @ManyToOne
     @JoinColumn(name = "districtId")
     private District district;
+    @Column
+    private String daysOfWeek;
     @Column
     private int slots;
     @Column

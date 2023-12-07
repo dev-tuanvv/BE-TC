@@ -32,6 +32,7 @@ import com.tutorcenter.model.Subject;
 import com.tutorcenter.service.AttendanceService;
 import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.FeedbackService;
+import com.tutorcenter.service.NotificationService;
 import com.tutorcenter.service.OrderService;
 import com.tutorcenter.service.RequestService;
 import com.tutorcenter.service.RequestSubjectService;
@@ -61,6 +62,8 @@ public class ClazzController {
     private RequestSubjectService requestSubjectService;
     @Autowired
     SubjectService subjectService;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("")
     public ApiResponseDto<List<ListClazzResDto>> getAllClazzs() {
@@ -293,13 +296,16 @@ public class ClazzController {
     }
 
     @PreAuthorize("hasAnyAuthority('manager:read')")
-    @GetMapping("/manager/{mId}")
-    public ApiResponseDto<List<ListClazzResDto>> getClazzByManagerId(@PathVariable int mId) {
+    @GetMapping("/manager")
+    public ApiResponseDto<List<ListClazzResDto>> getClazzByManagerId() {
         List<ListClazzResDto> response = new ArrayList<>();
         try {
-
+            int mId = Common.getCurrentUserId();
             List<Clazz> clazzs = clazzService.getClazzByManagerId(mId);
-
+            if (clazzs.isEmpty()) {
+                return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("500")
+                        .message("Manager hiện không có class được assign").build();
+            }
             for (Clazz c : clazzs) {
                 ListClazzResDto dto = new ListClazzResDto();
                 dto.fromClazz(c);
@@ -400,20 +406,23 @@ public class ClazzController {
 
     // @PreAuthorize("hasAnyAuthority('manager:create')")
     @PostMapping("/create")
-    public ApiResponseDto<Clazz> create(@RequestParam(name = "requestId") int rId) {
-        Clazz clazz = new Clazz();
-        try {
+    public ApiResponseDto<Integer> create(@RequestParam(name = "requestId") int rId) {
 
+        int response = 0;
+        try {
+            Clazz clazz = new Clazz();
             Request request = requestService.getRequestById(rId).orElse(null);
             clazz.setRequest(request);
             clazz.setStatus(0);
             clazz.setDeleted(false);
 
-            clazzService.save(clazz);
+            response = clazzService.save(clazz).getId();
+
+            notificationService.add(request.getParent(), "Yêu cầu của bạn đã được tạo thành lớp " + response);
         } catch (Exception e) {
-            return ApiResponseDto.<Clazz>builder().responseCode("500").message(e.getMessage()).build();
+            return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
         }
-        return ApiResponseDto.<Clazz>builder().data(clazz).build();
+        return ApiResponseDto.<Integer>builder().data(response).build();
     }
 
     @PutMapping("/update/{id}")
@@ -438,6 +447,7 @@ public class ClazzController {
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
         }
+        notificationService.add(clazz.getRequest().getParent(), "Lớp của bạn đã được cập nhật trạng thái");
         return ApiResponseDto.<Integer>builder().data(clazzService.save(clazz).getId()).build();
     }
 
@@ -451,6 +461,7 @@ public class ClazzController {
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
         }
+        notificationService.add(clazz.getRequest().getParent(), "Lớp " + clazz.getId() + " của bạn đã được xóa");
         return ApiResponseDto.<Integer>builder().data(clazzService.save(clazz).getId()).build();
     }
 }

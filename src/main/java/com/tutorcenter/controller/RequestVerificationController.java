@@ -26,6 +26,7 @@ import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Task;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.service.ManagerService;
+import com.tutorcenter.service.NotificationService;
 import com.tutorcenter.service.RequestVerificationService;
 import com.tutorcenter.service.SubjectService;
 import com.tutorcenter.service.TaskService;
@@ -48,6 +49,8 @@ public class RequestVerificationController {
     private TaskService taskService;
     @Autowired
     private ManagerService managerService;
+    @Autowired
+    private NotificationService notificationService;
 
     @GetMapping("/{id}")
     public ApiResponseDto<RequestVerificationResDto> getRVById(@PathVariable int id) {
@@ -56,6 +59,18 @@ public class RequestVerificationController {
 
             RequestVerification requestVerification = requestVerificationService.getRVById(id).orElse(null);
             dto.fromRequestVerification(requestVerification);
+
+            List<Integer> listSId = tutorSubjectService
+                    .getListSIdByTId(dto.getTutorId());
+            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+            List<SubjectLevelResDto> listSL = new ArrayList<>();
+            for (Subject subject : subjects) {
+                SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                sLDto.fromSubject(subject);
+                listSL.add(sLDto);
+            }
+            dto.setSubjects(listSL);
         } catch (Exception e) {
             return ApiResponseDto.<RequestVerificationResDto>builder().responseCode("500").message(e.getMessage())
                     .build();
@@ -84,11 +99,14 @@ public class RequestVerificationController {
     }
 
     @PreAuthorize("hasAnyAuthority('manager:read')")
-    @GetMapping("/manager/{mId}")
-    public ApiResponseDto<List<RequestVerificationResDto>> getRVByManagerId(@PathVariable int mId) {
+    @GetMapping("/manager")
+    public ApiResponseDto<List<RequestVerificationResDto>> getRVByManagerId() {
         try {
-
+            int mId = Common.getCurrentUserId();
             List<RequestVerification> requestVerifications = requestVerificationService.getRVByManagerId(mId);
+            if (requestVerifications.isEmpty() || requestVerifications == null)
+                return ApiResponseDto.<List<RequestVerificationResDto>>builder().responseCode("500")
+                        .message("Hiện không có yêu cầu xác thực").build();
             List<RequestVerificationResDto> response = new ArrayList<>();
             for (RequestVerification requestVerification : requestVerifications) {
                 RequestVerificationResDto dto = new RequestVerificationResDto();
@@ -150,6 +168,7 @@ public class RequestVerificationController {
             task.setType(1);
             task.setStatus(0);
             taskService.save(task);
+            notificationService.add(tutor, "Gửi yêu cầu xác thực thông tin cá nhân thành công");
 
             return ApiResponseDto.<Integer>builder().data(rvId).build();
         } catch (Exception e) {
@@ -185,7 +204,7 @@ public class RequestVerificationController {
                 tutor.setStatus(3);
             }
             tutorService.save(tutor);
-
+            notificationService.add(tutor, "Yêu cầu xác thực thông tin cá nhân của bạn đã được xét duyệt");
             return ApiResponseDto.<UpdateRequestVerificationResDto>builder().data(resDto).build();
         } catch (Exception e) {
             return ApiResponseDto.<UpdateRequestVerificationResDto>builder().responseCode("500").message(e.getMessage())

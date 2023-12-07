@@ -17,6 +17,7 @@ import com.tutorcenter.dto.transaction.TransactionResDto;
 import com.tutorcenter.dto.wallet.UserWalletResDto;
 import com.tutorcenter.model.TransactionHistory;
 import com.tutorcenter.model.UserWallet;
+import com.tutorcenter.service.NotificationService;
 import com.tutorcenter.service.TransactionHistoryService;
 import com.tutorcenter.service.UserWalletService;
 
@@ -25,9 +26,11 @@ import com.tutorcenter.service.UserWalletService;
 public class UserWalletController {
 
     @Autowired
-    UserWalletService userWalletService;
+    private UserWalletService userWalletService;
     @Autowired
-    TransactionHistoryService transactionHistoryService;
+    private TransactionHistoryService transactionHistoryService;
+    @Autowired
+    private NotificationService notificationService;
 
     @PutMapping("/deposit")
     public ApiResponseDto<UserWalletResDto> deposit(@RequestParam(name = "userId") int id,
@@ -50,6 +53,8 @@ public class UserWalletController {
 
             UserWalletResDto dto = new UserWalletResDto();
             dto.fromUserWallet(userWallet);
+            notificationService.add(transactionHistory.getUser(),
+                    "Bạn đã nạp " + transactionHistory.getAmount() + " vào ví thành công");
             return ApiResponseDto.<UserWalletResDto>builder().data(dto).build();
         } catch (Exception e) {
             return ApiResponseDto.<UserWalletResDto>builder().responseCode("500").message(e.getMessage()).build();
@@ -79,6 +84,8 @@ public class UserWalletController {
 
             UserWalletResDto dto = new UserWalletResDto();
             dto.fromUserWallet(userWallet);
+            notificationService.add(transactionHistory.getUser(),
+                    "Bạn đã rút " + transactionHistory.getAmount() + " khỏi ví thành công");
             return ApiResponseDto.<UserWalletResDto>builder().data(dto).build();
         } catch (Exception e) {
             return ApiResponseDto.<UserWalletResDto>builder().responseCode("500").message(e.getMessage()).build();
