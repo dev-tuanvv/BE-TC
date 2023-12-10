@@ -17,4 +17,5 @@ public interface TutorSubjectService {
 
     List<Integer> getListSIdByTId(int tId);
 
+    TutorSubject save(TutorSubject tutorSubject);
 }

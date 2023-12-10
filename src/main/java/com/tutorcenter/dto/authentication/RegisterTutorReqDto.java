@@ -1,6 +1,9 @@
 package com.tutorcenter.dto.authentication;
 
+import java.util.List;
+
 import com.tutorcenter.constant.Role;
+import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.Tutor;
 
 import jakarta.validation.constraints.NotEmpty;
@@ -31,6 +34,7 @@ public class RegisterTutorReqDto {
     private String imgAvatar;
     private String imgIdFront;
     private String imdIdBack;
+    private List<Integer> subjects;
 
     public void toTutor(Tutor tutor) {
         tutor.setEmail(this.email);

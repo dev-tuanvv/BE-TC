@@ -1,6 +1,8 @@
 package com.tutorcenter.service.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -17,9 +19,12 @@ import com.tutorcenter.dto.authentication.AuthenticationResDto;
 import com.tutorcenter.dto.authentication.RegisterParentReqDto;
 import com.tutorcenter.dto.authentication.RegisterReqDto;
 import com.tutorcenter.dto.authentication.RegisterTutorReqDto;
+import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.Parent;
+import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Token;
 import com.tutorcenter.model.Tutor;
+import com.tutorcenter.model.TutorSubject;
 import com.tutorcenter.model.User;
 import com.tutorcenter.repository.ParentRepository;
 import com.tutorcenter.repository.TokenRepository;
@@ -27,6 +32,8 @@ import com.tutorcenter.repository.TutorRepository;
 import com.tutorcenter.repository.UserRepository;
 import com.tutorcenter.service.DistrictService;
 import com.tutorcenter.service.NotificationService;
+import com.tutorcenter.service.SubjectService;
+import com.tutorcenter.service.TutorSubjectService;
 import com.tutorcenter.service.UserWalletService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -51,6 +58,10 @@ public class AuthenticationService {
     private UserWalletService userWalletService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private SubjectService subjectService;
+    @Autowired
+    private TutorSubjectService tutorSubjectService;
 
     public AuthenticationResDto register(RegisterReqDto request) {
         var user = User.builder()
@@ -81,15 +92,29 @@ public class AuthenticationService {
     }
 
     public String registerTutor(RegisterTutorReqDto request) {
-        Tutor tutor = new Tutor();
-        request.toTutor(tutor);
+        try {
+            Tutor tutor = new Tutor();
+            request.toTutor(tutor);
 
-        tutor.setPassword(passwordEncoder.encode(request.getPassword()));
-        tutor.setDistrict(districtService.getDistrictById(request.getDistrictId()).orElse(null));
-        userWalletService.create(tutorRepository.save(tutor).getId());
-        notificationService.add(tutor,
-                "Chào mừng gia sư đến hệ thống Tutor Center, hãy bắt đầu với cập nhật thông tin cá nhân và tạo yêu cầu xác minh.");
-        return tutor.getEmail();
+            tutor.setPassword(passwordEncoder.encode(request.getPassword()));
+            tutor.setDistrict(districtService.getDistrictById(request.getDistrictId()).orElse(null));
+            // create list tutor subject
+            List<Subject> subjects = subjectService.getSubjectsByListId(request.getSubjects());
+
+            for (Subject subject : subjects) {
+                TutorSubject tutorSubject = new TutorSubject();
+                tutorSubject.setSubject(subject);
+                tutorSubject.setTutor(tutor);
+                tutorSubjectService.save(tutorSubject);
+            }
+            // create tutor wallet
+            userWalletService.create(tutorRepository.save(tutor).getId());
+            notificationService.add(tutor,
+                    "Chào mừng gia sư đến hệ thống Tutor Center, hãy bắt đầu với cập nhật thông tin cá nhân và tạo yêu cầu xác minh.");
+            return tutor.getEmail();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public AuthenticationResDto authenticate(AuthenticationReqDto request) {

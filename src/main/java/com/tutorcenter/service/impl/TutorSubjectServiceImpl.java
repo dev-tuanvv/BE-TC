@@ -38,4 +38,9 @@ public class TutorSubjectServiceImpl implements TutorSubjectService {
         return list.stream().map(ts -> ts.getSubject().getId()).collect(Collectors.toList());
     }
 
+    @Override
+    public TutorSubject save(TutorSubject tutorSubject) {
+        return tutorSubjectRepository.save(tutorSubject);
+    }
+
 }
