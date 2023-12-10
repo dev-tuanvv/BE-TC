@@ -22,7 +22,7 @@ public class ParentRequestResDto {
     private String address;
 
     private String daysOfWeek;
-
+    private String time;
     private int slots;
 
     private int slotsLength;
@@ -40,6 +40,7 @@ public class ParentRequestResDto {
         this.tutorLevel = request.getTutorLevel();
         this.address = request.getAddress();
         this.daysOfWeek = request.getDaysOfWeek();
+        this.time = request.getTime();
         this.slots = request.getSlots();
         this.slotsLength = request.getSlotsLength();
         this.tuition = request.getTuition();

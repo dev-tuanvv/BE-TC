@@ -42,6 +42,8 @@ public class Request implements Serializable {
     @Column
     private String daysOfWeek;
     @Column
+    private String time;
+    @Column
     private int slots;
     @Column
     private int slotsLength;

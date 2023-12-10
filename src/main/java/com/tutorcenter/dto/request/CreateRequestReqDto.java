@@ -22,6 +22,7 @@ public class CreateRequestReqDto {
     private List<Integer> listSubjectId;
     private String gender;
     private String daysOfWeek;
+    private String time;
     @NotNull
     @Min(0)
     private int slots;
@@ -37,6 +38,7 @@ public class CreateRequestReqDto {
         request.setPhone(this.phone);
         request.setAddress(this.address);
         request.setDaysOfWeek(this.daysOfWeek);
+        request.setTime(this.time);
         request.setSlots(this.slots);
         request.setSlotsLength(this.slotsLength);
         request.setTuition(this.tuition);

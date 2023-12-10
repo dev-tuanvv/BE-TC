@@ -19,6 +19,7 @@ public class RequestResDto {
     private String provinceName;
     private float tuition; // fee
     private String daysOfWeek;
+    private String time;
     private int slots;
     private int slotsLength;
     private int status;
@@ -34,6 +35,7 @@ public class RequestResDto {
         this.provinceName = request.getDistrict().getProvince().getName();
         this.tuition = request.getTuition();
         this.daysOfWeek = request.getDaysOfWeek();
+        this.time = request.getTime();
         this.slots = request.getSlots();
         this.slotsLength = request.getSlotsLength();
         this.status = request.getStatus();

@@ -18,6 +18,7 @@ public class RequestDto {
     private int districtId;
     private List<Integer> rSubjects;
     private String daysOfWeek;
+    private String time;
     private int slots;
     private int slotsLength;
     private float tuition;
@@ -39,6 +40,7 @@ public class RequestDto {
         this.address = r.getAddress();
         this.districtId = r.getDistrict().getId();
         this.daysOfWeek = r.getDaysOfWeek();
+        this.time = r.getTime();
         this.slots = r.getSlots();
         this.slotsLength = r.getSlotsLength();
         this.tuition = r.getTuition();
