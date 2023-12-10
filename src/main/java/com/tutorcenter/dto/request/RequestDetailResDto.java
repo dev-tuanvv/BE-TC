@@ -47,7 +47,7 @@ public class RequestDetailResDto {
         this.email = request.getParent().getEmail();
         this.phone = request.getPhone();
         this.daysOfWeek = request.getDaysOfWeek();
-        this.time = request.getTime();
+        this.time = request.getTimeTutoring();
         this.slots = request.getSlots();
         this.slotsLength = request.getSlotsLength();
         this.tuition = request.getTuition();

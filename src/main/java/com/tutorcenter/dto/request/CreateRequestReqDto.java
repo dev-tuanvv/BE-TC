@@ -38,7 +38,7 @@ public class CreateRequestReqDto {
         request.setPhone(this.phone);
         request.setAddress(this.address);
         request.setDaysOfWeek(this.daysOfWeek);
-        request.setTime(this.time);
+        request.setTimeTutoring(this.time);
         request.setSlots(this.slots);
         request.setSlotsLength(this.slotsLength);
         request.setTuition(this.tuition);

@@ -35,7 +35,7 @@ public class RequestResDto {
         this.provinceName = request.getDistrict().getProvince().getName();
         this.tuition = request.getTuition();
         this.daysOfWeek = request.getDaysOfWeek();
-        this.time = request.getTime();
+        this.time = request.getTimeTutoring();
         this.slots = request.getSlots();
         this.slotsLength = request.getSlotsLength();
         this.status = request.getStatus();

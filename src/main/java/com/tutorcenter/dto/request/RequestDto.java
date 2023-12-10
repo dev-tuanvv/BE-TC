@@ -40,7 +40,7 @@ public class RequestDto {
         this.address = r.getAddress();
         this.districtId = r.getDistrict().getId();
         this.daysOfWeek = r.getDaysOfWeek();
-        this.time = r.getTime();
+        this.time = r.getTimeTutoring();
         this.slots = r.getSlots();
         this.slotsLength = r.getSlotsLength();
         this.tuition = r.getTuition();
