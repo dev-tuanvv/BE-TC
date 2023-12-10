@@ -40,6 +40,9 @@ public class ClazzDetailResDto {
 
     private int status;
 
+    private String daysOfWeek;
+    private String time;
+
     private int slots;
 
     private int attendances;
@@ -60,6 +63,8 @@ public class ClazzDetailResDto {
         this.dateStart = clazz.getRequest().getDateStart();
         this.dateEnd = clazz.getRequest().getDateEnd();
         this.status = clazz.getStatus();
+        this.daysOfWeek = clazz.getRequest().getDaysOfWeek();
+        this.time = clazz.getRequest().getTimeTutoring();
         this.slots = clazz.getRequest().getSlots();
 
         if (clazz.getFeedback() != null) {

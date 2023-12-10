@@ -15,6 +15,8 @@ public class ListClazzResDto {
     private int requestId;
     private String parentName;
     private List<SubjectLevelResDto> subjects;
+    private String daysOfWeek;
+    private String time;
     private int slots;
     private int slotsLength;
     private String tutorLevel;
@@ -32,6 +34,8 @@ public class ListClazzResDto {
         this.id = clazz.getId();
         this.requestId = clazz.getRequest().getId();
         this.parentName = clazz.getRequest().getParent().getFullname();
+        this.daysOfWeek = clazz.getRequest().getDaysOfWeek();
+        this.time = clazz.getRequest().getTimeTutoring();
         this.slots = clazz.getRequest().getSlots();
         this.slotsLength = clazz.getRequest().getSlotsLength();
         this.tutorLevel = clazz.getRequest().getTutorLevel();
