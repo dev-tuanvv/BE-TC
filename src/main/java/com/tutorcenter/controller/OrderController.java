@@ -74,17 +74,19 @@ public class OrderController {
             Order order = new Order();
             orderReqDto.toOrder(order);
             order.setClazz(clazz);
-            order.setStatus(0);
             order.setTimeCreate(new Date(System.currentTimeMillis()));
 
+            int noOrder = orderService.getOrdersByClazzId(order.getClazz().getId()).size();
             // lấy % revenue từ sys var
             // 0 <= revenue <= 1
             float revenue = Float.parseFloat(systemVariableService.getSysVarByVarKey("revenue").getValue());
             // lấy tuition từ request
             float amount = clazz.getRequest().getTuition();
 
-            if (orderReqDto.getType() == 1) { // phụ huynh đóng tiền cho system
+            if (noOrder == 0) { // chưa có order tạo trong clazz, phụ huynh đóng tiền cho system
                 order.setUser(userService.getUserById(clazz.getRequest().getParent().getId()).orElse(null));
+                order.setStatus(1);
+                order.setAmount(amount);
                 userWalletService.withdraw(clazz.getRequest().getParent().getId(), amount);
                 sysWalletService.deposit(amount);
                 // noti cho phụ huynh
@@ -95,10 +97,12 @@ public class OrderController {
                 notificationService.add(order.getClazz().getRequest().getManager(),
                         "Đã nhận " + String.format("%,.2f", amount) + " phí tạo lớp "
                                 + order.getClazz().getId() + " từ phụ huynh " + order.getUser().getFullname());
-            } else if (orderReqDto.getType() == 2) { // system trả tiền dạy cho gia sư
+            } else if (noOrder == 1) { // đã có order phụ huynh đóng tiền, system trả tiền dạy cho gia sư
                 float amountRevenue = amount * revenue;
                 amount = amount * (1 - revenue);
                 order.setUser(userService.getUserById(clazz.getTutor().getId()).orElse(null));
+                order.setStatus(2);
+                order.setAmount(amount);
                 if (amount > sysWalletService.getBalance())
                     return ApiResponseDto.<CreateOrderResDto>builder()
                             .message("Số dư trong tài khoản hệ thống không đủ.")
