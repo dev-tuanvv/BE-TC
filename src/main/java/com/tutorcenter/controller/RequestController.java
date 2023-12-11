@@ -237,6 +237,7 @@ public class RequestController {
             task.setName("Request");
             task.setType(1);
             task.setStatus(0);
+            task.setRequestId(response.getId());
             taskService.save(task);
             notificationService.add(request.getParent(), "Tạo yêu cầu tìm gia sư thành công");
             return ApiResponseDto.<Integer>builder().message(null).data(response.getId()).build();
