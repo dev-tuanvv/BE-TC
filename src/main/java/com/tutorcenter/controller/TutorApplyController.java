@@ -147,6 +147,13 @@ public class TutorApplyController {
                 return ApiResponseDto.<TutorApplyResDto>builder()
                         .message("Gia sư cần phải được xác nhận trước khi đăng ký lớp.").build();
             }
+            for (TutorApply ta : tutorApplyService.getTutorAppliesByTutorId(tId)) {
+                if (ta.getClazz().getId() == cId) {
+                    return ApiResponseDto.<TutorApplyResDto>builder()
+                            .message("Gia sư đã đăng ký lớp này.").build();
+                }
+            }
+
             tutorApply.setClazz(clazz);
             tutorApply.setTutor(tutor);
             tutorApply.setDeleted(false);
