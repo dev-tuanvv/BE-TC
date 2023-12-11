@@ -22,6 +22,7 @@ import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.NotificationService;
 import com.tutorcenter.service.OrderService;
 import com.tutorcenter.service.SysWalletService;
+import com.tutorcenter.service.SystemVariableService;
 import com.tutorcenter.service.UserService;
 import com.tutorcenter.service.UserWalletService;
 
@@ -40,6 +41,8 @@ public class OrderController {
     private SysWalletService sysWalletService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private SystemVariableService systemVariableService;
 
     @GetMapping("/clazz/{cId}")
     public ApiResponseDto<List<CreateOrderResDto>> getOrdersByClazzId(@PathVariable int cId) {
@@ -74,35 +77,44 @@ public class OrderController {
             order.setStatus(0);
             order.setTimeCreate(new Date(System.currentTimeMillis()));
 
+            // lấy % revenue từ sys var
+            // 0 <= revenue <= 1
+            float revenue = Float.parseFloat(systemVariableService.getSysVarByVarKey("revenue").getValue());
+            // lấy tuition từ request
+            float amount = clazz.getRequest().getTuition();
+
             if (orderReqDto.getType() == 1) { // phụ huynh đóng tiền cho system
                 order.setUser(userService.getUserById(clazz.getRequest().getParent().getId()).orElse(null));
-                userWalletService.withdraw(clazz.getRequest().getParent().getId(), orderReqDto.getAmount());
-                sysWalletService.deposit(orderReqDto.getAmount());
+                userWalletService.withdraw(clazz.getRequest().getParent().getId(), amount);
+                sysWalletService.deposit(amount);
                 // noti cho phụ huynh
                 notificationService.add(order.getUser(),
-                        "Đã đóng " + order.getAmount() + " cho lớp " + order.getClazz().getId() + " thành công");
+                        "Đã đóng " + amount + " cho lớp " + order.getClazz().getId() + " thành công");
                 // noti cho manager
                 notificationService.add(order.getClazz().getRequest().getManager(),
-                        "Đã nhận " + order.getAmount() + " phí tạo lớp "
+                        "Đã nhận " + amount + " phí tạo lớp "
                                 + order.getClazz().getId() + " từ phụ huynh " + order.getUser().getFullname());
             } else if (orderReqDto.getType() == 2) { // system trả tiền dạy cho gia sư
+                amount = amount * revenue;
                 order.setUser(userService.getUserById(clazz.getTutor().getId()).orElse(null));
-                if (orderReqDto.getAmount() > sysWalletService.getBalance())
+                if (amount > sysWalletService.getBalance())
                     return ApiResponseDto.<CreateOrderResDto>builder()
                             .message("Số dư trong tài khoản hệ thống không đủ.")
                             .build();
-                sysWalletService.withdraw(orderReqDto.getAmount());
-                userWalletService.deposit(clazz.getTutor().getId(), orderReqDto.getAmount());
+                sysWalletService.withdraw(amount);
+                userWalletService.deposit(clazz.getTutor().getId(), amount);
                 // noti cho gia sư
                 notificationService.add(order.getUser(),
-                        "Đã nhận " + order.getAmount() + " học phí từ dạy lớp " + order.getClazz().getId()
+                        "Đã nhận " + amount + " học phí từ dạy lớp " + order.getClazz().getId()
                                 + " thành công");
                 // noti cho manager
                 notificationService.add(order.getClazz().getRequest().getManager(),
-                        "Đã chuyển" + order.getAmount() + " tiền cho gia sư "
+                        "Đã chuyển " + amount + " tiền cho gia sư "
                                 + order.getUser().getFullname() + " từ dạy lớp " + order.getClazz().getId());
+                notificationService.add(order.getClazz().getRequest().getManager(),
+                        "Hệ thống đã thu được " + (clazz.getRequest().getTuition() - amount) + " tiền từ lớp "
+                                + order.getClazz().getId());
             }
-
             dto.fromOrder(orderService.save(order));
         } catch (Exception e) {
             return ApiResponseDto.<CreateOrderResDto>builder().responseCode("500").message(e.getMessage()).build();
