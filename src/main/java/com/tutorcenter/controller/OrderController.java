@@ -79,7 +79,7 @@ public class OrderController {
 
             // lấy % revenue từ sys var
             // 0 <= revenue <= 1
-            float revenue = 1 - Float.parseFloat(systemVariableService.getSysVarByVarKey("revenue").getValue());
+            float revenue = Float.parseFloat(systemVariableService.getSysVarByVarKey("revenue").getValue());
             // lấy tuition từ request
             float amount = clazz.getRequest().getTuition();
 
@@ -89,13 +89,15 @@ public class OrderController {
                 sysWalletService.deposit(amount);
                 // noti cho phụ huynh
                 notificationService.add(order.getUser(),
-                        "Đã đóng " + amount + " cho lớp " + order.getClazz().getId() + " thành công");
+                        "Đã đóng " + String.format("%,.2f", amount) + " cho lớp " + order.getClazz().getId()
+                                + " thành công");
                 // noti cho manager
                 notificationService.add(order.getClazz().getRequest().getManager(),
-                        "Đã nhận " + amount + " phí tạo lớp "
+                        "Đã nhận " + String.format("%,.2f", amount) + " phí tạo lớp "
                                 + order.getClazz().getId() + " từ phụ huynh " + order.getUser().getFullname());
             } else if (orderReqDto.getType() == 2) { // system trả tiền dạy cho gia sư
-                amount = amount * revenue;
+                float amountRevenue = amount * revenue;
+                amount = amount * (1 - revenue);
                 order.setUser(userService.getUserById(clazz.getTutor().getId()).orElse(null));
                 if (amount > sysWalletService.getBalance())
                     return ApiResponseDto.<CreateOrderResDto>builder()
@@ -105,14 +107,16 @@ public class OrderController {
                 userWalletService.deposit(clazz.getTutor().getId(), amount);
                 // noti cho gia sư
                 notificationService.add(order.getUser(),
-                        "Đã nhận " + amount + " học phí từ dạy lớp " + order.getClazz().getId()
+                        "Đã nhận " + String.format("%,.2f", amount) + " học phí sau khi trả "
+                                + String.format("%,.2f", amountRevenue)
+                                + " phí cho hệ thống sau khi dạy lớp " + order.getClazz().getId()
                                 + " thành công");
                 // noti cho manager
                 notificationService.add(order.getClazz().getRequest().getManager(),
-                        "Đã chuyển " + amount + " tiền cho gia sư "
+                        "Đã chuyển " + String.format("%,.2f", amount) + " tiền cho gia sư "
                                 + order.getUser().getFullname() + " từ dạy lớp " + order.getClazz().getId());
                 notificationService.add(order.getClazz().getRequest().getManager(),
-                        "Hệ thống đã thu được " + (clazz.getRequest().getTuition() - amount) + " tiền từ lớp "
+                        "Hệ thống đã thu được " + String.format("%,.2f", amountRevenue) + " tiền từ lớp "
                                 + order.getClazz().getId());
             }
             dto.fromOrder(orderService.save(order));
