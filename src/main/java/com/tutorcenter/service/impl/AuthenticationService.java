@@ -87,7 +87,8 @@ public class AuthenticationService {
         parent.setDistrict(districtService.getDistrictById(request.getDistrictId()).orElse(null));
         userWalletService.create(parentRepository.save(parent).getId());
         notificationService.add(parent,
-                "Chào mừng phụ huynh đến hệ thống Tutor Center, hãy bắt đầu với tạo yêu cầu tìm gia sư.");
+                "Chào mừng phụ huynh " + parent.getFullname()
+                        + " đến hệ thống Tutor Center, hãy bắt đầu với tạo yêu cầu tìm gia sư.");
         return parent.getEmail();
     }
 
@@ -98,19 +99,21 @@ public class AuthenticationService {
 
             tutor.setPassword(passwordEncoder.encode(request.getPassword()));
             tutor.setDistrict(districtService.getDistrictById(request.getDistrictId()).orElse(null));
+
+            // create tutor wallet
+            userWalletService.create(tutorRepository.save(tutor).getId());
+
             // create list tutor subject
             List<Subject> subjects = subjectService.getSubjectsByListId(request.getSubjects());
-
             for (Subject subject : subjects) {
                 TutorSubject tutorSubject = new TutorSubject();
                 tutorSubject.setSubject(subject);
                 tutorSubject.setTutor(tutor);
                 tutorSubjectService.save(tutorSubject);
             }
-            // create tutor wallet
-            userWalletService.create(tutorRepository.save(tutor).getId());
             notificationService.add(tutor,
-                    "Chào mừng gia sư đến hệ thống Tutor Center, hãy bắt đầu với cập nhật thông tin cá nhân và tạo yêu cầu xác minh.");
+                    "Chào mừng gia sư " + tutor.getFullname()
+                            + " đến hệ thống Tutor Center, hãy bắt đầu với cập nhật thông tin cá nhân và tạo yêu cầu xác minh.");
             return tutor.getEmail();
         } catch (Exception e) {
             return null;

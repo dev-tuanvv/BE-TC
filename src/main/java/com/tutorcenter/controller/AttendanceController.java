@@ -88,10 +88,10 @@ public class AttendanceController {
             attendance.setDateCreate(new Date(System.currentTimeMillis()));
             notificationService.add(c.getTutor(),
                     "Phụ huynh " + c.getRequest().getParent().getFullname()
-                            + "đã tạo điểm danh lớp" + c.getId() + " thành công");
+                            + "đã tạo điểm danh lớp " + c.getId() + " thành công");
             notificationService.add(c.getRequest().getParent(),
                     "Phụ huynh " + c.getRequest().getParent().getFullname()
-                            + "đã tạo điểm danh lớp" + c.getId() + " thành công");
+                            + "đã tạo điểm danh lớp " + c.getId() + " thành công");
             dto.fromAttendance(attendanceService.save(attendance));
         } catch (Exception e) {
             return ApiResponseDto.<AttendanceResDto>builder().responseCode("500").message(e.getMessage()).build();
