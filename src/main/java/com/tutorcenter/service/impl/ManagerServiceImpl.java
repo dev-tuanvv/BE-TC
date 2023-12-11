@@ -26,4 +26,9 @@ public class ManagerServiceImpl implements ManagerService {
         return managerRepository.findById(id);
     }
 
+    @Override
+    public Manager save(Manager manager) {
+        return managerRepository.save(manager);
+    }
+
 }

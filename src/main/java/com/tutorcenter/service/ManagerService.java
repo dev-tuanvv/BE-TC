@@ -12,4 +12,6 @@ public interface ManagerService {
     List<Manager> findAll();
 
     Optional<Manager> getManagerById(int id);
+
+    Manager save(Manager manager);
 }
