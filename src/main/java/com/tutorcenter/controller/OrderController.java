@@ -79,7 +79,7 @@ public class OrderController {
 
             // lấy % revenue từ sys var
             // 0 <= revenue <= 1
-            float revenue = Float.parseFloat(systemVariableService.getSysVarByVarKey("revenue").getValue());
+            float revenue = 1 - Float.parseFloat(systemVariableService.getSysVarByVarKey("revenue").getValue());
             // lấy tuition từ request
             float amount = clazz.getRequest().getTuition();
 
