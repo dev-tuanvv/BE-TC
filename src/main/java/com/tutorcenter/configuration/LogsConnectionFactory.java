@@ -26,9 +26,9 @@ public class LogsConnectionFactory {
     private String userName = "vietnamt1_tc";
     private String pass = "abc123456";
 
-    // Hoang local test
+    // local docker
     // private String datasourceURL =
-    // "jdbc:mysql://localhost:3306/vietnamt1_tc?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false";
+    // "jdbc:mysql://host.docker.internal:3306/vietnamt1_tc?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false";
     // private String userName = "root";
     // private String pass = "123456";
 
