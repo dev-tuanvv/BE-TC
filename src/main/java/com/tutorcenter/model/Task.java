@@ -20,6 +20,8 @@ public class Task {
     @Column
     private String name;
     @Column
+    private int requestId;
+    @Column
     private int type;
     @ManyToOne
     @JoinColumn(name = "managerId")

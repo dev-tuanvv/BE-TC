@@ -166,6 +166,7 @@ public class RequestVerificationController {
             task.setManager(managerService.getManagerById(3).orElse(null));
             task.setName("Request");
             task.setType(1);
+            task.setRequestId(rvId);
             task.setStatus(0);
             taskService.save(task);
             notificationService.add(tutor, "Gửi yêu cầu xác thực thông tin cá nhân thành công");
