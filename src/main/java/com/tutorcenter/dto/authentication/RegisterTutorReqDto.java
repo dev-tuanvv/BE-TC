@@ -28,6 +28,7 @@ public class RegisterTutorReqDto {
     @NotEmpty
     private String gender;
     private String university;
+    private String tutorLevel;
     private String major;
     private String area;
     private String imgCertificate;
@@ -46,6 +47,7 @@ public class RegisterTutorReqDto {
         tutor.setRole(Role.TUTOR);
         tutor.setGender(this.gender);
         tutor.setUniversity(this.university);
+        tutor.setTutorLevel(this.tutorLevel);
         tutor.setMajor(this.major);
         tutor.setArea(this.area);
         tutor.setImgCertificate(this.imgCertificate);
