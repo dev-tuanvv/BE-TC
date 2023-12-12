@@ -85,7 +85,7 @@ public class OrderController {
 
             if (noOrder == 0) { // chưa có order tạo trong clazz, phụ huynh đóng tiền cho system
                 order.setUser(userService.getUserById(clazz.getRequest().getParent().getId()).orElse(null));
-                order.setStatus(1);
+                order.setType(1);
                 order.setAmount(amount);
                 userWalletService.withdraw(clazz.getRequest().getParent().getId(), amount);
                 sysWalletService.deposit(amount);
@@ -101,7 +101,7 @@ public class OrderController {
                 float amountRevenue = amount * revenue;
                 amount = amount * (1 - revenue);
                 order.setUser(userService.getUserById(clazz.getTutor().getId()).orElse(null));
-                order.setStatus(2);
+                order.setType(2);
                 order.setAmount(amount);
                 if (amount > sysWalletService.getBalance())
                     return ApiResponseDto.<CreateOrderResDto>builder()
@@ -122,6 +122,9 @@ public class OrderController {
                 notificationService.add(order.getClazz().getRequest().getManager(),
                         "Hệ thống đã thu được " + String.format("%,.2f", amountRevenue) + " tiền từ lớp "
                                 + order.getClazz().getId());
+            } else {
+                return ApiResponseDto.<CreateOrderResDto>builder().responseCode("500")
+                        .message("Lớp đã hoàn thành 2 order, không thể tạo thêm").build();
             }
             dto.fromOrder(orderService.save(order));
         } catch (Exception e) {
