@@ -50,6 +50,6 @@ public class RegisterTutorReqDto {
         tutor.setArea(this.area);
         tutor.setImgCertificate(this.imgCertificate);
         tutor.setImgAvatar(this.imgAvatar);
-        tutor.setImgId(this.imgIdFront + "-" + this.imdIdBack);
+        tutor.setImgId(this.imgIdFront + "~" + this.imdIdBack);
     }
 }
