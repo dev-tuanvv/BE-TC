@@ -8,9 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.tutorcenter.model.Manager;
+import com.tutorcenter.model.Request;
+import com.tutorcenter.model.RequestVerification;
 import com.tutorcenter.model.Task;
 import com.tutorcenter.repository.TaskRepository;
 import com.tutorcenter.service.ManagerService;
+import com.tutorcenter.service.RequestService;
+import com.tutorcenter.service.RequestVerificationService;
 import com.tutorcenter.service.TaskService;
 
 import lombok.AllArgsConstructor;
@@ -22,6 +26,10 @@ public class TaskServiceImpl implements TaskService {
     TaskRepository taskRepository;
     @Autowired
     private ManagerService managerService;
+    @Autowired
+    private RequestService requestService;
+    @Autowired
+    private RequestVerificationService requestVerificationService;
 
     public int findBestSuitManagerId() {
         List<Manager> managers = managerService.findAll();
@@ -43,7 +51,7 @@ public class TaskServiceImpl implements TaskService {
         }
         Collections.sort(managerTasks);
         List<Integer> managerIds = new ArrayList<>();
-        if(slTask > managerTasks.size()){
+        if (slTask > managerTasks.size()) {
             slTask = managerTasks.size();
         }
         for (ManagerTask mt : managerTasks.subList(0, slTask)) {
@@ -56,15 +64,36 @@ public class TaskServiceImpl implements TaskService {
         List<Task> tasks = taskRepository.findByStatus(0);
         List<Integer> managerIds = findBestSuitManagerIds(tasks.size());
         int j = 0;
+
         for (int i = 0; i < tasks.size(); i++) {
             tasks.get(i).setManager(managerService.getManagerById(managerIds.get(j)).orElse(null));
             tasks.get(i).setStatus(1);
             j++;
-            if (j>=managerIds.size()) {
+            if (j >= managerIds.size()) {
                 j = 0;
             }
+            taskRepository.save(tasks.get(i));
+            if (tasks.get(i).getType() == 1) {
+                Request request = requestService.getRequestById(tasks.get(i).getRequestId()).orElse(null);
+                request.setManager(managerService.getManagerById(managerIds.get(j)).orElse(null));
+                requestService.save(request);
+            } else {
+                RequestVerification requestVerification = requestVerificationService
+                        .getRVById(tasks.get(i).getRequestId()).orElse(null);
+                requestVerification.setManager(managerService.getManagerById(managerIds.get(j)).orElse(null));
+                requestVerificationService.save(requestVerification);
+            }
         }
-        taskRepository.saveAll(tasks);
+
+        // for (int i = 0; i < tasks.size(); i++) {
+        // tasks.get(i).setManager(managerService.getManagerById(managerIds.get(j)).orElse(null));
+        // tasks.get(i).setStatus(1);
+        // j++;
+        // if (j >= managerIds.size()) {
+        // j = 0;
+        // }
+        // }
+        // taskRepository.saveAll(tasks);
     }
 
     @Data
