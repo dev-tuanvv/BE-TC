@@ -31,4 +31,9 @@ public class ManagerServiceImpl implements ManagerService {
         return managerRepository.save(manager);
     }
 
+    @Override
+    public List<Manager> findAllActive() {
+        return managerRepository.findByStatus(1);
+    }
+
 }

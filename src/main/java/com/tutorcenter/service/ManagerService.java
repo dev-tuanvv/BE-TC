@@ -10,6 +10,7 @@ import com.tutorcenter.model.Manager;
 @Service
 public interface ManagerService {
     List<Manager> findAll();
+    List<Manager> findAllActive();
 
     Optional<Manager> getManagerById(int id);
 

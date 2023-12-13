@@ -62,38 +62,29 @@ public class TaskServiceImpl implements TaskService {
 
     public void autoAssignTask() {
         List<Task> tasks = taskRepository.findByStatus(0);
-        List<Integer> managerIds = findBestSuitManagerIds(tasks.size());
+        List<Manager> managers = managerService.findAllActive();
         int j = 0;
 
         for (int i = 0; i < tasks.size(); i++) {
-            tasks.get(i).setManager(managerService.getManagerById(managerIds.get(j)).orElse(null));
+            tasks.get(i).setManager(managers.get(j));
             tasks.get(i).setStatus(1);
             j++;
-            if (j >= managerIds.size()) {
+            if (j >= managers.size()) {
                 j = 0;
             }
             taskRepository.save(tasks.get(i));
             if (tasks.get(i).getType() == 1) {
                 Request request = requestService.getRequestById(tasks.get(i).getRequestId()).orElse(null);
-                request.setManager(managerService.getManagerById(managerIds.get(j)).orElse(null));
+                request.setManager((managers.get(j)));
                 requestService.save(request);
             } else {
                 RequestVerification requestVerification = requestVerificationService
                         .getRVById(tasks.get(i).getRequestId()).orElse(null);
-                requestVerification.setManager(managerService.getManagerById(managerIds.get(j)).orElse(null));
+                requestVerification.setManager((managers.get(j)));
                 requestVerificationService.save(requestVerification);
             }
         }
-
-        // for (int i = 0; i < tasks.size(); i++) {
-        // tasks.get(i).setManager(managerService.getManagerById(managerIds.get(j)).orElse(null));
-        // tasks.get(i).setStatus(1);
-        // j++;
-        // if (j >= managerIds.size()) {
-        // j = 0;
-        // }
-        // }
-        // taskRepository.saveAll(tasks);
+        taskRepository.saveAll(tasks);
     }
 
     @Data
