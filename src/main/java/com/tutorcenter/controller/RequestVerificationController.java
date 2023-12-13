@@ -162,9 +162,9 @@ public class RequestVerificationController {
             tutorService.save(tutor);
 
             Task task = new Task();
-            task.setManager(managerService.getManagerById(taskService.findBestSuitManagerId()).get());
+            // task.setManager(managerService.getManagerById(taskService.findBestSuitManagerId()).get());
             // task.setManager(managerService.getManagerById(3).orElse(null));
-            task.setName("Request");
+            task.setName("VerifyRequest");
             task.setType(1);
             task.setRequestId(rvId);
             task.setStatus(0);

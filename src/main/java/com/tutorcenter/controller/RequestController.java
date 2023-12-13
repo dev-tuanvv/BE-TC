@@ -232,7 +232,7 @@ public class RequestController {
             requestSubjectService.updateByRequestId(response.getId(), createRequestDto.getListSubjectId());
 
             Task task = new Task();
-            task.setManager(manager);
+            // task.setManager(manager);
             task.setName("Request");
             task.setType(1);
             task.setStatus(0);
