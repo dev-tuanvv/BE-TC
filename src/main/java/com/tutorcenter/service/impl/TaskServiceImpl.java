@@ -43,6 +43,9 @@ public class TaskServiceImpl implements TaskService {
         }
         Collections.sort(managerTasks);
         List<Integer> managerIds = new ArrayList<>();
+        if(slTask > managerTasks.size()){
+            slTask = managerTasks.size();
+        }
         for (ManagerTask mt : managerTasks.subList(0, slTask)) {
             managerIds.add(mt.getManagerId());
         }
@@ -52,9 +55,14 @@ public class TaskServiceImpl implements TaskService {
     public void autoAssignTask() {
         List<Task> tasks = taskRepository.findByStatus(0);
         List<Integer> managerIds = findBestSuitManagerIds(tasks.size());
+        int j = 0;
         for (int i = 0; i < tasks.size(); i++) {
-            tasks.get(i).setManager(managerService.getManagerById(managerIds.get(i)).orElse(null));
+            tasks.get(i).setManager(managerService.getManagerById(managerIds.get(j)).orElse(null));
             tasks.get(i).setStatus(1);
+            j++;
+            if (j>=managerIds.size()) {
+                j = 0;
+            }
         }
         taskRepository.saveAll(tasks);
     }
