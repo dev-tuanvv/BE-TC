@@ -68,11 +68,8 @@ public class TaskServiceImpl implements TaskService {
         for (int i = 0; i < tasks.size(); i++) {
             tasks.get(i).setManager(managers.get(j));
             tasks.get(i).setStatus(1);
-            j++;
-            if (j >= managers.size()) {
-                j = 0;
-            }
-            taskRepository.save(tasks.get(i));
+
+            // taskRepository.save(tasks.get(i));
             if (tasks.get(i).getType() == 1) {
                 Request request = requestService.getRequestById(tasks.get(i).getRequestId()).orElse(null);
                 request.setManager((managers.get(j)));
@@ -82,6 +79,10 @@ public class TaskServiceImpl implements TaskService {
                         .getRVById(tasks.get(i).getRequestId()).orElse(null);
                 requestVerification.setManager((managers.get(j)));
                 requestVerificationService.save(requestVerification);
+            }
+            j++;
+            if (j >= managers.size()) {
+                j = 0;
             }
         }
         taskRepository.saveAll(tasks);
