@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,6 +22,7 @@ public class TaskController {
     @Autowired
     private TaskService taskService;
 
+    @PreAuthorize("hasAnyAuthority('admin:read','manager:read')")
     @GetMapping("/")
     public ApiResponseDto<List<TaskResDto>> getListTask() {
         try {
@@ -42,6 +44,7 @@ public class TaskController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('admin:update')")
     @PutMapping("auto-assign")
     public ApiResponseDto autoAssignTask() {
         try {
@@ -53,10 +56,15 @@ public class TaskController {
         }
     }
 
+    @PreAuthorize("hasAnyAuthority('manager:update')")
     @PutMapping("/finish")
     public ApiResponseDto<Integer> finishTask(int id) {
         try {
             Task task = taskService.getTaskById(id).orElse(null);
+            if (task.getManager().getId() != Common.getCurrentUserId()) {
+                return ApiResponseDto.<Integer>builder().responseCode("500")
+                        .message("You are not this task assigned manager").build();
+            }
             if (task.getStatus() == 1)
                 task.setStatus(2);
             taskService.save(task);
