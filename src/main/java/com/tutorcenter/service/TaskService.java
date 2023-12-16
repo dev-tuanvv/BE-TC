@@ -1,6 +1,7 @@
 package com.tutorcenter.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -15,4 +16,10 @@ public interface TaskService {
     void autoAssignTask();
 
     Task save(Task task);
+
+    List<Task> getAllTask();
+
+    List<Task> getListTaskByManagerId(int mId);
+
+    Optional<Task> getTaskById(int id);
 }

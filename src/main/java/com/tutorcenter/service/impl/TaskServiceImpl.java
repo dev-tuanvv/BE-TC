@@ -3,6 +3,7 @@ package com.tutorcenter.service.impl;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -103,5 +104,26 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Task save(Task task) {
         return taskRepository.save(task);
+    }
+
+    @Override
+    public List<Task> getAllTask() {
+        return taskRepository.findAll();
+    }
+
+    @Override
+    public List<Task> getListTaskByManagerId(int mId) {
+        List<Task> response = new ArrayList<>();
+        for (Task t : taskRepository.findAll()) {
+            if (t.getManager() != null && t.getManager().getId() == mId) {
+                response.add(t);
+            }
+        }
+        return response;
+    }
+
+    @Override
+    public Optional<Task> getTaskById(int id) {
+        return taskRepository.findById(id);
     }
 }
