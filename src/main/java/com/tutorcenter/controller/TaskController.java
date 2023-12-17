@@ -1,6 +1,7 @@
 package com.tutorcenter.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import com.tutorcenter.common.Common;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.task.TaskResDto;
 import com.tutorcenter.model.Task;
+import com.tutorcenter.service.SystemVariableService;
 import com.tutorcenter.service.TaskService;
 
 @RestController
@@ -21,6 +23,8 @@ import com.tutorcenter.service.TaskService;
 public class TaskController {
     @Autowired
     private TaskService taskService;
+    @Autowired
+    private SystemVariableService systemVariableService;
 
     @PreAuthorize("hasAnyAuthority('admin:read','manager:read')")
     @GetMapping("/")
@@ -65,8 +69,16 @@ public class TaskController {
                 return ApiResponseDto.<Integer>builder().responseCode("500")
                         .message("You are not this task assigned manager").build();
             }
-            if (task.getStatus() == 1)
-                task.setStatus(2);
+            if (task.getStatus() == 1) {
+                int task_work_time = Integer
+                        .parseInt(systemVariableService.getSysVarByVarKey("task_work_time").getValue());
+                Date now = new Date(System.currentTimeMillis());
+                if ((now.getTime() - task.getDateCreate().getTime()) > task_work_time * 24 * 60 * 60 * 1000) {
+                    task.setStatus(3);
+                } else {
+                    task.setStatus(2);
+                }
+            }
             taskService.save(task);
             return ApiResponseDto.<Integer>builder().data(task.getId()).build();
         } catch (Exception e) {
