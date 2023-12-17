@@ -1,6 +1,7 @@
 package com.tutorcenter.controller;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -237,6 +238,7 @@ public class RequestController {
             task.setName("Request");
             task.setType(1);
             task.setStatus(0);
+            task.setDateCreate(new Date(System.currentTimeMillis()));
             task.setRequestId(response.getId());
             taskService.save(task);
             notificationService.add(request.getParent(), "Tạo yêu cầu tìm gia sư thành công");

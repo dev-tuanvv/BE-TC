@@ -34,6 +34,8 @@ public class TaskResDto {
             this.link = "/api/requestVerification/" + this.requestId;
         }
         this.dateCreate = task.getDateCreate();
-        this.dateFinished = task.getDateFinished();
+        if (task.getDateFinished() != null) {
+            this.dateFinished = task.getDateFinished();
+        }
     }
 }
