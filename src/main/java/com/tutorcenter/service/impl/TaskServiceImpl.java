@@ -115,8 +115,10 @@ public class TaskServiceImpl implements TaskService {
     public List<Task> getListTaskByManagerId(int mId) {
         List<Task> response = new ArrayList<>();
         for (Task t : taskRepository.findAll()) {
-            if (t.getManager() != null && t.getManager().getId() == mId) {
-                response.add(t);
+            if (t.getManager() != null) {
+                if (t.getManager().getId() == mId) {
+                    response.add(t);
+                }
             }
         }
         return response;
