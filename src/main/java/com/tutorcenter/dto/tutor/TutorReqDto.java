@@ -32,7 +32,7 @@ public class TutorReqDto {
     private String imgCertificate;
     private String imgAvatar;
     private String imgIdFront;
-    private String imdIdBack;
+    private String imgIdBack;
 
     public void toTutor(Tutor tutor) {
         tutor.setId(this.id);
@@ -50,6 +50,6 @@ public class TutorReqDto {
         tutor.setArea(this.area);
         tutor.setImgCertificate(this.imgCertificate);
         tutor.setImgAvatar(this.imgAvatar);
-        tutor.setImgId(this.imgIdFront + "~" + this.imdIdBack);
+        tutor.setImgId(this.imgIdFront + "~" + this.imgIdBack);
     }
 }
