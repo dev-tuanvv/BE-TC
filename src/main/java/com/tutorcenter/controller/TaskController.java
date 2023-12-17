@@ -75,8 +75,10 @@ public class TaskController {
                 Date now = new Date(System.currentTimeMillis());
                 if ((now.getTime() - task.getDateCreate().getTime()) > task_work_time * 24 * 60 * 60 * 1000) {
                     task.setStatus(3);
+                    task.setDateFinished(now);
                 } else {
                     task.setStatus(2);
+                    task.setDateFinished(now);
                 }
             }
             taskService.save(task);
