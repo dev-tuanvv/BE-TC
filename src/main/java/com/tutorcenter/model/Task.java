@@ -1,5 +1,7 @@
 package com.tutorcenter.model;
 
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -28,4 +30,8 @@ public class Task {
     private Manager manager;
     @Column
     private int status;
+    @Column
+    private Date dateCreate;
+    @Column
+    private Date dateFinished;
 }

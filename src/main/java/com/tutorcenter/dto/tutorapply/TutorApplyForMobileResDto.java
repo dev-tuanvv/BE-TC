@@ -1,9 +1,10 @@
 package com.tutorcenter.dto.tutorapply;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorcenter.model.RequestSubject;
 import com.tutorcenter.model.TutorApply;
 
@@ -15,7 +16,9 @@ public class TutorApplyForMobileResDto {
     private int clazzId;
     private int tutorId;
     private List<SubjectDto> subjects = new ArrayList<SubjectDto>();
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date dateStart;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date dateEnd;
     private String address;
     private String districtName;

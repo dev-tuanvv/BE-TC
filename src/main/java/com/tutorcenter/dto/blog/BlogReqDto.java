@@ -1,6 +1,6 @@
 package com.tutorcenter.dto.blog;
 
-import java.sql.Date;
+import java.util.Date;
 
 import com.tutorcenter.model.Blog;
 

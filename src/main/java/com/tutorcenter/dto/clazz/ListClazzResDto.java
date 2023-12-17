@@ -1,8 +1,9 @@
 package com.tutorcenter.dto.clazz;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.Tutor;
@@ -15,7 +16,9 @@ public class ListClazzResDto {
     private int requestId;
     private String parentName;
     private List<SubjectLevelResDto> subjects;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private String daysOfWeek;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private String time;
     private int slots;
     private int slotsLength;

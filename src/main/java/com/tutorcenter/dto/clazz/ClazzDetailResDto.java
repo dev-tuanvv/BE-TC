@@ -1,10 +1,11 @@
 package com.tutorcenter.dto.clazz;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.service.FeedbackService;
@@ -33,9 +34,9 @@ public class ClazzDetailResDto {
     private List<SubjectLevelResDto> subjects;
 
     private String notes;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date dateStart;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date dateEnd;
 
     private int status;

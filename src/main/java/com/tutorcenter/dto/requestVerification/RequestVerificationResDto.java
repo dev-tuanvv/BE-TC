@@ -1,8 +1,9 @@
 package com.tutorcenter.dto.requestverification;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.RequestVerification;
 
@@ -23,6 +24,7 @@ public class RequestVerificationResDto {
     private int managerId;
     private int status;
     private String rejectReason;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date dateCreate;
 
     public void fromRequestVerification(RequestVerification requestVerification) {

@@ -1,7 +1,8 @@
 package com.tutorcenter.dto.attendance;
 
-import java.sql.Date;
+import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorcenter.model.Attendance;
 
 import lombok.Data;
@@ -10,6 +11,7 @@ import lombok.Data;
 public class AttendanceResDto {
     private int id;
     private int clazzId;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date dateCreate;
     private int status;
 

@@ -1,8 +1,9 @@
 package com.tutorcenter.dto.request;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.Request;
 
@@ -30,7 +31,7 @@ public class ParentRequestResDto {
     private float tuition; // fee
 
     private int status;
-
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date creatDate;
     private String districtName;
     private String provinceName;

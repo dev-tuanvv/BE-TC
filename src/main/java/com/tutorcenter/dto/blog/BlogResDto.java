@@ -1,7 +1,8 @@
 package com.tutorcenter.dto.blog;
 
-import java.sql.Date;
+import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorcenter.model.Blog;
 
 import lombok.Data;
@@ -15,7 +16,9 @@ public class BlogResDto {
     private String title;
     private String content;
     private int status;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date dateCreate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date dateModified;
 
     public void fromBlog(Blog blog) {

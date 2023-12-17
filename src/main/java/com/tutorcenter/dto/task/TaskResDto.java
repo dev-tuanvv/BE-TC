@@ -1,5 +1,8 @@
 package com.tutorcenter.dto.task;
 
+import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorcenter.model.Task;
 
 import lombok.Data;
@@ -13,6 +16,10 @@ public class TaskResDto {
     private int managerId;
     private int status;
     private String link;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    private Date dateCreate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    private Date dateFinished;
 
     public void fromTask(Task task) {
         this.id = task.getId();
@@ -26,5 +33,7 @@ public class TaskResDto {
         } else if (this.type == 2) {
             this.link = "/api/requestVerification/" + this.requestId;
         }
+        this.dateCreate = task.getDateCreate();
+        this.dateFinished = task.getDateFinished();
     }
 }

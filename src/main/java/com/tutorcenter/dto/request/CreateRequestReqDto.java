@@ -1,9 +1,10 @@
 package com.tutorcenter.dto.request;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.Calendar;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorcenter.model.Request;
 
 import jakarta.validation.constraints.Min;
@@ -29,7 +30,9 @@ public class CreateRequestReqDto {
     private int slotsLength;
     private float tuition;
     private String notes;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date dateStart;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date dateEnd;
     private int districtId;
     private String tutorLevel;

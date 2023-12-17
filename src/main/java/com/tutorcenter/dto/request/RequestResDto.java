@@ -1,8 +1,9 @@
 package com.tutorcenter.dto.request;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.Request;
 
@@ -24,6 +25,7 @@ public class RequestResDto {
     private int slotsLength;
     private int status;
     private String address;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date dateCreate;
 
     public void fromRequest(Request request) {

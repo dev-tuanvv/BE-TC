@@ -1,7 +1,7 @@
 package com.tutorcenter.model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

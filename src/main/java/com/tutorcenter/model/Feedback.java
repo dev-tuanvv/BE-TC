@@ -1,7 +1,7 @@
 package com.tutorcenter.model;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -17,7 +17,7 @@ import lombok.Data;
 @Entity
 @Data
 @Table(name = "tblFeedback")
-public class Feedback implements Serializable{
+public class Feedback implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;

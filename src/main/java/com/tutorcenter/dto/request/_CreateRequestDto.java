@@ -1,6 +1,6 @@
 package com.tutorcenter.dto.request;
 
-import java.sql.Date;
+import java.util.Date;
 
 import com.tutorcenter.model.Request;
 

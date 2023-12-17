@@ -1,8 +1,9 @@
 package com.tutorcenter.dto.order;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.Order;
 
@@ -22,6 +23,7 @@ public class OrderByUserResDto {
     private String provinceName;
     private String gender;
     private String nameTutor;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date time;
     private double amount;
     private int type;
