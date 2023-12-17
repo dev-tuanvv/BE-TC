@@ -44,6 +44,7 @@ public class TaskController {
             }
             return ApiResponseDto.<List<TaskResDto>>builder().data(response).build();
         } catch (Exception e) {
+            e.printStackTrace();
             return ApiResponseDto.<List<TaskResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
     }
