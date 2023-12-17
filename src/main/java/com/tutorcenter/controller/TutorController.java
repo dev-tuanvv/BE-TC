@@ -1,6 +1,8 @@
 package com.tutorcenter.controller;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +62,50 @@ public class TutorController {
         }
 
         dto.setSubjects(listSL);
-
+        dto.setAvgRating(feedbackService.getAverageRatingByTutorId(tutor.getId()));
         response.add(dto);
       }
       return ApiResponseDto.<List<TutorResDto>>builder().data(response).build();
+    } catch (Exception e) {
+      return ApiResponseDto.<List<TutorResDto>>builder().responseCode("500").message(e.getMessage()).build();
+    }
+  }
+
+  @GetMapping("/best")
+  public ApiResponseDto<List<TutorResDto>> getBestTutors() {
+    try {
+      List<TutorResDto> response = new ArrayList<>();
+      List<Tutor> tutors = tutorService.findAll();
+      for (Tutor tutor : tutors) {
+        TutorResDto dto = new TutorResDto();
+        dto.fromTutor(tutor);
+
+        // Tạo list SubjectLevel từ tutorId
+        List<Integer> listSId = tutorSubjectService
+            .getListSIdByTId(tutor.getId());
+        List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+        List<SubjectLevelResDto> listSL = new ArrayList<>();
+        for (Subject subject : subjects) {
+          SubjectLevelResDto sLDto = new SubjectLevelResDto();
+          sLDto.fromSubject(subject);
+          listSL.add(sLDto);
+        }
+
+        dto.setSubjects(listSL);
+        dto.setAvgRating(feedbackService.getAverageRatingByTutorId(tutor.getId()));
+        response.add(dto);
+      }
+      // Create a comparator based on ratings
+      Comparator<TutorResDto> ratingComparator = Comparator.comparing(TutorResDto::getAvgRating).reversed();
+
+      // Sort the list of tutors
+      Collections.sort(response, ratingComparator);
+
+      // Get the top 5 tutors
+      List<TutorResDto> topTutors = response.subList(0, Math.min(tutors.size(), 5));
+
+      return ApiResponseDto.<List<TutorResDto>>builder().data(topTutors).build();
     } catch (Exception e) {
       return ApiResponseDto.<List<TutorResDto>>builder().responseCode("500").message(e.getMessage()).build();
     }

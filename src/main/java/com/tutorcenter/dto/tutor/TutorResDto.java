@@ -24,6 +24,7 @@ public class TutorResDto {
     private String imgCert;
     private String imgAvatar;
     private int status;
+    private float avgRating;
 
     public void fromTutor(Tutor tutor) {
         this.id = tutor.getId();
