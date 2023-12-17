@@ -26,7 +26,9 @@ public class TaskResDto {
         this.name = task.getName();
         this.requestId = task.getRequestId();
         this.type = task.getType();
-        this.managerId = task.getManager().getId();
+        if (task.getManager() != null) {
+            this.managerId = task.getManager().getId();
+        }
         this.status = task.getStatus();
         if (this.type == 1) {
             this.link = "/api/request/" + this.requestId;
