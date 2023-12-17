@@ -17,6 +17,6 @@ public class ScheduledAutoAssign {
     // @Scheduled(fixedRate = 10000) // Run every 10 secs
     public void autoAssign() {
         taskService.autoAssignTask();
-        System.out.println("auto assign run");
+        System.out.println("Run auto assign task for all manager...");
     }
 }

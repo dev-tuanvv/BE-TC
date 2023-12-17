@@ -81,7 +81,8 @@ public class AttendanceController {
             Clazz c = clazzService.getClazzById(clazzId).orElse(null);
             attendance.setClazz(c);
             if (attendance.getClazz().getRequest().getSlots() <= (attendanceService.getAttendedByCId(clazzId) + 1)) {
-                c.setStatus(2);
+                // status 7 = Wait for feedback
+                c.setStatus(7);
                 clazzService.save(c);
             }
             attendance.setStatus(status);

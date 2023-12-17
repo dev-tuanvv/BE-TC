@@ -142,6 +142,10 @@ public class TutorApplyController {
 
             TutorApply tutorApply = new TutorApply();
             Clazz clazz = clazzService.getClazzById(cId).orElse(null);
+            if (clazz.getStatus() != 3) {
+                return ApiResponseDto.<TutorApplyResDto>builder().responseCode("500")
+                        .message("Lớp không trong trạng thái có thể đăng ký").build();
+            }
             Tutor tutor = tutorService.getTutorById(tId).orElse(null);
             if (tutor.getStatus() != 2) {
                 return ApiResponseDto.<TutorApplyResDto>builder()
