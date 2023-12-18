@@ -258,7 +258,7 @@ public class RequestController {
             if (rq == null) {
                 return ApiResponseDto.<Integer>builder().data(null).responseCode("404").message("Not found").build();
             }
-            rq.setStatus(status);
+            rq.setStatus(status); // 1 or 2
             rq.setRejectReason(rr);
 
             requestService.save(rq);
@@ -317,10 +317,16 @@ public class RequestController {
         try {
 
             Request rq = requestService.getRequestById(id).orElseThrow();
-            if (rq.getParent().getId() == Common.getCurrentUserId()) {
+            if (rq.getParent().getId() == Common.getCurrentUserId() && rq.getStatus() == 0) {
                 rq.setStatus(3);
                 notificationService.add(rq.getParent(), "Yêu cầu tìm gia sư đã được hủy bỏ");
                 requestService.save(rq);
+                for (Task t : taskService.getAllTask()) {
+                    if (t.getType() == 1 && t.getRequestId() == id && t.getStatus() == 0) {
+                        t.setType(5); // cancel request > task disable
+                        taskService.save(t);
+                    }
+                }
             }
             return ApiResponseDto.<Integer>builder().data(id).build();
         } catch (Exception e) {
