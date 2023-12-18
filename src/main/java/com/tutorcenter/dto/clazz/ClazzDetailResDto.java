@@ -34,9 +34,9 @@ public class ClazzDetailResDto {
     private List<SubjectLevelResDto> subjects;
 
     private String notes;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+
     private Date dateStart;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+
     private Date dateEnd;
 
     private int status;

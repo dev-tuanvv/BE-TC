@@ -83,6 +83,7 @@ public class BlogController {
         try {
             Blog blog = blogService.getBlogById(id).orElseThrow();
             blog.setDeleted(true);
+            blogService.save(blog);
             return ApiResponseDto.<String>builder().data(blog.getTitle()).build();
         } catch (Exception e) {
             return ApiResponseDto.<String>builder().responseCode("500").message(e.getMessage()).build();

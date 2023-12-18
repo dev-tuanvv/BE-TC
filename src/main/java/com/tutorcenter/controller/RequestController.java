@@ -300,8 +300,28 @@ public class RequestController {
         try {
 
             Request rq = requestService.getRequestById(id).orElseThrow();
-            rq.setDeleted(true);
-            notificationService.add(rq.getParent(), "Yêu cầu tìm gia sư đã được hủy bỏ");
+            if (rq.getParent().getId() == Common.getCurrentUserId()) {
+                rq.setDeleted(true);
+                notificationService.add(rq.getParent(), "Yêu cầu tìm gia sư đã được xóa");
+                requestService.save(rq);
+            }
+            return ApiResponseDto.<Integer>builder().data(id).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('parent:delete')")
+    @DeleteMapping("/cancel/{id}")
+    public ApiResponseDto<Integer> cancelRequest(@PathVariable int id) {
+        try {
+
+            Request rq = requestService.getRequestById(id).orElseThrow();
+            if (rq.getParent().getId() == Common.getCurrentUserId()) {
+                rq.setStatus(3);
+                notificationService.add(rq.getParent(), "Yêu cầu tìm gia sư đã được hủy bỏ");
+                requestService.save(rq);
+            }
             return ApiResponseDto.<Integer>builder().data(id).build();
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();

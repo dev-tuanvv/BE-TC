@@ -16,9 +16,7 @@ public class ListClazzResDto {
     private int requestId;
     private String parentName;
     private List<SubjectLevelResDto> subjects;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private String daysOfWeek;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private String time;
     private int slots;
     private int slotsLength;

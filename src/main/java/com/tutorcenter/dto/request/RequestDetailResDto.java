@@ -29,9 +29,7 @@ public class RequestDetailResDto {
     private float tuition; // fee
 
     private String notes; // tuoi, gioi tinh, vung mien, phuong phap day,...
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date dateStart;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date dateEnd;
 
     private int status;
