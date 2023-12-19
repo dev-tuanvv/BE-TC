@@ -46,9 +46,9 @@ public class ScheduledStatusClazz {
                 notificationService.add(c.getRequest().getParent(),
                         "Lớp " + c.getId()
                                 + " của bạn đã tự động chuyển sang trạng thái kết thúc và tiền sẽ được trả cho gia sư sau 7 ngày không đánh giá");
-            } // check status = 8 wait for update end date
+            } // check status = 8 wait for consider
             else if ((currentTime.after(new Date(c.getRequest().getDateEnd().getTime())) && (c.getStatus() == 1))) {
-                c.setStatus(8); // wait for update end date
+                c.setStatus(8); // wait for consider
                 // send notifications
                 notificationService.add(c.getRequest().getParent(),
                         "Lớp " + c.getId()

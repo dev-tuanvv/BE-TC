@@ -19,7 +19,7 @@ public class TutorApplyServiceImpl implements TutorApplyService {
 
     @Override
     public List<TutorApply> findAll() {
-        return tutorApplyRepository.findAll();
+        return tutorApplyRepository.findAll().stream().filter(b -> !b.isDeleted()).toList();
     }
 
     @Override

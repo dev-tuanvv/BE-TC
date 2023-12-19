@@ -21,7 +21,7 @@ public class FeedbackServiceImpl implements FeedbackService {
 
     @Override
     public List<Feedback> findAll() {
-        return feedbackRepository.findAll();
+        return feedbackRepository.findAll().stream().filter(b -> !b.isDeleted()).toList();
     }
 
     @Override

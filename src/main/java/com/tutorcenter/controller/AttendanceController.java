@@ -80,6 +80,10 @@ public class AttendanceController {
         try {
             Clazz c = clazzService.getClazzById(clazzId).orElse(null);
             attendance.setClazz(c);
+            if (c.getStatus() != 1) {// class start paid can take attend
+                return ApiResponseDto.<AttendanceResDto>builder().message("Lớp không thể tạo điểm danh cho lớp này")
+                        .build();
+            }
             if (attendance.getClazz().getRequest().getSlots() <= (attendanceService.getAttendedByCId(clazzId) + 1)) {
                 // status 7 = Wait for feedback
                 c.setStatus(7);

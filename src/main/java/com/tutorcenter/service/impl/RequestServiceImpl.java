@@ -19,7 +19,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public List<Request> findAll() {
-        return requestRepository.findAll();
+        return requestRepository.findAll().stream().filter(b -> !b.isDeleted()).toList();
     }
 
     @Override

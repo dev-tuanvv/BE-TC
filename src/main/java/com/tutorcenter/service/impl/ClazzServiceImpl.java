@@ -22,7 +22,7 @@ public class ClazzServiceImpl implements ClazzService {
 
     @Override
     public List<Clazz> findAll() {
-        return clazzRepository.findAll();
+        return clazzRepository.findAll().stream().filter(b -> !b.isDeleted()).toList();
     }
 
     public List<SearchResDto> search(int limit, int offset, SearchReqDto req, String order) {

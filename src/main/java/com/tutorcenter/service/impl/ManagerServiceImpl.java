@@ -18,7 +18,7 @@ public class ManagerServiceImpl implements ManagerService {
 
     @Override
     public List<Manager> findAll() {
-        return managerRepository.findAll();
+        return managerRepository.findAll().stream().filter(b -> !b.isDeleted()).toList();
     }
 
     @Override

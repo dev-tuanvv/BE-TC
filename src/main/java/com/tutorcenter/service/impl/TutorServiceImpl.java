@@ -18,7 +18,7 @@ public class TutorServiceImpl implements TutorService {
 
     @Override
     public List<Tutor> findAll() {
-        return tutorRepository.findAll();
+        return tutorRepository.findAll().stream().filter(b -> !b.isDeleted()).toList();
     }
 
     @Override

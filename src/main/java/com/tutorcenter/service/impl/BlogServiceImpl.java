@@ -18,7 +18,7 @@ public class BlogServiceImpl implements BlogService {
 
     @Override
     public List<Blog> findAll() {
-        return blogRepository.findAll();
+        return blogRepository.findAll().stream().filter(b -> !b.isDeleted()).toList();
     }
 
     @Override

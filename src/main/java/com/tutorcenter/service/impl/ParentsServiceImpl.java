@@ -18,7 +18,7 @@ public class ParentsServiceImpl implements ParentService {
 
     @Override
     public List<Parent> findAll() {
-        return parentsRepository.findAll();
+        return parentsRepository.findAll().stream().filter(b -> !b.isDeleted()).toList();
     }
 
     @Override
