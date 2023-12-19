@@ -16,6 +16,7 @@ import com.tutorcenter.dto.feedback.CreateFeedbackResDto;
 import com.tutorcenter.dto.feedback.FeedbackReqDto;
 import com.tutorcenter.dto.feedback.FeedbackResDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
+import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.Feedback;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.service.ClazzService;
@@ -99,7 +100,9 @@ public class FeedbackController {
             Feedback feedback = new Feedback();
             feedbackReqDto.toFeedback(feedback);
             feedback.setClazz(clazzService.getClazzById(feedbackReqDto.getClazzId()).orElse(null));
-
+            Clazz clazz = feedback.getClazz();
+            clazz.setStatus(2);
+            clazzService.save(clazz);
             feedbackService.save(feedback);
 
             dto.fromFeedback(feedback);
