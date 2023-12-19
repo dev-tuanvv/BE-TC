@@ -23,9 +23,9 @@ public class ListClazzByTutorResDto {
     private float tuition;
     private String notes;
 
-    private Date dateStart;
+    private java.sql.Date dateStart;
 
-    private Date dateEnd;
+    private java.sql.Date dateEnd;
     private String tutorLevel;
     private String address;
     private String districtName;

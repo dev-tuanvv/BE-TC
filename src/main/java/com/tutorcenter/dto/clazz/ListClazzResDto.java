@@ -27,8 +27,8 @@ public class ListClazzResDto {
     private String gender;
     private float tuition;
     private int status;
-    private Date dateStart;
-    private Date dateEnd;
+    private java.sql.Date dateStart;
+    private java.sql.Date dateEnd;
     private TutorDto tutor = new TutorDto();
 
     public void fromClazz(Clazz clazz) {

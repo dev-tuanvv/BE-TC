@@ -35,9 +35,9 @@ public class ClazzDetailResDto {
 
     private String notes;
 
-    private Date dateStart;
+    private java.sql.Date dateStart;
 
-    private Date dateEnd;
+    private java.sql.Date dateEnd;
 
     private int status;
 

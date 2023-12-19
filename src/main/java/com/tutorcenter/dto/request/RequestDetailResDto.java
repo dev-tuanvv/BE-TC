@@ -29,8 +29,8 @@ public class RequestDetailResDto {
     private float tuition; // fee
 
     private String notes; // tuoi, gioi tinh, vung mien, phuong phap day,...
-    private Date dateStart;
-    private Date dateEnd;
+    private java.sql.Date dateStart;
+    private java.sql.Date dateEnd;
 
     private int status;
 

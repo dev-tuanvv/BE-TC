@@ -30,8 +30,8 @@ public class CreateRequestReqDto {
     private int slotsLength;
     private float tuition;
     private String notes;
-    private Date dateStart;
-    private Date dateEnd;
+    private java.sql.Date dateStart;
+    private java.sql.Date dateEnd;
     private int districtId;
     private String tutorLevel;
 

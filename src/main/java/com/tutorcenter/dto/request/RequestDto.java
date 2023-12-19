@@ -24,8 +24,8 @@ public class RequestDto {
     private int slotsLength;
     private float tuition;
     private String notes;
-    private Date dateStart;
-    private Date dateEnd;
+    private java.sql.Date dateStart;
+    private java.sql.Date dateEnd;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date dateCreate;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")

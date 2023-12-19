@@ -52,9 +52,9 @@ public class Request implements Serializable {
     @Column
     private String notes; // tuoi, gioi tinh, vung mien, phuong phap day,...
     @Column
-    private Date dateStart;
+    private java.sql.Date dateStart;
     @Column
-    private Date dateEnd;
+    private java.sql.Date dateEnd;
     @Column
     private Date dateCreate;
     @Column
