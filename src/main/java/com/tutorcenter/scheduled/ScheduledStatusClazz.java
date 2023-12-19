@@ -31,14 +31,16 @@ public class ScheduledStatusClazz {
         // status 7 = Wait for feedback
         List<Clazz> clazzs = clazzService.getClazzByStatus(7);
         int overdue_clazz = Integer.parseInt(systemVariableService.getSysVarByVarKey("clazz_overdue").getValue());
+        int date_wait_for_feedback = Integer
+                .parseInt(systemVariableService.getSysVarByVarKey("date_wait_for_feedback").getValue());
         Date currentTime = new Date();
 
         for (Clazz c : clazzs) {
             // get date create of last attendance
             Date lastDate = attendanceService.getAttendancesByClazzId(c.getId())
                     .get(attendanceService.getAttendancesByClazzId(c.getId()).size() - 1).getDateCreate();
-            // status = 2 should be set after 7 days
-            long overdueThresholdMillis = lastDate.getTime() + (7 * 24 * 60 * 60 * 1000);
+            // status = 2 should be set after date_wait_for_feedback days
+            long overdueThresholdMillis = lastDate.getTime() + (date_wait_for_feedback * 24 * 60 * 60 * 1000);
 
             if ((currentTime.after(new Date(overdueThresholdMillis)) && (c.getStatus() == 7))) {
                 c.setStatus(2); // clazz end
