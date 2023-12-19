@@ -14,6 +14,7 @@ public class TaskResDto {
     private int requestId;
     private int type;
     private int managerId;
+    private String managerEmail;
     private int status;
     private String link;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
@@ -28,6 +29,7 @@ public class TaskResDto {
         this.type = task.getType();
         if (task.getManager() != null) {
             this.managerId = task.getManager().getId();
+            this.managerEmail = task.getManager().getEmail();
         }
         this.status = task.getStatus();
         if (this.type == 1) {
