@@ -18,6 +18,7 @@ import com.tutorcenter.dto.authentication.AuthenticationResDto;
 import com.tutorcenter.dto.authentication.RegisterParentReqDto;
 import com.tutorcenter.dto.authentication.RegisterReqDto;
 import com.tutorcenter.dto.authentication.RegisterTutorReqDto;
+import com.tutorcenter.service.EmailService;
 import com.tutorcenter.service.UserService;
 import com.tutorcenter.service.impl.AuthenticationService;
 
@@ -33,6 +34,8 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     @Autowired
     private UserService userService;
+        @Autowired
+    private EmailService emailService;
 
     private static final Logger logger = LogManager.getLogger(AuthenticationController.class);
 
@@ -66,8 +69,11 @@ public class AuthenticationController {
     @PostMapping("/registerParent")
     public ApiResponseDto<String> registerParent(
             @RequestBody RegisterParentReqDto request) {
-
-        return ApiResponseDto.<String>builder().data(authenticationService.registerParent(request))
+                String email = authenticationService.registerParent(request);
+                if (email != null && !email.isEmpty()) {
+                    emailService.sendEmail(email, "Chào mừng đến với TC!", "Chúc mừng bạn đã tạo thành công tài khoản tạo Tutor Center!");
+                }
+        return ApiResponseDto.<String>builder().data(email)
                 .build();
     }
 
