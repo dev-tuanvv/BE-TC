@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tutorcenter.cache.ClazzRedisCache;
 import com.tutorcenter.common.Common;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.PaginRes;
@@ -64,12 +65,15 @@ public class ClazzController {
     SubjectService subjectService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private ClazzRedisCache clazzRedisCache;
 
     @GetMapping("")
     public ApiResponseDto<List<ListClazzResDto>> getAllClazzs() {
         List<ListClazzResDto> response = new ArrayList<>();
         try {
-            List<Clazz> clazzs = clazzService.findAll();
+            // List<Clazz> clazzs = clazzService.findAll();
+            List<Clazz> clazzs =new ArrayList<>(clazzRedisCache.findAll().values());
 
             for (Clazz c : clazzs) {
                 ListClazzResDto dto = new ListClazzResDto();
