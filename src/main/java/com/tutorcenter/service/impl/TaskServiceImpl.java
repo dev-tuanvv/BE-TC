@@ -2,7 +2,9 @@ package com.tutorcenter.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +70,8 @@ public class TaskServiceImpl implements TaskService {
         List<Task> tasks = taskRepository.findByStatus(0);
         List<Manager> managers = managerService.findAllActive();
         int j = 0;
-        String emailContent = "Bạn đã được assign các task: ";
+        HashMap<String, List<String>> taskLink = new HashMap<>();
+
         for (int i = 0; i < tasks.size(); i++) {
             tasks.get(i).setManager(managers.get(j));
             tasks.get(i).setStatus(1);
@@ -78,24 +81,37 @@ public class TaskServiceImpl implements TaskService {
                 Request request = requestService.getRequestById(tasks.get(i).getRequestId()).orElse(null);
                 request.setManager((managers.get(j)));
                 requestService.save(request);
-                emailContent += " <a href='localhost:300/api/request/" + tasks.get(i).getRequestId() + "'>Task Request "
-                        + tasks.get(i).getRequestId() + "</a>";
+                // add task link
+                taskLink.putIfAbsent(tasks.get(i).getManager().getEmail(), new ArrayList<>());
+                List<String> links = taskLink.get(tasks.get(i).getManager().getEmail());
+                links.add(" <a href='localhost:300/api/request/" + tasks.get(i).getRequestId() + "'>Task Request "
+                        + tasks.get(i).getRequestId() + "</a> ");
             } else {
                 RequestVerification requestVerification = requestVerificationService
                         .getRVById(tasks.get(i).getRequestId()).orElse(null);
                 requestVerification.setManager((managers.get(j)));
                 requestVerificationService.save(requestVerification);
-                emailContent += " <a href='localhost:300/api/requestVerification/" + tasks.get(i).getRequestId()
-                        + "'>Task Request Verify"
-                        + tasks.get(i).getRequestId() + "</a>";
+                // add task link
+                taskLink.putIfAbsent(tasks.get(i).getManager().getEmail(), new ArrayList<>());
+                List<String> links = taskLink.get(tasks.get(i).getManager().getEmail());
+                links.add(" <a href='localhost:300/api/requestVerification/" + tasks.get(i).getRequestId()
+                        + "'>Task Request Verify "
+                        + tasks.get(i).getRequestId() + "</a>");
             }
-            emailService.sendEmail(tasks.get(i).getManager().getEmail(), "Task mới đã được assign", emailContent);
             j++;
             if (j >= managers.size()) {
                 j = 0;
             }
         }
         taskRepository.saveAll(tasks);
+        for (Map.Entry<String, List<String>> entry : taskLink.entrySet()) {
+            List<String> links = entry.getValue();
+            String content = "Bạn đã được assign các task: ";
+            for (String link : links) {
+                content += link;
+            }
+            emailService.sendEmail(entry.getKey(), "Task mới đã được assign", content);
+        }
     }
 
     @Data
