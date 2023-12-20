@@ -17,6 +17,7 @@ public class TutorDetailResDto {
     private String university;
     private String tutorLevel;
     private String major;
+    private String imgAvatar;
     private String imgCert;
     private float rating;
 
@@ -28,6 +29,7 @@ public class TutorDetailResDto {
         this.university = tutor.getUniversity();
         this.tutorLevel = tutor.getTutorLevel();
         this.major = tutor.getMajor();
+        this.imgAvatar = tutor.getImgAvatar();
         this.imgCert = tutor.getImgCertificate();
     }
 }
