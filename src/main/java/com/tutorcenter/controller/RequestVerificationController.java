@@ -214,6 +214,8 @@ public class RequestVerificationController {
             }
             tutorService.save(tutor);
             notificationService.add(tutor, "Yêu cầu xác thực thông tin cá nhân của bạn đã được xét duyệt");
+            // finish task for manager
+            taskService.finish(requestVerification.getId(), 2);
             return ApiResponseDto.<UpdateRequestVerificationResDto>builder().data(resDto).build();
         } catch (Exception e) {
             return ApiResponseDto.<UpdateRequestVerificationResDto>builder().responseCode("500").message(e.getMessage())

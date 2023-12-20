@@ -7,11 +7,14 @@ import com.tutorcenter.model.Manager;
 import com.tutorcenter.model.Task;
 import java.util.List;
 
-
 public interface TaskRepository extends JpaRepository<Task, Integer> {
 
   @Query(value = "SELECT COUNT(*) FROM tbl_task t WHERE t.manager_id =:managerId AND t.status = 0", nativeQuery = true)
   public int countByManager(int managerId);
+
   List<Task> findByStatus(int status);
+
   List<Task> findByManager(Manager manager);
+
+  List<Task> findByRequestId(int rId);
 }

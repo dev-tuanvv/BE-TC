@@ -2,6 +2,7 @@ package com.tutorcenter.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.tutorcenter.common.Common;
+import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.model.Manager;
 import com.tutorcenter.model.Request;
 import com.tutorcenter.model.RequestVerification;
@@ -19,6 +22,7 @@ import com.tutorcenter.service.EmailService;
 import com.tutorcenter.service.ManagerService;
 import com.tutorcenter.service.RequestService;
 import com.tutorcenter.service.RequestVerificationService;
+import com.tutorcenter.service.SystemVariableService;
 import com.tutorcenter.service.TaskService;
 
 import lombok.AllArgsConstructor;
@@ -36,6 +40,8 @@ public class TaskServiceImpl implements TaskService {
     private RequestVerificationService requestVerificationService;
     @Autowired
     private EmailService emailService;
+    @Autowired
+    private SystemVariableService systemVariableService;
 
     public int findBestSuitManagerId() {
         List<Manager> managers = managerService.findAll();
@@ -152,5 +158,39 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public Optional<Task> getTaskById(int id) {
         return taskRepository.findById(id);
+    }
+
+    @Override
+    public Task getTaskByRequest(int rId, int type) {
+        Task task = new Task();
+        for (Task t : taskRepository.findByRequestId(rId)) {
+            if (t.getType() == type) {
+                task = t;
+            }
+        }
+        return task;
+    }
+
+    @Override
+    public String finish(int rId, int type) {
+        Task task = getTaskByRequest(rId, type);
+
+        if (task.getManager().getId() != Common.getCurrentUserId()) {
+            return "Bạn không được assign cho task này";
+        }
+        if (task.getStatus() == 1) {
+            int task_work_time = Integer
+                    .parseInt(systemVariableService.getSysVarByVarKey("task_work_time").getValue());
+            Date now = new Date(System.currentTimeMillis());
+            if ((now.getTime() - task.getDateCreate().getTime()) > task_work_time * 24 * 60 * 60 * 1000) {
+                task.setStatus(3); // finish after deadlin
+                task.setDateFinished(now);
+            } else {
+                task.setStatus(2); // finish on time
+                task.setDateFinished(now);
+            }
+        }
+        taskRepository.save(task);
+        return "Hoàn thành task";
     }
 }

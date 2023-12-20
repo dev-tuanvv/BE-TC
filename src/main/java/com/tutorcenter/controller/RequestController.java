@@ -248,6 +248,7 @@ public class RequestController {
         }
     }
 
+    // 1=accept or 2=reject
     @PreAuthorize("hasAnyAuthority('manager:update')")
     @PutMapping("/updateStatus")
     public ApiResponseDto<Integer> updateSubjects(@RequestParam(name = "requestId") int rId,
@@ -263,6 +264,9 @@ public class RequestController {
 
             requestService.save(rq);
             notificationService.add(rq.getParent(), "Yêu cầu tìm gia sư đã được xét duyệt");
+            // finish task
+            taskService.finish(rId, 1);
+
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
         }

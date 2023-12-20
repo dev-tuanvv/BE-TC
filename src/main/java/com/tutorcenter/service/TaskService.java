@@ -22,4 +22,8 @@ public interface TaskService {
     List<Task> getListTaskByManagerId(int mId);
 
     Optional<Task> getTaskById(int id);
+
+    Task getTaskByRequest(int rId, int type);
+
+    String finish(int rId, int type);
 }
