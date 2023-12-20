@@ -73,7 +73,7 @@ public class ClazzController {
         List<ListClazzResDto> response = new ArrayList<>();
         try {
             // List<Clazz> clazzs = clazzService.findAll();
-            List<Clazz> clazzs =new ArrayList<>(clazzRedisCache.findAll().values());
+            List<Clazz> clazzs = new ArrayList<>(clazzRedisCache.findAll().values());
 
             for (Clazz c : clazzs) {
                 ListClazzResDto dto = new ListClazzResDto();
@@ -421,6 +421,7 @@ public class ClazzController {
             clazz.setDeleted(false);
 
             response = clazzService.save(clazz).getId();
+            clazzRedisCache.save(clazz);
 
             notificationService.add(request.getParent(), "Yêu cầu của bạn đã được tạo thành lớp " + response);
         } catch (Exception e) {
@@ -435,7 +436,7 @@ public class ClazzController {
         clazzDto.convertClazzDto(clazz);
 
         clazzService.save(clazz);
-
+        clazzRedisCache.save(clazz);
         return ResponseEntity.ok("Cập nhật thành công class.");
     }
 
@@ -452,6 +453,7 @@ public class ClazzController {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
         }
         notificationService.add(clazz.getRequest().getParent(), "Lớp của bạn đã được cập nhật trạng thái");
+        clazzRedisCache.save(clazz);
         return ApiResponseDto.<Integer>builder().data(clazzService.save(clazz).getId()).build();
     }
 
@@ -466,6 +468,7 @@ public class ClazzController {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
         }
         notificationService.add(clazz.getRequest().getParent(), "Lớp " + clazz.getId() + " của bạn đã được xóa");
+        clazzRedisCache.save(clazz);
         return ApiResponseDto.<Integer>builder().data(clazzService.save(clazz).getId()).build();
     }
 }

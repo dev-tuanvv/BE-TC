@@ -22,13 +22,19 @@ public class LogsConnectionFactory {
 
     private final DataSource dataSource;
 
-    private String datasourceURL = "jdbc:mysql://d216150.tino.org/vietnamt1_tc?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false";
-    private String userName = "vietnamt1_tc";
-    private String pass = "abc123456";
+    // private String datasourceURL =
+    // "jdbc:mysql://d216150.tino.org/vietnamt1_tc?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false";
+    // private String userName = "vietnamt1_tc";
+    // private String pass = "abc123456";
 
     // local docker
+    private String datasourceURL = "jdbc:mysql://host.docker.internal:3306/vietnamt1_tc?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false";
+    private String userName = "root";
+    private String pass = "123456";
+
+    // local dev
     // private String datasourceURL =
-    // "jdbc:mysql://host.docker.internal:3306/vietnamt1_tc?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false";
+    // "jdbc:mysql://localhost:3306/vietnamt1_tc?autoReconnect=true&useSSL=false&useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false";
     // private String userName = "root";
     // private String pass = "123456";
 

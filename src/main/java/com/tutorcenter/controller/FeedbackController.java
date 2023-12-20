@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tutorcenter.cache.ClazzRedisCache;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.feedback.CreateFeedbackResDto;
 import com.tutorcenter.dto.feedback.FeedbackReqDto;
@@ -42,6 +43,8 @@ public class FeedbackController {
     private RequestSubjectService requestSubjectService;
     @Autowired
     SubjectService subjectService;
+    @Autowired
+    private ClazzRedisCache clazzRedisCache;
 
     @GetMapping("/tutor/{tId}")
     public ApiResponseDto<List<FeedbackResDto>> getFeedbackByTutorId(@PathVariable int tId) {
@@ -103,6 +106,7 @@ public class FeedbackController {
             Clazz clazz = feedback.getClazz();
             clazz.setStatus(2);
             clazzService.save(clazz);
+            clazzRedisCache.save(clazz);
             feedbackService.save(feedback);
 
             dto.fromFeedback(feedback);

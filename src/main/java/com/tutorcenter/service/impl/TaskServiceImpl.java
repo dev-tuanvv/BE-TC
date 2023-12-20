@@ -90,8 +90,7 @@ public class TaskServiceImpl implements TaskService {
                 // add task link
                 taskLink.putIfAbsent(tasks.get(i).getManager().getEmail(), new ArrayList<>());
                 List<String> links = taskLink.get(tasks.get(i).getManager().getEmail());
-                links.add(" <a href='localhost:300/api/request/" + tasks.get(i).getRequestId() + "'>Task Request "
-                        + tasks.get(i).getRequestId() + "</a> ");
+                links.add(" Request " + tasks.get(i).getRequestId());
             } else {
                 RequestVerification requestVerification = requestVerificationService
                         .getRVById(tasks.get(i).getRequestId()).orElse(null);
@@ -100,9 +99,7 @@ public class TaskServiceImpl implements TaskService {
                 // add task link
                 taskLink.putIfAbsent(tasks.get(i).getManager().getEmail(), new ArrayList<>());
                 List<String> links = taskLink.get(tasks.get(i).getManager().getEmail());
-                links.add(" <a href='localhost:300/api/requestVerification/" + tasks.get(i).getRequestId()
-                        + "'>Task Request Verify "
-                        + tasks.get(i).getRequestId() + "</a>");
+                links.add(" Request Verification " + tasks.get(i).getRequestId());
             }
             j++;
             if (j >= managers.size()) {
@@ -113,8 +110,10 @@ public class TaskServiceImpl implements TaskService {
         for (Map.Entry<String, List<String>> entry : taskLink.entrySet()) {
             List<String> links = entry.getValue();
             String content = "Bạn đã được assign các task: ";
+            int count = 1;
             for (String link : links) {
-                content += link;
+                content += (count + "." + link);
+                count++;
             }
             emailService.sendEmail(entry.getKey(), "Task mới đã được assign", content);
         }
