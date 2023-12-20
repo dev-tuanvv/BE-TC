@@ -25,6 +25,7 @@ import com.tutorcenter.model.RequestVerification;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Task;
 import com.tutorcenter.model.Tutor;
+import com.tutorcenter.service.EmailService;
 import com.tutorcenter.service.ManagerService;
 import com.tutorcenter.service.NotificationService;
 import com.tutorcenter.service.RequestVerificationService;
@@ -48,7 +49,7 @@ public class RequestVerificationController {
     @Autowired
     private TaskService taskService;
     @Autowired
-    private ManagerService managerService;
+    private EmailService emailService;
     @Autowired
     private NotificationService notificationService;
 
@@ -200,10 +201,16 @@ public class RequestVerificationController {
             resDto.fromRequestVerification(requestVerificationService.save(requestVerification));
 
             Tutor tutor = tutorService.getTutorById(reqDto.getTutorId()).orElse(null);
-            if (reqDto.getStatus() == 1) {
+            if (reqDto.getStatus() == 1) { // verify
                 tutor.setStatus(2);
-            } else if (reqDto.getStatus() == 2) {
+                emailService.sendEmail(tutor.getEmail(), "Xác minh thành công trên TutorCenter",
+                        "Tài khoản gia sư đã xác minh thành công, bạn có thể bắt đầu tìm lớp.");
+            } else if (reqDto.getStatus() == 2) { // reject
                 tutor.setStatus(3);
+                emailService.sendEmail(tutor.getEmail(), "Xác minh không thành công trên TutorCenter",
+                        "Tài khoản gia sư của bạn xác minh không thành công vì :"
+                                + requestVerification.getRejectReason()
+                                + ". Vui lòng cập nhật lại thông tin và gửi lại yêu cầu xác minh.");
             }
             tutorService.save(tutor);
             notificationService.add(tutor, "Yêu cầu xác thực thông tin cá nhân của bạn đã được xét duyệt");
