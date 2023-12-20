@@ -144,7 +144,7 @@ public class OrderController {
 
             Order order = new Order();
             orderReqDto.toOrder(order);
-            order.setClazz(clazz);
+            order.setClazz(clazz);t
             order.setTimeCreate(new Date(System.currentTimeMillis()));
 
             int noOrder = orderService.getOrdersByClazzId(order.getClazz().getId()).size();

@@ -13,6 +13,7 @@ import com.tutorcenter.model.Request;
 import com.tutorcenter.model.RequestVerification;
 import com.tutorcenter.model.Task;
 import com.tutorcenter.repository.TaskRepository;
+import com.tutorcenter.service.EmailService;
 import com.tutorcenter.service.ManagerService;
 import com.tutorcenter.service.RequestService;
 import com.tutorcenter.service.RequestVerificationService;
@@ -31,6 +32,8 @@ public class TaskServiceImpl implements TaskService {
     private RequestService requestService;
     @Autowired
     private RequestVerificationService requestVerificationService;
+    @Autowired
+    private EmailService emailService;
 
     public int findBestSuitManagerId() {
         List<Manager> managers = managerService.findAll();
@@ -65,7 +68,7 @@ public class TaskServiceImpl implements TaskService {
         List<Task> tasks = taskRepository.findByStatus(0);
         List<Manager> managers = managerService.findAllActive();
         int j = 0;
-
+        String emailContent = "Bạn đã được assign các task: ";
         for (int i = 0; i < tasks.size(); i++) {
             tasks.get(i).setManager(managers.get(j));
             tasks.get(i).setStatus(1);
@@ -75,12 +78,18 @@ public class TaskServiceImpl implements TaskService {
                 Request request = requestService.getRequestById(tasks.get(i).getRequestId()).orElse(null);
                 request.setManager((managers.get(j)));
                 requestService.save(request);
+                emailContent += " <a href='localhost:300/api/request/" + tasks.get(i).getRequestId() + "'>Task Request "
+                        + tasks.get(i).getRequestId() + "</a>";
             } else {
                 RequestVerification requestVerification = requestVerificationService
                         .getRVById(tasks.get(i).getRequestId()).orElse(null);
                 requestVerification.setManager((managers.get(j)));
                 requestVerificationService.save(requestVerification);
+                emailContent += " <a href='localhost:300/api/requestVerification/" + tasks.get(i).getRequestId()
+                        + "'>Task Request Verify"
+                        + tasks.get(i).getRequestId() + "</a>";
             }
+            emailService.sendEmail(tasks.get(i).getManager().getEmail(), "Task mới đã được assign", emailContent);
             j++;
             if (j >= managers.size()) {
                 j = 0;

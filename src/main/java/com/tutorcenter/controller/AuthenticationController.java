@@ -34,7 +34,7 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
     @Autowired
     private UserService userService;
-        @Autowired
+    @Autowired
     private EmailService emailService;
 
     private static final Logger logger = LogManager.getLogger(AuthenticationController.class);
@@ -69,18 +69,22 @@ public class AuthenticationController {
     @PostMapping("/registerParent")
     public ApiResponseDto<String> registerParent(
             @RequestBody RegisterParentReqDto request) {
-                String email = authenticationService.registerParent(request);
-                if (email != null && !email.isEmpty()) {
-                    emailService.sendEmail(email, "Chào mừng đến với TC!", "Chúc mừng bạn đã tạo thành công tài khoản tạo Tutor Center!");
-                }
-        return ApiResponseDto.<String>builder().data(email)
-                .build();
+        String email = authenticationService.registerParent(request);
+        if (email != null && !email.isEmpty()) {
+            emailService.sendEmail(email, "Chào mừng đến với TC!",
+                    "Chúc mừng bạn đã tạo thành công tài khoản phụ huynh tại Tutor Center!");
+        }
+        return ApiResponseDto.<String>builder().data(email).build();
     }
 
     @PostMapping("/registerTutor")
     public ApiResponseDto<String> registerTutor(
             @RequestBody RegisterTutorReqDto request) {
-        return ApiResponseDto.<String>builder().data(authenticationService.registerTutor(request))
-                .build();
+        String email = authenticationService.registerTutor(request);
+        if (email != null && !email.isEmpty()) {
+            emailService.sendEmail(email, "Chào mừng đến với TC!",
+                    "Chúc mừng bạn đã tạo thành công tài khoản gia sư tại Tutor Center!");
+        }
+        return ApiResponseDto.<String>builder().data(email).build();
     }
 }
