@@ -35,7 +35,8 @@ public class AttendanceController {
     @Autowired
     private ClazzRedisCache clazzRedisCache;
 
-    private static final Logger logger = LogManager.getLogger(AuthenticationController.class);
+    // private static final Logger logger =
+    // LogManager.getLogger(AuthenticationController.class);
 
     @GetMapping("")
     public ApiResponseDto<List<AttendanceResDto>> getListAttendance() {
@@ -52,7 +53,7 @@ public class AttendanceController {
         } catch (Exception e) {
             return ApiResponseDto.<List<AttendanceResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
-        logger.info("Get list attendance");
+        // logger.info("Get list attendance");
         return ApiResponseDto.<List<AttendanceResDto>>builder().data(response).build();
 
     }
@@ -71,7 +72,7 @@ public class AttendanceController {
         } catch (Exception e) {
             return ApiResponseDto.<List<AttendanceResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
-        logger.info("Get attendance by class Id");
+        // logger.info("Get attendance by class Id");
         return ApiResponseDto.<List<AttendanceResDto>>builder().data(response).build();
     }
 
@@ -105,7 +106,7 @@ public class AttendanceController {
         } catch (Exception e) {
             return ApiResponseDto.<AttendanceResDto>builder().responseCode("500").message(e.getMessage()).build();
         }
-        logger.info("Create attendance");
+        // logger.info("Create attendance");
         return ApiResponseDto.<AttendanceResDto>builder().data(dto).build();
     }
 }

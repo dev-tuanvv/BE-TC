@@ -37,19 +37,20 @@ public class AuthenticationController {
     @Autowired
     private EmailService emailService;
 
-    private static final Logger logger = LogManager.getLogger(AuthenticationController.class);
+    // private static final Logger logger =
+    // LogManager.getLogger(AuthenticationController.class);
 
     @PostMapping("/register")
     public ApiResponseDto<AuthenticationResDto> register(
             @RequestBody RegisterReqDto request) {
-        logger.info("Register new user");
+        // logger.info("Register new user");
         return ApiResponseDto.<AuthenticationResDto>builder().data(authenticationService.register(request)).build();
     }
 
     @PostMapping("/authenticate")
     public ApiResponseDto<AuthenticationResDto> authenticate(
             @RequestBody AuthenticationReqDto request) {
-        logger.info(request.getEmail() + " logged in");
+        // logger.info(request.getEmail() + " logged in");
 
         return ApiResponseDto.<AuthenticationResDto>builder().data(authenticationService.authenticate(request)).build();
     }
