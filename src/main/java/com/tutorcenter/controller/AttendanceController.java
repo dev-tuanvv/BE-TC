@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tutorcenter.cache.ClazzRedisCache;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.attendance.AttendanceResDto;
 import com.tutorcenter.model.Attendance;
@@ -32,8 +31,6 @@ public class AttendanceController {
     private ClazzService clazzService;
     @Autowired
     private NotificationService notificationService;
-    @Autowired
-    private ClazzRedisCache clazzRedisCache;
 
     // private static final Logger logger =
     // LogManager.getLogger(AuthenticationController.class);
@@ -92,7 +89,7 @@ public class AttendanceController {
                 // status 7 = Wait for feedback
                 c.setStatus(7);
                 clazzService.save(c);
-                clazzRedisCache.save(c);
+
             }
             attendance.setStatus(status);
             attendance.setDateCreate(new Date(System.currentTimeMillis()));

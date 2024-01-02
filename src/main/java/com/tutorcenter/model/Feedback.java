@@ -34,4 +34,14 @@ public class Feedback implements Serializable {
     private Date dateCreate;
     @Column
     private boolean isDeleted;
+    @Column
+    private int professionalSkill;
+    @Column
+    private int workingStyle;
+    @Column
+    private int pedagogicalSkill;
+    @Column
+    private int supportOT;
+    @Column
+    private int courseCover;
 }

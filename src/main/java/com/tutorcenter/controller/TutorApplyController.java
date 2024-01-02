@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.tutorcenter.cache.ClazzRedisCache;
 import com.tutorcenter.common.Common;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
@@ -51,8 +50,6 @@ public class TutorApplyController {
     private RequestSubjectService requestSubjectService;
     @Autowired
     private NotificationService notificationService;
-    @Autowired
-    private ClazzRedisCache clazzRedisCache;
 
     @GetMapping("/")
     public List<TutorApply> getAll() {
@@ -208,7 +205,7 @@ public class TutorApplyController {
             tutorApply.getClazz().setStatus(1);
             tutorApplyService.save(tutorApply);
             clazzService.save(tutorApply.getClazz());
-            clazzRedisCache.save(tutorApply.getClazz());
+
             return ApiResponseDto.<String>builder().data(tutorApply.getTutor().getFullname()).build();
         } catch (Exception e) {
             return ApiResponseDto.<String>builder().responseCode("500").message(e.getMessage()).build();
