@@ -4,8 +4,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
@@ -13,6 +16,9 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import com.tutorcenter.model.Answer;
@@ -103,6 +109,20 @@ public class TestServiceImpl implements TestService {
         }
 
         return true;
+    }
+
+    @Override
+    public List<Question> getRandQuestion(Subject subject, int difficulty, int no) {
+        Pageable pageable = PageRequest.of(0, no, Sort.by("rand()"));
+        List<Question> questions = questionRepository.findByDifficultyOrderByRand(subject, difficulty, pageable);
+
+        if (questions.size() < no) {
+            int remainingQuestions = no - questions.size();
+            List<Question> remain = getRandQuestion(subject, difficulty - 1, remainingQuestions);
+            questions.addAll(0, remain);
+        }
+
+        return questions;
     }
 
 }

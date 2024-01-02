@@ -22,4 +22,5 @@ public interface TestService {
 
     boolean readExcelFile(String filePath);
 
+    List<Question> getRandQuestion(Subject subject, int difficulty, int no);
 }
