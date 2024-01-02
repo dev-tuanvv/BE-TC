@@ -26,6 +26,4 @@ public class Answer {
     private String content;
     @Column
     private boolean isCorrect;
-    @Column
-    private Date dateCreate;
 }
