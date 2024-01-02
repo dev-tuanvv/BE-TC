@@ -1,6 +1,7 @@
 package com.tutorcenter.model;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,4 +28,6 @@ public class TutorSubject implements Serializable {
     private Subject subject;
     @Column
     private int latestGrade;
+    @Column
+    private Date latestDate;
 }
