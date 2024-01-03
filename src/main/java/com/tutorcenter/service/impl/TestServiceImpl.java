@@ -113,8 +113,8 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public List<Question> getRandQuestion(Subject subject, int difficulty, int no) {
-        Pageable pageable = PageRequest.of(0, no, Sort.by("rand()"));
-        List<Question> questions = questionRepository.findByDifficultyOrderByRand(subject, difficulty, pageable);
+
+        List<Question> questions = questionRepository.findBySubjectAndDifficulty(subject, difficulty);
 
         if (questions.size() < no) {
             int remainingQuestions = no - questions.size();

@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorSubject;
 import com.tutorcenter.repository.TutorSubjectRepository;
 import com.tutorcenter.service.TutorSubjectService;
@@ -41,6 +42,12 @@ public class TutorSubjectServiceImpl implements TutorSubjectService {
     @Override
     public TutorSubject save(TutorSubject tutorSubject) {
         return tutorSubjectRepository.save(tutorSubject);
+    }
+
+    @Override
+    public List<TutorSubject> getTutorSubjectsByTutorId(int tId) {
+        return tutorSubjectRepository.findAll().stream().filter(ts -> ts.getTutor().getId() == tId)
+                .collect(Collectors.toList());
     }
 
 }

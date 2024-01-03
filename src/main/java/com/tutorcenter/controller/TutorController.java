@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.common.Common;
 import com.tutorcenter.dto.ApiResponseDto;
+import com.tutorcenter.dto.subject.SubjectLevelGradeResDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.dto.tutor.TutorDetailResDto;
 import com.tutorcenter.dto.tutor.TutorProfileResDto;
@@ -22,6 +23,7 @@ import com.tutorcenter.dto.tutor.TutorReqDto;
 import com.tutorcenter.dto.tutor.TutorResDto;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Tutor;
+import com.tutorcenter.model.TutorSubject;
 import com.tutorcenter.service.FeedbackService;
 import com.tutorcenter.service.SubjectService;
 import com.tutorcenter.service.TutorService;
@@ -137,6 +139,28 @@ public class TutorController {
       return ApiResponseDto.<TutorDetailResDto>builder().data(dto).build();
     } catch (Exception e) {
       return ApiResponseDto.<TutorDetailResDto>builder().responseCode("500").message(e.getMessage()).build();
+    }
+  }
+
+  @GetMapping("/test/{id}")
+  public ApiResponseDto<List<SubjectLevelGradeResDto>> getTestByTutorId(@PathVariable int id) {
+    try {
+      List<SubjectLevelGradeResDto> response = new ArrayList<>();
+
+      // get list TutorSubject từ tutorId
+      List<TutorSubject> tutorSubjects = tutorSubjectService
+          .getTutorSubjectsByTutorId(id);
+
+      for (TutorSubject ts : tutorSubjects) {
+        SubjectLevelGradeResDto gradeResDto = new SubjectLevelGradeResDto();
+        gradeResDto.fromTutorSubject(ts);
+        response.add(gradeResDto);
+      }
+
+      return ApiResponseDto.<List<SubjectLevelGradeResDto>>builder().data(response).build();
+    } catch (Exception e) {
+      return ApiResponseDto.<List<SubjectLevelGradeResDto>>builder().responseCode("500").message(e.getMessage())
+          .build();
     }
   }
 

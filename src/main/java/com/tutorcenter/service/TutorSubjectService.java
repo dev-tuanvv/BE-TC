@@ -5,11 +5,14 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorSubject;
 
 @Service
 public interface TutorSubjectService {
     List<TutorSubject> findAll();
+
+    List<TutorSubject> getTutorSubjectsByTutorId(int tId);
 
     List<TutorSubject> getTutorSubjectsById(List<Integer> idList);
 

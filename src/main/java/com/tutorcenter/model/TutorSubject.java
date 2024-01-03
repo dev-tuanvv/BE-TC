@@ -30,4 +30,6 @@ public class TutorSubject implements Serializable {
     private int latestGrade;
     @Column
     private Date latestDate;
+    @Column
+    private int times;
 }
