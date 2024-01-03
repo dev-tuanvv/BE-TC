@@ -1,20 +1,7 @@
 package com.tutorcenter.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.tutorcenter.dto.ApiResponseDto;
-import com.tutorcenter.dto.admin.MonthData;
-import com.tutorcenter.dto.admin.YearlySaleResDto;
-import com.tutorcenter.model.Order;
-import com.tutorcenter.service.ClazzService;
-import com.tutorcenter.service.OrderService;
-
-import lombok.Data;
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +9,25 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.tutorcenter.dto.ApiResponseDto;
+import com.tutorcenter.dto.admin.ManagerResDto;
+import com.tutorcenter.dto.admin.MonthData;
+import com.tutorcenter.dto.admin.UpdateManagerReqDto;
+import com.tutorcenter.dto.admin.YearlySaleResDto;
+import com.tutorcenter.model.Manager;
+import com.tutorcenter.model.Order;
+import com.tutorcenter.service.ClazzService;
+import com.tutorcenter.service.ManagerService;
+import com.tutorcenter.service.OrderService;
+
+import lombok.Data;
 
 @RestController
 @RequestMapping("/api/admin")
@@ -31,6 +36,8 @@ public class AdminController {
     private OrderService orderService;
     @Autowired
     private ClazzService clazzService;
+    @Autowired
+    private ManagerService managerService;
 
     @PreAuthorize("hasAnyAuthority('admin:read')")
     @GetMapping("/yearlySale")
@@ -94,6 +101,71 @@ public class AdminController {
             return ApiResponseDto.<Integer>builder().data(response).build();
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
+        }
+    }
+
+    @GetMapping("/list-managers")
+    public ApiResponseDto<List<ManagerResDto>> getAllManagers() {
+        try {
+            List<ManagerResDto> response = new ArrayList<>();
+            for (Manager manager : managerService.findAll()) {
+                ManagerResDto dto = new ManagerResDto();
+                dto.fromManager(manager);
+                response.add(dto);
+            }
+            return ApiResponseDto.<List<ManagerResDto>>builder().data(response).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<List<ManagerResDto>>builder().responseCode("500").message(e.getMessage()).build();
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('admin:read')")
+    @GetMapping("/manager/{id}")
+    public ApiResponseDto<ManagerResDto> getManagerById(@PathVariable int id) {
+        try {
+            ManagerResDto resDto = new ManagerResDto();
+            Manager model = managerService.getManagerById(id).orElse(null);
+            if (model == null) {
+                return ApiResponseDto.<ManagerResDto>builder().message("Not found").build();
+            } else {
+                resDto.fromManager(model);
+                return ApiResponseDto.<ManagerResDto>builder().data(resDto).build();
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<ManagerResDto>builder().responseCode("500").message(e.getMessage()).build();
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('admin:read')")
+    @PutMapping("/manager/{id}")
+    public ApiResponseDto updateManagerById(@PathVariable int id,
+            @RequestBody UpdateManagerReqDto request) {
+        try {
+            Manager model = managerService.getManagerById(id).orElse(null);
+            if (model == null) {
+                return ApiResponseDto.builder().message("Not found").build();
+            } else {
+                managerService.save(model);
+                return ApiResponseDto.builder().build();
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.builder().responseCode("500").message(e.getMessage()).build();
+        }
+    }
+
+    @PreAuthorize("hasAnyAuthority('admin:read')")
+    @PostMapping("/manager")
+    public ApiResponseDto<Manager> addManager(@RequestBody UpdateManagerReqDto request) {
+        try {
+            Manager model = new Manager();
+            model.setFullname(request.getFullname());
+            model.setEmail(request.getEmail());
+            model.setPhone(request.getPhone());
+            model.setPassword(request.getPassword());
+            return ApiResponseDto.<Manager>builder().data(managerService.save(model)).build();
+
+        } catch (Exception e) {
+            return ApiResponseDto.<Manager>builder().responseCode("500").message(e.getMessage()).build();
         }
     }
 
