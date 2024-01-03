@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Date;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -118,10 +119,15 @@ public class TestServiceImpl implements TestService {
 
         if (questions.size() < no) {
             int remainingQuestions = no - questions.size();
+            // nếu ko đủ câu hỏi có difficulty thì lấy câu hỏi có difficulty -1
             List<Question> remain = getRandQuestion(subject, difficulty - 1, remainingQuestions);
             questions.addAll(0, remain);
         }
-
+        if (questions.size() > no) {
+            List<Question> excess = questions.subList(0, no);
+            questions = excess;
+        }
+        Collections.shuffle(questions);
         return questions;
     }
 
