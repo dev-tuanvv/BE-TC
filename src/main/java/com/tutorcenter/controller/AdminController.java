@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.tutorcenter.constant.Role;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.admin.ManagerResDto;
 import com.tutorcenter.dto.admin.MonthData;
@@ -142,9 +143,15 @@ public class AdminController {
             @RequestBody UpdateManagerReqDto request) {
         try {
             Manager model = managerService.getManagerById(id).orElse(null);
+
             if (model == null) {
                 return ApiResponseDto.builder().message("Not found").build();
             } else {
+                model.setFullname(request.getFullname());
+                model.setEmail(request.getEmail());
+                model.setPhone(request.getPhone());
+                model.setPassword(request.getPassword());
+                model.setStatus(request.getStatus());
                 managerService.save(model);
                 return ApiResponseDto.builder().build();
             }
@@ -162,6 +169,10 @@ public class AdminController {
             model.setEmail(request.getEmail());
             model.setPhone(request.getPhone());
             model.setPassword(request.getPassword());
+
+
+            model.setRole(Role.MANAGER);
+            model.setStatus(1);
             return ApiResponseDto.<Manager>builder().data(managerService.save(model)).build();
 
         } catch (Exception e) {
