@@ -120,7 +120,12 @@ public class TestServiceImpl implements TestService {
         if (questions.size() < no) {
             int remainingQuestions = no - questions.size();
             // nếu ko đủ câu hỏi có difficulty thì lấy câu hỏi có difficulty -1
-            List<Question> remain = getRandQuestion(subject, difficulty - 1, remainingQuestions);
+            List<Question> remain = new ArrayList<>();
+            if (difficulty > 1) {
+                remain = getRandQuestion(subject, difficulty - 1, remainingQuestions);
+            } else {
+                remain = getRandQuestion(subject, difficulty, remainingQuestions);
+            }
             questions.addAll(0, remain);
         }
         if (questions.size() > no) {
