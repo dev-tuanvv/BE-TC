@@ -136,4 +136,18 @@ public class TestServiceImpl implements TestService {
         return questions;
     }
 
+    @Override
+    public int checkAnswer(int answerId) {
+        Answer answer = answerRepository.findById(answerId).orElse(null);
+        if (answer.isCorrect())
+            return answer.getQuestion().getDifficulty();
+        else
+            return 0;
+    }
+
+    @Override
+    public int getDifficulty(int qId) {
+        return questionRepository.findById(qId).orElse(null).getDifficulty();
+    }
+
 }

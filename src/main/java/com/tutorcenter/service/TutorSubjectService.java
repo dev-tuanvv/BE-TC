@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorSubject;
 
@@ -21,4 +22,6 @@ public interface TutorSubjectService {
     List<Integer> getListSIdByTId(int tId);
 
     TutorSubject save(TutorSubject tutorSubject);
+
+    TutorSubject getTutorSubjectBySubjectAndTutor(Subject subject, Tutor tutor);
 }

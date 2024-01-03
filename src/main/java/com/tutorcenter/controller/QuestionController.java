@@ -4,6 +4,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -18,15 +19,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.tutorcenter.common.Common;
 import com.tutorcenter.dto.ApiResponseDto;
 import com.tutorcenter.dto.question.AnswerResDto;
 import com.tutorcenter.dto.question.QuestionResDto;
+import com.tutorcenter.dto.question.SubmitReqDto;
 import com.tutorcenter.model.Answer;
 import com.tutorcenter.model.Question;
 import com.tutorcenter.model.Subject;
+import com.tutorcenter.model.Tutor;
+import com.tutorcenter.model.TutorSubject;
 import com.tutorcenter.service.SubjectService;
 import com.tutorcenter.service.SystemVariableService;
 import com.tutorcenter.service.TestService;
+import com.tutorcenter.service.TutorService;
+import com.tutorcenter.service.TutorSubjectService;
+
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/api/question")
@@ -39,7 +49,10 @@ public class QuestionController {
     private SubjectService subjectService;
     @Autowired
     private SystemVariableService systemVariableService;
-
+    @Autowired
+    private TutorService tutorService;
+    @Autowired
+    private TutorSubjectService tutorSubjectService;
     // @GetMapping("/")
     // public ApiResponseDto<List<QuestionDto>>
 
@@ -94,5 +107,50 @@ public class QuestionController {
             return ApiResponseDto.<List<QuestionResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
         return ApiResponseDto.<List<QuestionResDto>>builder().data(response).build();
+    }
+
+    @PutMapping("/submit")
+    public ApiResponseDto<Integer> submit(@RequestBody List<SubmitReqDto> submitReqDtos) {
+        int result = 0;
+        int maxGrade = 0;
+        int grade = 0;
+        try {
+            // check tutor id
+            Tutor tutor = tutorService.getTutorById(Common.getCurrentUserId()).orElse(null);
+            if (tutor == null || tutor.getStatus() == 0) {
+                return ApiResponseDto.<Integer>builder().responseCode("500")
+                        .message("Bạn chưa đủ điều kiện làm bài test này")
+                        .build();
+            }
+            Subject subject = subjectService.getSubjectById(submitReqDtos.get(0).getSubjectId()).orElse(null);
+            // check correct & get grade
+
+            for (SubmitReqDto submitReqDto : submitReqDtos) {
+                if (submitReqDto.getAnswerId() != 0) {
+                    grade += testService.checkAnswer(submitReqDto.getAnswerId());
+                }
+                maxGrade += testService.getDifficulty(submitReqDto.getQuestionId());
+            }
+            // get test result
+            result = (int) (((double) grade / maxGrade) * 100);
+
+            // tạo tutorSubject
+            TutorSubject tutorSubject = tutorSubjectService.getTutorSubjectBySubjectAndTutor(subject, tutor);
+
+            if (tutorSubject == null) {
+                tutorSubject = new TutorSubject();
+                tutorSubject.setSubject(subject);
+                tutorSubject.setTimes(1);
+                tutorSubject.setTutor(tutor);
+            } else {
+                tutorSubject.setTimes(tutorSubject.getTimes() + 1);
+            }
+            tutorSubject.setLatestGrade(result);
+            tutorSubject.setLatestDate(new Date(System.currentTimeMillis()));
+            tutorSubjectService.save(tutorSubject);
+        } catch (Exception e) {
+            return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
+        }
+        return ApiResponseDto.<Integer>builder().data(result).build();
     }
 }
