@@ -53,11 +53,11 @@ public class TutorSubjectServiceImpl implements TutorSubjectService {
 
     @Override
     public TutorSubject getTutorSubjectBySubjectAndTutor(Subject subject, Tutor tutor) {
-        List<TutorSubject> tutorSubjects = tutorSubjectRepository.findBySubjectAndTutor(subject, tutor);
-        if (tutorSubjects.size() > 1) {
-            TutorSubject ts = tutorSubjects.get(0);
-            if (ts.getTimes() > 1)
+        List<TutorSubject> tutorSubjects = tutorSubjectRepository.findByTutor(tutor);
+        for (TutorSubject ts : tutorSubjects) {
+            if (ts.getSubject().getId() == subject.getId()) {
                 return ts;
+            }
         }
         return null;
     }
