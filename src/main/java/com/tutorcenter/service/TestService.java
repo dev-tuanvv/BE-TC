@@ -12,6 +12,8 @@ import com.tutorcenter.model.Subject;
 public interface TestService {
     List<Question> getAllQuestion();
 
+    Question getQuestionById(int qId);
+
     List<Question> getAllQuestionBySId(Subject subject);
 
     List<Answer> getAllAnswersByQId(Question question);
@@ -27,4 +29,7 @@ public interface TestService {
     int checkAnswer(int answerId);
 
     int getDifficulty(int qId);
+
+    void deleteQuestion(int qId);
+
 }

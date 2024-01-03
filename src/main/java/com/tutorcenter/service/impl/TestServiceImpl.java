@@ -150,4 +150,18 @@ public class TestServiceImpl implements TestService {
         return questionRepository.findById(qId).orElse(null).getDifficulty();
     }
 
+    @Override
+    public void deleteQuestion(int qId) {
+        Question question = getQuestionById(qId);
+        for (Answer a : getAllAnswersByQId(question)) {
+            answerRepository.delete(a);
+        }
+        questionRepository.delete(question);
+    }
+
+    @Override
+    public Question getQuestionById(int qId) {
+        return questionRepository.findById(qId).orElse(null);
+    }
+
 }

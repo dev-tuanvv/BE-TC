@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,7 +22,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.tutorcenter.common.Common;
 import com.tutorcenter.dto.ApiResponseDto;
+import com.tutorcenter.dto.question.AnswerManagerResDto;
 import com.tutorcenter.dto.question.AnswerResDto;
+import com.tutorcenter.dto.question.QuestionDetailManagerResDto;
+import com.tutorcenter.dto.question.QuestionManagerResDto;
 import com.tutorcenter.dto.question.QuestionResDto;
 import com.tutorcenter.dto.question.SubmitReqDto;
 import com.tutorcenter.model.Answer;
@@ -55,6 +59,80 @@ public class QuestionController {
     private TutorSubjectService tutorSubjectService;
     // @GetMapping("/")
     // public ApiResponseDto<List<QuestionDto>>
+
+    @GetMapping("/")
+    public ApiResponseDto<List<QuestionManagerResDto>> getAllQuestions() {
+
+        try {
+            List<QuestionManagerResDto> response = new ArrayList<>();
+            List<Question> questions = testService.getAllQuestion();
+            for (Question q : questions) {
+                QuestionManagerResDto dto = new QuestionManagerResDto();
+                dto.fromQuestion(q);
+                response.add(dto);
+            }
+            return ApiResponseDto.<List<QuestionManagerResDto>>builder().data(response).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<List<QuestionManagerResDto>>builder().responseCode("500").message(e.getMessage())
+                    .build();
+        }
+    }
+
+    @GetMapping("/{id}")
+    public ApiResponseDto<QuestionDetailManagerResDto> getQuestionById(@PathVariable int id) {
+        try {
+            QuestionDetailManagerResDto response = new QuestionDetailManagerResDto();
+            Question question = testService.getQuestionById(id);
+            response.fromQuestion(question);
+            List<Answer> answers = testService.getAllAnswersByQId(question);
+            List<AnswerManagerResDto> answerResDtos = new ArrayList<>();
+            for (Answer a : answers) {
+                AnswerManagerResDto answerResDto = new AnswerManagerResDto();
+                answerResDto.fromAnswer(a);
+                answerResDtos.add(answerResDto);
+            }
+            response.setAnswers(answerResDtos);
+
+            return ApiResponseDto.<QuestionDetailManagerResDto>builder().data(response).build();
+        } catch (Exception e) {
+            return ApiResponseDto.<QuestionDetailManagerResDto>builder().responseCode("500").message(e.getMessage())
+                    .build();
+        }
+    }
+
+    @PutMapping("/update")
+    public ApiResponseDto<String> updateQuestion(@RequestBody QuestionDetailManagerResDto dto) {
+        try {
+            Question question = new Question();
+            dto.toQuestion(question);
+            List<AnswerManagerResDto> answerResDtos = dto.getAnswers();
+            for (AnswerManagerResDto a : answerResDtos) {
+                Answer answer = new Answer();
+                a.toAnswer(answer);
+                answer.setQuestion(question);
+                testService.saveAnswer(answer);
+            }
+            question.setSubject(subjectService.getSubjectById(dto.getSubjectId()).orElse(null));
+            testService.saveQuestion(question);
+
+            return ApiResponseDto.<String>builder().data("Update question success").build();
+        } catch (Exception e) {
+            return ApiResponseDto.<String>builder().responseCode("500").message(e.getMessage())
+                    .build();
+        }
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ApiResponseDto<String> deleteQuestion(@PathVariable int id) {
+        try {
+            testService.deleteQuestion(id);
+
+            return ApiResponseDto.<String>builder().data("Delete question success").build();
+        } catch (Exception e) {
+            return ApiResponseDto.<String>builder().responseCode("500").message(e.getMessage())
+                    .build();
+        }
+    }
 
     @PostMapping("/import")
     public ApiResponseDto<String> importFromExcelToDB(@RequestParam("file") MultipartFile file) {
