@@ -202,7 +202,7 @@ public class TutorApplyController {
 
             }
             tutorApply.getClazz().setTutor(tutorApply.getTutor());
-            tutorApply.getClazz().setStatus(1);
+            tutorApply.getClazz().setStatus(2);
             tutorApplyService.save(tutorApply);
             clazzService.save(tutorApply.getClazz());
 
