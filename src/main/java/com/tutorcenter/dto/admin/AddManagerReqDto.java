@@ -3,9 +3,9 @@ package com.tutorcenter.dto.admin;
 import lombok.Data;
 
 @Data
-public class UpdateManagerReqDto {
-    private String fullname;
+public class AddManagerReqDto {
     private String email;
+    private String fullname;
     private String phone;
-    private int status;
+    private String password;
 }

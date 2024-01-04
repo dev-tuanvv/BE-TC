@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.constant.Role;
 import com.tutorcenter.dto.ApiResponseDto;
+import com.tutorcenter.dto.admin.AddManagerReqDto;
 import com.tutorcenter.dto.admin.ManagerResDto;
 import com.tutorcenter.dto.admin.MonthData;
 import com.tutorcenter.dto.admin.UpdateManagerReqDto;
@@ -150,8 +151,25 @@ public class AdminController {
                 model.setFullname(request.getFullname());
                 model.setEmail(request.getEmail());
                 model.setPhone(request.getPhone());
-                model.setPassword(request.getPassword());
                 model.setStatus(request.getStatus());
+                managerService.save(model);
+                return ApiResponseDto.builder().build();
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.builder().responseCode("500").message(e.getMessage()).build();
+        }
+    }
+    @PreAuthorize("hasAnyAuthority('admin:read')")
+    @PutMapping("/manager/update-pass/{id}")
+    public ApiResponseDto updatePasswordManagerById(@PathVariable int id,
+            @RequestBody String request) {
+        try {
+            Manager model = managerService.getManagerById(id).orElse(null);
+
+            if (model == null) {
+                return ApiResponseDto.builder().message("Not found").build();
+            } else {
+                model.setPassword(request);
                 managerService.save(model);
                 return ApiResponseDto.builder().build();
             }
@@ -162,15 +180,13 @@ public class AdminController {
 
     @PreAuthorize("hasAnyAuthority('admin:read')")
     @PostMapping("/manager")
-    public ApiResponseDto<Manager> addManager(@RequestBody UpdateManagerReqDto request) {
+    public ApiResponseDto<Manager> addManager(@RequestBody AddManagerReqDto request) {
         try {
             Manager model = new Manager();
             model.setFullname(request.getFullname());
             model.setEmail(request.getEmail());
             model.setPhone(request.getPhone());
             model.setPassword(request.getPassword());
-
-
             model.setRole(Role.MANAGER);
             model.setStatus(1);
             return ApiResponseDto.<Manager>builder().data(managerService.save(model)).build();
