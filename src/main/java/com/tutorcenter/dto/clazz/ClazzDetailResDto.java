@@ -51,6 +51,11 @@ public class ClazzDetailResDto {
     private String feedback;
 
     private int rating;
+    private int professionalSkill;
+    private int supportOt;
+    private int pedagogicalSkill;
+    private int workingStyle;
+    private int courseCover;
 
     public void fromClazz(Clazz clazz) {
         this.id = clazz.getId();
@@ -71,6 +76,11 @@ public class ClazzDetailResDto {
         if (clazz.getFeedback() != null) {
             this.feedback = clazz.getFeedback().getContent();
             this.rating = clazz.getFeedback().getRating();
+            this.professionalSkill = clazz.getFeedback().getProfessionalSkill();
+            this.supportOt = clazz.getFeedback().getSupportOT();
+            this.pedagogicalSkill = clazz.getFeedback().getPedagogicalSkill();
+            this.workingStyle = clazz.getFeedback().getWorkingStyle();
+            this.courseCover = clazz.getFeedback().getCourseCover();
         }
 
     }
