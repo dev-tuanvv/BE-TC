@@ -36,4 +36,9 @@ public class TutorServiceImpl implements TutorService {
         return tutorRepository.save(tutor);
     }
 
+    @Override
+    public List<Tutor> getTutorByStatus(int status) {
+        return tutorRepository.findByStatus(status);
+    }
+
 }

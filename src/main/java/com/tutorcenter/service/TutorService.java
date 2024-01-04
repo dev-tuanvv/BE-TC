@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.Tutor;
 
 @Service
@@ -17,4 +18,5 @@ public interface TutorService {
 
     Tutor save(Tutor tutor);
 
+    List<Tutor> getTutorByStatus(int status);
 }

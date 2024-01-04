@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.model.Clazz;
+import com.tutorcenter.model.Tutor;
 import com.tutorcenter.repository.ClazzRepository;
 import com.tutorcenter.service.ClazzService;
 
@@ -104,6 +105,11 @@ public class ClazzServiceImpl implements ClazzService {
                 list.add(c);
         }
         return list;
+    }
+
+    @Override
+    public int countNoClassByTutor(Tutor tutor) {
+        return clazzRepository.findByTutor(tutor).size();
     }
 
 }

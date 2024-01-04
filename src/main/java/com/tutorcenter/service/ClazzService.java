@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.model.Clazz;
+import com.tutorcenter.model.Tutor;
 
 @Service
 public interface ClazzService {
@@ -32,4 +33,7 @@ public interface ClazzService {
     List<Clazz> getClazzByDistrict(int dId);
 
     List<Clazz> getClazzByStatus(int status);
+
+    int countNoClassByTutor(Tutor tutor);
+
 }

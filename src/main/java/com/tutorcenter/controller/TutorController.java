@@ -24,6 +24,7 @@ import com.tutorcenter.dto.tutor.TutorResDto;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorSubject;
+import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.FeedbackService;
 import com.tutorcenter.service.SubjectService;
 import com.tutorcenter.service.TutorService;
@@ -40,6 +41,8 @@ public class TutorController {
   private SubjectService subjectService;
   @Autowired
   private FeedbackService feedbackService;
+  @Autowired
+  private ClazzService clazzService;
 
   @GetMapping("")
   public ApiResponseDto<List<TutorResDto>> getAllTutors() {
@@ -65,6 +68,40 @@ public class TutorController {
 
         dto.setSubjects(listSL);
         dto.setAvgRating(feedbackService.getAverageRatingByTutorId(tutor.getId()));
+        dto.setNoClass(clazzService.countNoClassByTutor(tutor));
+        response.add(dto);
+      }
+      return ApiResponseDto.<List<TutorResDto>>builder().data(response).build();
+    } catch (Exception e) {
+      return ApiResponseDto.<List<TutorResDto>>builder().responseCode("500").message(e.getMessage()).build();
+    }
+  }
+
+  @GetMapping("/verified")
+  public ApiResponseDto<List<TutorResDto>> getVerifiedTutors() {
+    try {
+
+      List<TutorResDto> response = new ArrayList<>();
+      List<Tutor> tutors = tutorService.getTutorByStatus(1);
+      for (Tutor tutor : tutors) {
+        TutorResDto dto = new TutorResDto();
+        dto.fromTutor(tutor);
+
+        // Tạo list SubjectLevel từ tutorId
+        List<Integer> listSId = tutorSubjectService
+            .getListSIdByTId(tutor.getId());
+        List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+        List<SubjectLevelResDto> listSL = new ArrayList<>();
+        for (Subject subject : subjects) {
+          SubjectLevelResDto sLDto = new SubjectLevelResDto();
+          sLDto.fromSubject(subject);
+          listSL.add(sLDto);
+        }
+
+        dto.setSubjects(listSL);
+        dto.setAvgRating(feedbackService.getAverageRatingByTutorId(tutor.getId()));
+        dto.setNoClass(clazzService.countNoClassByTutor(tutor));
         response.add(dto);
       }
       return ApiResponseDto.<List<TutorResDto>>builder().data(response).build();
@@ -96,6 +133,7 @@ public class TutorController {
 
         dto.setSubjects(listSL);
         dto.setAvgRating(feedbackService.getAverageRatingByTutorId(tutor.getId()));
+        dto.setNoClass(clazzService.countNoClassByTutor(tutor));
         response.add(dto);
       }
       // Create a comparator based on ratings
