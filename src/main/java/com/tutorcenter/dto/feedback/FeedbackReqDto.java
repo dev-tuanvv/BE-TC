@@ -10,12 +10,19 @@ import lombok.Data;
 public class FeedbackReqDto {
     private int clazzId;
     private int tutorId;
-    private int rating;
+    private int professionalSkill;
+    private int supportOt;
+    private int pedagogicalSkill;
+    private int workingStyle;
+    private int courseCover;
     private String content;
 
     public void toFeedback(Feedback feedback) {
-        feedback.setRating(this.rating);
-        feedback.setContent(this.content);
+        feedback.setProfessionalSkill(professionalSkill);
+        feedback.setSupportOT(supportOt);
+        feedback.setPedagogicalSkill(pedagogicalSkill);
+        feedback.setWorkingStyle(workingStyle);
+        feedback.setCourseCover(courseCover);
         feedback.setDateCreate(new Date(System.currentTimeMillis()));
         feedback.setDeleted(false);
         feedback.setStatus(0);
