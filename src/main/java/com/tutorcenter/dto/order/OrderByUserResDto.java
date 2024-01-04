@@ -39,7 +39,9 @@ public class OrderByUserResDto {
         this.districtName = order.getClazz().getRequest().getDistrict().getName();
         this.provinceName = order.getClazz().getRequest().getDistrict().getProvince().getName();
         this.gender = order.getClazz().getRequest().getGender();
-        this.nameTutor = order.getClazz().getTutor().getFullname();
+        if (order.getClazz().getTutor() != null) {
+            this.nameTutor = order.getClazz().getTutor().getFullname();
+        }
         this.time = order.getTimeCreate();
         this.amount = order.getAmount();
         this.type = order.getType();
