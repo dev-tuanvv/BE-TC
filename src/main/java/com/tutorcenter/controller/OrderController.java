@@ -90,6 +90,11 @@ public class OrderController {
                 order.setAmount(amount);
                 userWalletService.withdraw(clazz.getRequest().getParent().getId(), amount);
                 sysWalletService.deposit(amount);
+                if (clazz.getStatus() == 0) {
+                    clazz.setStatus(1);
+                    clazzService.save(clazz);
+                }
+
                 // noti cho phụ huynh
                 notificationService.add(order.getUser(),
                         "Đã đóng " + String.format("%,.2f", amount) + " cho lớp " + order.getClazz().getId()
