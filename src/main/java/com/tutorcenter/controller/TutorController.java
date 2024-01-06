@@ -160,14 +160,12 @@ public class TutorController {
       dto.fromTutor(tutor);
 
       // Tạo list SubjectLevel từ tutorId
-      List<Integer> listSId = tutorSubjectService
-          .getListSIdByTId(tutor.getId());
-      List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+      List<TutorSubject> listTutorSubjects = tutorSubjectService.getTutorSubjectsByTutorId(id);
 
       List<SubjectLevelResDto> listSL = new ArrayList<>();
-      for (Subject subject : subjects) {
+      for (TutorSubject subject : listTutorSubjects) {
         SubjectLevelResDto sLDto = new SubjectLevelResDto();
-        sLDto.fromSubject(subject);
+        sLDto.fromTutorSubject(subject);
         listSL.add(sLDto);
       }
       dto.setSubjects(listSL);
