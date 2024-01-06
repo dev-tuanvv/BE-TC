@@ -239,4 +239,17 @@ public class TutorController {
       return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
     }
   }
+
+  @PutMapping("/ban/{tId}")
+  public ApiResponseDto<Integer> ban(@PathVariable int tId) {
+    try {
+      Tutor tutor = tutorService.getTutorById(tId).orElse(null);
+
+      tutor.setStatus(3);// ban
+      tutorService.save(tutor);
+      return ApiResponseDto.<Integer>builder().data(tutor.getId()).build();
+    } catch (Exception e) {
+      return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
+    }
+  }
 }
