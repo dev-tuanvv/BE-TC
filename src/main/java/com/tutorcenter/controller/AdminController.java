@@ -31,8 +31,10 @@ import com.tutorcenter.service.ManagerService;
 import com.tutorcenter.service.OrderService;
 
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/api/admin")
 public class AdminController {
     private final PasswordEncoder passwordEncoder;
