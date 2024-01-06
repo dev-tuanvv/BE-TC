@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +35,7 @@ import lombok.Data;
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
+    private final PasswordEncoder passwordEncoder;
     @Autowired
     private OrderService orderService;
     @Autowired
@@ -159,6 +161,7 @@ public class AdminController {
             return ApiResponseDto.builder().responseCode("500").message(e.getMessage()).build();
         }
     }
+
     @PreAuthorize("hasAnyAuthority('admin:read')")
     @PutMapping("/manager/update-pass/{id}")
     public ApiResponseDto updatePasswordManagerById(@PathVariable int id,
@@ -169,7 +172,7 @@ public class AdminController {
             if (model == null) {
                 return ApiResponseDto.builder().message("Not found").build();
             } else {
-                model.setPassword(request);
+                model.setPassword(passwordEncoder.encode(request));
                 managerService.save(model);
                 return ApiResponseDto.builder().build();
             }
@@ -186,7 +189,7 @@ public class AdminController {
             model.setFullname(request.getFullname());
             model.setEmail(request.getEmail());
             model.setPhone(request.getPhone());
-            model.setPassword(request.getPassword());
+            model.setPassword(passwordEncoder.encode(request.getPassword()));
             model.setRole(Role.MANAGER);
             model.setStatus(1);
             return ApiResponseDto.<Manager>builder().data(managerService.save(model)).build();
