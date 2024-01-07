@@ -26,6 +26,7 @@ import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.model.TutorApply;
 import com.tutorcenter.service.ClazzService;
+import com.tutorcenter.service.FeedbackService;
 import com.tutorcenter.service.NotificationService;
 import com.tutorcenter.service.RequestSubjectService;
 import com.tutorcenter.service.SubjectService;
@@ -50,6 +51,8 @@ public class TutorApplyController {
     private RequestSubjectService requestSubjectService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private FeedbackService feedbackService;
 
     @GetMapping("/")
     public List<TutorApply> getAll() {
@@ -67,6 +70,7 @@ public class TutorApplyController {
             for (TutorApply ta : taList) {
                 ListTutorApplyResDto dto = new ListTutorApplyResDto();
                 dto.fromTutorApply(ta);
+                dto.setAvgRating(feedbackService.getAverageRatingByTutorId(ta.getTutor().getId()));
                 // Tạo list SubjectLevel từ tutorId
                 List<Integer> listSId = tutorSubjectService
                         .getListSIdByTId(ta.getTutor().getId());

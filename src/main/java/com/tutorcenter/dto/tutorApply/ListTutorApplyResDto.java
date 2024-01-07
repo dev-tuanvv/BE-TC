@@ -17,6 +17,7 @@ public class ListTutorApplyResDto {
     private String tutorUniversity;
     private List<SubjectLevelResDto> tutorSubjects;
     private String tutorAddress;
+    private float avgRating;
 
     public void fromTutorApply(TutorApply tutorApply) {
         this.id = tutorApply.getId();
