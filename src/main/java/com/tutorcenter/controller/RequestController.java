@@ -32,6 +32,7 @@ import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Task;
 import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.DistrictService;
+import com.tutorcenter.service.EmailService;
 import com.tutorcenter.service.ManagerService;
 import com.tutorcenter.service.NotificationService;
 import com.tutorcenter.service.ParentService;
@@ -62,6 +63,8 @@ public class RequestController {
     private TaskService taskService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private EmailService emailService;
 
     @GetMapping("")
     public ApiResponseDto<List<RequestResDto>> getListRequest() {
@@ -220,10 +223,9 @@ public class RequestController {
             Request request = new Request();
             // TODO: lay Id tu Session
             createRequestDto.toRequest(request);
-            // Manager manager =
-            // managerService.getManagerById(taskService.findBestSuitManagerId()).orElse(null);
+            Manager manager = managerService.getManagerById(taskService.findBestSuitManagerId()).orElse(null);
             // Manager manager = managerService.getManagerById(3).orElse(null);
-            // request.setManager(manager);
+            request.setManager(manager);
             request.setParent(parentService.getParentById(Common.getCurrentUserId()).orElse(null));
             District district = districtService.getDistrictById(createRequestDto.getDistrictId()).orElse(null);
             if (district == null) {
@@ -234,7 +236,7 @@ public class RequestController {
             requestSubjectService.updateByRequestId(response.getId(), createRequestDto.getListSubjectId());
 
             Task task = new Task();
-            // task.setManager(manager);
+            task.setManager(manager);
             task.setName("Request");
             task.setType(1);
             task.setStatus(0);
@@ -242,6 +244,7 @@ public class RequestController {
             task.setRequestId(response.getId());
             taskService.save(task);
             notificationService.add(request.getParent(), "Tạo yêu cầu tìm gia sư thành công");
+            emailService.sendEmail(manager.getEmail(), "Task mới đã được assign", "Bạn đã được assign các task: "+ task.getId());
             return ApiResponseDto.<Integer>builder().message(null).data(response.getId()).build();
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();

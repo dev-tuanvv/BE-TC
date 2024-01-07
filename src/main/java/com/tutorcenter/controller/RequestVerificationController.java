@@ -21,6 +21,7 @@ import com.tutorcenter.dto.requestverification.RequestVerificationReqDto;
 import com.tutorcenter.dto.requestverification.RequestVerificationResDto;
 import com.tutorcenter.dto.requestverification.UpdateRequestVerificationResDto;
 import com.tutorcenter.dto.subject.SubjectLevelResDto;
+import com.tutorcenter.model.Manager;
 import com.tutorcenter.model.RequestVerification;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Task;
@@ -52,6 +53,8 @@ public class RequestVerificationController {
     private EmailService emailService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private ManagerService managerService;
 
     @GetMapping("/{id}")
     public ApiResponseDto<RequestVerificationResDto> getRVById(@PathVariable int id) {
@@ -163,7 +166,8 @@ public class RequestVerificationController {
             tutorService.save(tutor);
 
             Task task = new Task();
-            // task.setManager(managerService.getManagerById(taskService.findBestSuitManagerId()).get());
+            Manager manager = managerService.getManagerById(taskService.findBestSuitManagerId()).orElse(null);
+            task.setManager(manager);
             // task.setManager(managerService.getManagerById(3).orElse(null));
             task.setName("VerifyRequest");
             task.setType(2);
@@ -172,7 +176,8 @@ public class RequestVerificationController {
             task.setDateCreate(new Date(System.currentTimeMillis()));
             taskService.save(task);
             notificationService.add(tutor, "Gửi yêu cầu xác thực thông tin cá nhân thành công");
-
+            emailService.sendEmail(manager.getEmail(), "Task mới đã được assign",
+                    "Bạn đã được assign các task: " + task.getId());
             return ApiResponseDto.<Integer>builder().data(rvId).build();
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
