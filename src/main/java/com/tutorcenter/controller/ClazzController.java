@@ -29,6 +29,7 @@ import com.tutorcenter.dto.subject.SubjectLevelResDto;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.Request;
 import com.tutorcenter.model.Subject;
+import com.tutorcenter.model.Tutor;
 import com.tutorcenter.service.AttendanceService;
 import com.tutorcenter.service.ClazzService;
 import com.tutorcenter.service.FeedbackService;
@@ -39,6 +40,7 @@ import com.tutorcenter.service.RequestSubjectService;
 import com.tutorcenter.service.SubjectService;
 import com.tutorcenter.service.TutorApplyService;
 import com.tutorcenter.service.TutorService;
+import com.tutorcenter.service.TutorSubjectService;
 
 @RestController
 @RequestMapping("/api/clazz")
@@ -64,6 +66,8 @@ public class ClazzController {
     SubjectService subjectService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private TutorSubjectService tutorSubjectService;
 
     @GetMapping("")
     public ApiResponseDto<List<ListClazzResDto>> getAllClazzs() {
@@ -153,6 +157,50 @@ public class ClazzController {
                     }
                 }
 
+            }
+        } catch (Exception e) {
+            return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("500").message(e.getMessage()).build();
+        }
+        return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
+    }
+
+    @GetMapping("/recommended")
+    public ApiResponseDto<List<ListClazzResDto>> getRecommendedClazz() {
+        List<ListClazzResDto> response = new ArrayList<>();
+        try {
+            Tutor tutor = tutorService.getTutorById(Common.getCurrentUserId()).orElse(null);
+            // get clazz from same district
+            List<Clazz> clazzs = clazzService.findByDistrict(tutor.getDistrict());
+            // get clazz has same subject
+            // get list subjectId of current tutor
+            List<Integer> tListSId = tutorSubjectService.getListSIdByTId(tutor.getId());
+
+            for (int s : tListSId) {
+                for (Clazz c : clazzs) {
+                    List<Integer> listSId = requestSubjectService
+                            .getListSIdByRId(c.getRequest().getId());
+
+                    for (int i : listSId) {
+                        if (i == s) {
+                            // tạo subjectDto
+                            ListClazzResDto dto = new ListClazzResDto();
+                            dto.fromClazz(c);
+                            // tạo SubjectLevel từ requestId
+                            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+
+                            List<SubjectLevelResDto> listSL = new ArrayList<>();
+                            for (Subject subject : subjects) {
+                                SubjectLevelResDto sLDto = new SubjectLevelResDto();
+                                sLDto.fromSubject(subject);
+                                listSL.add(sLDto);
+                            }
+                            // set list SubjectLevel
+                            dto.setSubjects(listSL);
+                            response.add(dto);
+                        }
+                    }
+
+                }
             }
         } catch (Exception e) {
             return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("500").message(e.getMessage()).build();

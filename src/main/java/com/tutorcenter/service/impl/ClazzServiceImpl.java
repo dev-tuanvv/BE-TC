@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.model.Clazz;
+import com.tutorcenter.model.District;
 import com.tutorcenter.model.Tutor;
 import com.tutorcenter.repository.ClazzRepository;
 import com.tutorcenter.service.ClazzService;
@@ -110,6 +111,11 @@ public class ClazzServiceImpl implements ClazzService {
     @Override
     public int countNoClassByTutor(Tutor tutor) {
         return clazzRepository.findByTutor(tutor).size();
+    }
+
+    @Override
+    public List<Clazz> findByDistrict(District district) {
+        return clazzRepository.findAll().stream().filter(c -> c.getRequest().getDistrict().equals(district)).toList();
     }
 
 }

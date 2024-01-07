@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.model.Clazz;
+import com.tutorcenter.model.District;
 import com.tutorcenter.model.Tutor;
 
 @Service
@@ -36,4 +37,5 @@ public interface ClazzService {
 
     int countNoClassByTutor(Tutor tutor);
 
+    List<Clazz> findByDistrict(District district);
 }
