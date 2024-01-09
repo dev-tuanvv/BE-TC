@@ -195,7 +195,7 @@ public class QuestionController {
         try {
             // check tutor id
             Tutor tutor = tutorService.getTutorById(Common.getCurrentUserId()).orElse(null);
-            if (tutor == null || tutor.getStatus() == 0) {
+            if (tutor == null) {
                 return ApiResponseDto.<Integer>builder().responseCode("500")
                         .message("Bạn chưa đủ điều kiện làm bài test này")
                         .build();
