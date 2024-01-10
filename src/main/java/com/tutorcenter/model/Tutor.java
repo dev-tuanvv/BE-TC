@@ -42,4 +42,6 @@ public class Tutor extends User {
     private String area;
     @Column
     private String tutorLevel;
+    @Column
+    private boolean isPremium;
 }

@@ -1,9 +1,7 @@
 package com.tutorcenter.model;
 
 import java.io.Serializable;
-import java.sql.Date;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -15,8 +13,8 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "tblTutorSubject")
-public class TutorSubject implements Serializable {
+@Table(name = "tblTutorDistrict")
+public class TutorDistrict implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -24,14 +22,6 @@ public class TutorSubject implements Serializable {
     @JoinColumn(name = "tutorId")
     private Tutor tutor;
     @ManyToOne
-    @JoinColumn(name = "subjectId")
-    private Subject subject;
-    @Column
-    private int latestGrade;
-    @Column
-    private Date latestDate;
-    @Column
-    private int times;
-    @Column
-    private boolean isHidden;
+    @JoinColumn(name = "districtId")
+    private District district;
 }
