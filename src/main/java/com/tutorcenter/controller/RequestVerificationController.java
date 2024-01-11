@@ -26,6 +26,7 @@ import com.tutorcenter.model.RequestVerification;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Task;
 import com.tutorcenter.model.Tutor;
+import com.tutorcenter.model.TutorSubject;
 import com.tutorcenter.service.EmailService;
 import com.tutorcenter.service.ManagerService;
 import com.tutorcenter.service.NotificationService;
@@ -64,14 +65,12 @@ public class RequestVerificationController {
             RequestVerification requestVerification = requestVerificationService.getRVById(id).orElse(null);
             dto.fromRequestVerification(requestVerification);
 
-            List<Integer> listSId = tutorSubjectService
-                    .getListSIdByTId(dto.getTutorId());
-            List<Subject> subjects = subjectService.getSubjectsByListId(listSId);
+            List<TutorSubject> tss = tutorSubjectService.getTutorSubjectsByTutorId(dto.getTutorId());
 
             List<SubjectLevelResDto> listSL = new ArrayList<>();
-            for (Subject subject : subjects) {
+            for (TutorSubject ts : tss) {
                 SubjectLevelResDto sLDto = new SubjectLevelResDto();
-                sLDto.fromSubject(subject);
+                sLDto.fromTutorSubject(ts);
                 listSL.add(sLDto);
             }
             dto.setSubjects(listSL);
