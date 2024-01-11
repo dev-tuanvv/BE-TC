@@ -126,9 +126,9 @@ public class ClazzServiceImpl implements ClazzService {
         List<Clazz> response = new ArrayList<>();
         List<TutorDistrict> tds = tutorDistrictRepository.findByTutor(tutor);
         for (TutorDistrict td : tds) {
-            for (Clazz c : clazzRepository.findAll().stream()
-                    .filter(c -> c.getRequest().getDistrict().getId() == td.getDistrict().getId()).toList()) {
-                response.add(c);
+            for (Clazz c : clazzRepository.findAll()) {
+                if (c.getRequest().getDistrict().getId() == td.getDistrict().getId())
+                    response.add(c);
             }
         }
         return response;

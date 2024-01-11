@@ -173,14 +173,15 @@ public class ClazzController {
             List<Clazz> clazzs = clazzService.findByTutorDistrict(tutor);
             // get clazz has same subject
             // get list subjectId of current tutor
-            List<Integer> tListSId = tutorSubjectService.getListSIdByTId(tutor.getId());
+            List<Integer> tss = tutorSubjectService.getListSIdByTId(tutor.getId());
 
-            for (int s : tListSId) {
-                for (Clazz c : clazzs) {
-                    List<Integer> listSId = requestSubjectService
-                            .getListSIdByRId(c.getRequest().getId());
-
-                    for (int i : listSId) {
+            for (Clazz c : clazzs) {
+                List<Integer> listSId = requestSubjectService
+                        .getListSIdByRId(c.getRequest().getId());
+                // for cho subject của class
+                for (int i : listSId) {
+                    // for cho subject của tutor
+                    for (int s : tss) {
                         if (i == s) {
                             // tạo subjectDto
                             ListClazzResDto dto = new ListClazzResDto();
@@ -205,7 +206,7 @@ public class ClazzController {
         } catch (Exception e) {
             return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("500").message(e.getMessage()).build();
         }
-        return ApiResponseDto.<List<ListClazzResDto>>builder().data(response).build();
+        return ApiResponseDto.<List<ListClazzResDto>>builder().data(response.stream().distinct().toList()).build();
     }
 
     @GetMapping("/level/{lId}")
