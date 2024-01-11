@@ -153,8 +153,10 @@ public class RequestVerificationController {
                         .message("Đã tồn tại RequestVerification với TutorId: " + tId + " ở trạng thái đang chờ duyệt")
                         .build();
             }
+            Manager manager = managerService.getManagerById(taskService.findBestSuitManagerId()).orElse(null);
+
             requestVerification.setTutor(tutorService.getTutorById(tId).orElse(null));
-            requestVerification.setManager(null);
+            requestVerification.setManager(manager);
             requestVerification.setStatus(0);
             requestVerification.setRejectReason(null);
             requestVerification.setDateCreate(new Date(System.currentTimeMillis()));
@@ -166,7 +168,6 @@ public class RequestVerificationController {
             tutorService.save(tutor);
 
             Task task = new Task();
-            Manager manager = managerService.getManagerById(taskService.findBestSuitManagerId()).orElse(null);
             task.setManager(manager);
             // task.setManager(managerService.getManagerById(3).orElse(null));
             task.setName("VerifyRequest");
