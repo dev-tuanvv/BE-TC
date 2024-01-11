@@ -36,6 +36,7 @@ public class RegisterTutorReqDto {
     private String imgIdFront;
     private String imdIdBack;
     private List<Integer> subjects;
+    private List<Integer> areas;
 
     public void toTutor(Tutor tutor) {
         tutor.setEmail(this.email);

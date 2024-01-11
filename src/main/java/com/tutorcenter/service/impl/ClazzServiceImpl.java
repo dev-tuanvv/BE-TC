@@ -13,14 +13,22 @@ import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.model.Clazz;
 import com.tutorcenter.model.District;
 import com.tutorcenter.model.Tutor;
+import com.tutorcenter.model.TutorDistrict;
 import com.tutorcenter.repository.ClazzRepository;
+import com.tutorcenter.repository.TutorDistrictRepository;
 import com.tutorcenter.service.ClazzService;
+import com.tutorcenter.service.TutorService;
+import com.tutorcenter.service.TutorSubjectService;
 
 @Component
 public class ClazzServiceImpl implements ClazzService {
 
     @Autowired
     ClazzRepository clazzRepository;
+    @Autowired
+    private TutorService tutorService;
+    @Autowired
+    TutorDistrictRepository tutorDistrictRepository;
 
     @Override
     public List<Clazz> findAll() {
@@ -114,8 +122,16 @@ public class ClazzServiceImpl implements ClazzService {
     }
 
     @Override
-    public List<Clazz> findByDistrict(District district) {
-        return clazzRepository.findAll().stream().filter(c -> c.getRequest().getDistrict().equals(district)).toList();
+    public List<Clazz> findByTutorDistrict(Tutor tutor) {
+        List<Clazz> response = new ArrayList<>();
+        List<TutorDistrict> tds = tutorDistrictRepository.findByTutor(tutor);
+        for (TutorDistrict td : tds) {
+            for (Clazz c : clazzRepository.findAll().stream()
+                    .filter(c -> c.getRequest().getDistrict().getId() == td.getDistrict().getId()).toList()) {
+                response.add(c);
+            }
+        }
+        return response;
     }
 
 }

@@ -37,5 +37,5 @@ public interface ClazzService {
 
     int countNoClassByTutor(Tutor tutor);
 
-    List<Clazz> findByDistrict(District district);
+    List<Clazz> findByTutorDistrict(Tutor tutor);
 }

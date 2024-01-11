@@ -11,6 +11,7 @@ import lombok.Data;
 public class TutorDetailResDto {
     private String tutorName;
     private List<SubjectLevelResDto> subjects;
+    private String areas;
     private String gender;
     private String districtName;
     private String provinceName;

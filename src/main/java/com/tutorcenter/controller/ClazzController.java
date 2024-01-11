@@ -170,7 +170,7 @@ public class ClazzController {
         try {
             Tutor tutor = tutorService.getTutorById(Common.getCurrentUserId()).orElse(null);
             // get clazz from same district
-            List<Clazz> clazzs = clazzService.findByDistrict(tutor.getDistrict());
+            List<Clazz> clazzs = clazzService.findByTutorDistrict(tutor);
             // get clazz has same subject
             // get list subjectId of current tutor
             List<Integer> tListSId = tutorSubjectService.getListSIdByTId(tutor.getId());

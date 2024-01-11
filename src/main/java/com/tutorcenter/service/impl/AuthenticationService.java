@@ -24,10 +24,12 @@ import com.tutorcenter.model.Parent;
 import com.tutorcenter.model.Subject;
 import com.tutorcenter.model.Token;
 import com.tutorcenter.model.Tutor;
+import com.tutorcenter.model.TutorDistrict;
 import com.tutorcenter.model.TutorSubject;
 import com.tutorcenter.model.User;
 import com.tutorcenter.repository.ParentRepository;
 import com.tutorcenter.repository.TokenRepository;
+import com.tutorcenter.repository.TutorDistrictRepository;
 import com.tutorcenter.repository.TutorRepository;
 import com.tutorcenter.repository.UserRepository;
 import com.tutorcenter.service.DistrictService;
@@ -62,6 +64,8 @@ public class AuthenticationService {
     private SubjectService subjectService;
     @Autowired
     private TutorSubjectService tutorSubjectService;
+    @Autowired
+    TutorDistrictRepository tutorDistrictRepository;
 
     public AuthenticationResDto register(RegisterReqDto request) {
         var user = User.builder()
@@ -111,6 +115,16 @@ public class AuthenticationService {
                 tutorSubject.setTutor(tutor);
                 tutorSubjectService.save(tutorSubject);
             }
+
+            // create list tutor district
+
+            for (int i : request.getAreas()) {
+                TutorDistrict td = new TutorDistrict();
+                td.setDistrict(districtService.getDistrictById(i).orElse(null));
+                td.setTutor(tutor);
+                tutorDistrictRepository.save(td);
+            }
+
             notificationService.add(tutor,
                     "Chào mừng gia sư " + tutor.getFullname()
                             + " đến hệ thống Tutor Center, hãy bắt đầu với cập nhật thông tin cá nhân và tạo yêu cầu xác minh.");
