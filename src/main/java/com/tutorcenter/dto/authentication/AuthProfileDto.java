@@ -11,11 +11,13 @@ public class AuthProfileDto {
     private String fullName;
     private Role role;
     private String imgAvatar;
+    private String email;
 
     public void fromUser(User user) {
         this.id = user.getId();
         this.fullName = user.getFullname();
         this.role = user.getRole();
+        this.email = user.getEmail();
 
     }
 }
