@@ -351,7 +351,7 @@ public class ClazzController {
             int mId = Common.getCurrentUserId();
             List<Clazz> clazzs = clazzService.getClazzByManagerId(mId);
             if (clazzs.isEmpty()) {
-                return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("200")
+                return ApiResponseDto.<List<ListClazzResDto>>builder().responseCode("200").data(response)
                         .message("Manager hiện không có class được assign").build();
             }
             for (Clazz c : clazzs) {
