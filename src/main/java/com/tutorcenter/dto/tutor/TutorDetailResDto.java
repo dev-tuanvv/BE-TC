@@ -11,6 +11,8 @@ import lombok.Data;
 public class TutorDetailResDto {
     private String tutorName;
     private List<SubjectLevelResDto> subjects;
+    private String phone;
+    private String address;
     private String areas;
     private String gender;
     private String districtName;
@@ -25,6 +27,8 @@ public class TutorDetailResDto {
     public void fromTutor(Tutor tutor) {
         this.tutorName = tutor.getFullname();
         this.gender = tutor.getGender();
+        this.phone = tutor.getPhone();
+        this.address = tutor.getAddress();
         this.districtName = tutor.getDistrict().getName();
         this.provinceName = tutor.getDistrict().getProvince().getName();
         this.university = tutor.getUniversity();
