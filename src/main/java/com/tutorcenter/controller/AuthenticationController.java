@@ -78,7 +78,7 @@ public class AuthenticationController {
         return ApiResponseDto.<String>builder().data(email).build();
     }
 
-    @PostMapping("/sendCode")
+    @PostMapping("/send-code")
     public ApiResponseDto<String> sendCode(
             @RequestBody int code, @RequestBody String email) {
         emailService.sendEmail(email, "Mã xác thực tạo tài khoản tại TutorCenter",
