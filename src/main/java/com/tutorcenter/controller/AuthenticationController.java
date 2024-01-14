@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tutorcenter.dto.ApiResponseDto;
@@ -80,7 +81,7 @@ public class AuthenticationController {
 
     @PostMapping("/send-code")
     public ApiResponseDto<String> sendCode(
-            @RequestBody int code, @RequestBody String email) {
+            @RequestParam int code, @RequestParam String email) {
         emailService.sendEmail(email, "Mã xác thực tạo tài khoản tại TutorCenter",
                 "Mã xác thực của bạn là: " + code);
         return ApiResponseDto.<String>builder().data(email).build();
