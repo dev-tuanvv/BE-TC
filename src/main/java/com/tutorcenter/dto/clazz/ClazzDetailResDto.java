@@ -57,6 +57,9 @@ public class ClazzDetailResDto {
     private int workingStyle;
     private int courseCover;
 
+    private int tutorId;
+    private String tutorFullName;
+
     public void fromClazz(Clazz clazz) {
         this.id = clazz.getId();
         this.parentName = clazz.getRequest().getParent().getFullname();
@@ -81,6 +84,10 @@ public class ClazzDetailResDto {
             this.pedagogicalSkill = clazz.getFeedback().getPedagogicalSkill();
             this.workingStyle = clazz.getFeedback().getWorkingStyle();
             this.courseCover = clazz.getFeedback().getCourseCover();
+        }
+        if (clazz.getTutor() != null) {
+            this.tutorFullName = clazz.getTutor().getFullname();
+            this.tutorId = clazz.getTutor().getId();
         }
 
     }

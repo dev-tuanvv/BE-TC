@@ -53,6 +53,7 @@ public class ListClazzResDto {
     public void fromTutor(Tutor tutor) {
         this.tutor.setId(tutor.getId());
         this.tutor.setName(tutor.getFullname());
+        this.tutor.setPhone(tutor.getPhone());
         this.tutor.setUniversity(tutor.getUniversity());
         this.tutor.setAddress(tutor.getAddress());
         this.tutor.setDistrictName(tutor.getDistrict().getName());
@@ -64,6 +65,7 @@ public class ListClazzResDto {
 class TutorDto {
     private int id;
     private String name;
+    private String phone;
     private String university;
     private String address;
     private String districtName;
