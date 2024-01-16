@@ -82,7 +82,10 @@ public class OrderController {
             // 0 <= revenue <= 1
             float revenue = Float.parseFloat(systemVariableService.getSysVarByVarKey("revenue").getValue());
             // lấy tuition từ request
-            float amount = clazz.getRequest().getTuition();
+            float amount = clazz.getRequest().getTuition()*revenue;
+            if (amount < 200000){
+                amount = 200000;
+            }
 
             if (noOrder == 0) { // chưa có order tạo trong clazz, phụ huynh đóng tiền cho system
                 order.setUser(userService.getUserById(clazz.getRequest().getParent().getId()).orElse(null));
@@ -103,34 +106,36 @@ public class OrderController {
                 notificationService.add(order.getClazz().getRequest().getManager(),
                         "Đã nhận " + String.format("%,.2f", amount) + " phí tạo lớp "
                                 + order.getClazz().getId() + " từ phụ huynh " + order.getUser().getFullname());
-            } else if (noOrder == 1) { // đã có order phụ huynh đóng tiền, system trả tiền dạy cho gia sư
-                float amountRevenue = amount * revenue;
-                amount = amount * (1 - revenue);
-                order.setUser(userService.getUserById(clazz.getTutor().getId()).orElse(null));
-                order.setType(2);
-                order.setAmount(amount);
-                if (amount > sysWalletService.getBalance())
-                    return ApiResponseDto.<CreateOrderResDto>builder()
-                            .message("Số dư trong tài khoản hệ thống không đủ.")
-                            .build();
-                sysWalletService.withdraw(amount);
-                userWalletService.deposit(clazz.getTutor().getId(), amount);
-                // noti cho gia sư
-                notificationService.add(order.getUser(),
-                        "Đã nhận " + String.format("%,.2f", amount) + " học phí sau khi trả "
-                                + String.format("%,.2f", amountRevenue)
-                                + " phí cho hệ thống sau khi dạy lớp " + order.getClazz().getId()
-                                + " thành công");
-                // noti cho manager
-                notificationService.add(order.getClazz().getRequest().getManager(),
-                        "Đã chuyển " + String.format("%,.2f", amount) + " tiền cho gia sư "
-                                + order.getUser().getFullname() + " từ dạy lớp " + order.getClazz().getId());
-                notificationService.add(order.getClazz().getRequest().getManager(),
-                        "Hệ thống đã thu được " + String.format("%,.2f", amountRevenue) + " tiền từ lớp "
-                                + order.getClazz().getId());
-            } else {
+            } 
+            // else if (noOrder == 1) { // đã có order phụ huynh đóng tiền, system trả tiền dạy cho gia sư
+            //     float amountRevenue = amount * revenue;
+            //     amount = amount * (1 - revenue);
+            //     order.setUser(userService.getUserById(clazz.getTutor().getId()).orElse(null));
+            //     order.setType(2);
+            //     order.setAmount(amount);
+            //     if (amount > sysWalletService.getBalance())
+            //         return ApiResponseDto.<CreateOrderResDto>builder()
+            //                 .message("Số dư trong tài khoản hệ thống không đủ.")
+            //                 .build();
+            //     sysWalletService.withdraw(amount);
+            //     userWalletService.deposit(clazz.getTutor().getId(), amount);
+            //     // noti cho gia sư
+            //     notificationService.add(order.getUser(),
+            //             "Đã nhận " + String.format("%,.2f", amount) + " học phí sau khi trả "
+            //                     + String.format("%,.2f", amountRevenue)
+            //                     + " phí cho hệ thống sau khi dạy lớp " + order.getClazz().getId()
+            //                     + " thành công");
+            //     // noti cho manager
+            //     notificationService.add(order.getClazz().getRequest().getManager(),
+            //             "Đã chuyển " + String.format("%,.2f", amount) + " tiền cho gia sư "
+            //                     + order.getUser().getFullname() + " từ dạy lớp " + order.getClazz().getId());
+            //     notificationService.add(order.getClazz().getRequest().getManager(),
+            //             "Hệ thống đã thu được " + String.format("%,.2f", amountRevenue) + " tiền từ lớp "
+            //                     + order.getClazz().getId());
+            // } 
+            else {
                 return ApiResponseDto.<CreateOrderResDto>builder().responseCode("500")
-                        .message("Lớp đã hoàn thành 2 order, không thể tạo thêm").build();
+                        .message("Lớp đã hoàn thành order, không thể tạo thêm").build();
             }
             dto.fromOrder(orderService.save(order));
         } catch (Exception e) {
