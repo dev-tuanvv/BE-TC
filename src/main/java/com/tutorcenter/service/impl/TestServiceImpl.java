@@ -118,9 +118,15 @@ public class TestServiceImpl implements TestService {
         try (Workbook workbook = WorkbookFactory.create(new FileInputStream(new File(filePath)))) {
             Sheet sheet = workbook.getSheetAt(0);
             DataFormatter formatter = new DataFormatter();
-            CellStyle style = workbook.createCellStyle();
-            style.setFillForegroundColor(IndexedColors.RED.index);
-            style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+            CellStyle redCellStyle = workbook.createCellStyle();
+            redCellStyle.setFillForegroundColor(IndexedColors.RED.index);
+            redCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+            CellStyle greenCellStyle = workbook.createCellStyle();
+            greenCellStyle.setFillForegroundColor(IndexedColors.LIGHT_GREEN.index);
+            greenCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
             Iterator<Row> rowIterator = sheet.iterator();
             while (rowIterator.hasNext()) {
                 Row row = rowIterator.next();
@@ -152,9 +158,7 @@ public class TestServiceImpl implements TestService {
                     sjId = Integer.parseInt(subjectId);
                 } catch (Exception e) {
                     rs.setCellValue("Invalid subjectId type");
-                    style.setFillForegroundColor(IndexedColors.RED.index);
-                    style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-                    rs.setCellStyle(style);
+                    rs.setCellStyle(redCellStyle);
                     continue;
                 }
                 int difficultInt = -1;
@@ -162,39 +166,31 @@ public class TestServiceImpl implements TestService {
                     difficultInt = Integer.parseInt(difficult);
                     if (difficultInt < 1 || difficultInt > 3) {
                         rs.setCellValue("Out of range difficult");
-                        style.setFillForegroundColor(IndexedColors.RED.index);
-                        style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-                        rs.setCellStyle(style);
+                        rs.setCellStyle(redCellStyle);
                         continue;
                     }
                 } catch (Exception e) {
                     rs.setCellValue("Invalid difficulty type");
-                    style.setFillForegroundColor(IndexedColors.RED.index);
-                    style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-                    rs.setCellStyle(style);
+                    rs.setCellStyle(redCellStyle);
                     continue;
                 }
 
                 Subject subject = subjectRepository.findById(sjId).orElse(null);
                 if (subject == null) {
                     rs.setCellValue("Wrong subject Id");
-                    style.setFillForegroundColor(IndexedColors.RED.index);
-                    style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-                    rs.setCellStyle(style);
+                    rs.setCellStyle(redCellStyle);
                     continue;
                 }
                 List<String> questionContentList = questionRepository.findAll().stream().map(q -> q.getContent())
                         .toList();
                 if (questionContentList.contains(questionContent)) {
-                    style.setFillForegroundColor(IndexedColors.RED.index);
-                    style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-
                     rs.setCellValue("Duplicated question");
-                    rs.setCellStyle(style);
+                    rs.setCellStyle(redCellStyle);
                     continue;
                 }
                 Question question = new Question();
                 question.setSubject(subject);
+                question.setContent(questionContent);
                 question.setDifficulty(difficultInt);
                 question.setDateCreate(new Date(System.currentTimeMillis()));
                 questionRepository.save(question);
@@ -211,10 +207,8 @@ public class TestServiceImpl implements TestService {
                     answerList.add(answer);
                 }
                 answerRepository.saveAll(answerList);
-                style.setFillForegroundColor(IndexedColors.LIGHT_GREEN.index);
-                style.setFillPattern(FillPatternType.SOLID_FOREGROUND);
-                rs.setCellValue("Success");
-                rs.setCellStyle(style);
+                rs.setCellValue("Success:" + question.getId());
+                rs.setCellStyle(greenCellStyle);
             }
             ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             workbook.write(outputStream);
