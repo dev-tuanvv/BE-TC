@@ -172,6 +172,7 @@ public class QuestionController {
             .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
                     .body(rs);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.ok()
                     .body(null);
         }
