@@ -11,6 +11,9 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -150,6 +153,28 @@ public class QuestionController {
             return ApiResponseDto.<String>builder().responseCode("500").message(e.getMessage()).build();
         }
         return ApiResponseDto.<String>builder().data("Data imported successfully").build();
+    }
+
+    @PostMapping("/importV2")
+    public ResponseEntity<byte[]> importFromExcelToDBV2(@RequestParam("file") MultipartFile file) {
+        Path pathFolder = Paths.get(UPLOAD_DIRECTORY);
+
+        try {
+            if (!Files.exists(pathFolder)) {
+                Files.createDirectories(pathFolder);
+            }
+            String filePath = pathFolder.resolve(UUID.randomUUID() + file.getOriginalFilename()) + "";
+
+            file.transferTo(new File(filePath));
+            byte[] rs = testService.readExcelFileV2(filePath);
+            return ResponseEntity.ok()
+            .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "rs.xlsx")
+            .contentType(MediaType.parseMediaType("application/vnd.ms-excel"))
+                    .body(rs);
+        } catch (Exception e) {
+            return ResponseEntity.ok()
+                    .body(null);
+        }
     }
 
     @GetMapping("/exam/{sId}")

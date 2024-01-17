@@ -1,5 +1,6 @@
 package com.tutorcenter.service.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Date;
@@ -11,11 +12,15 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -110,6 +115,97 @@ public class TestServiceImpl implements TestService {
         }
 
         return true;
+    }
+
+    @Override
+    public byte[] readExcelFileV2(String filePath) {
+        try (Workbook workbook = WorkbookFactory.create(new FileInputStream(new File(filePath)))) {
+            Sheet sheet = workbook.getSheetAt(0);
+            CellStyle style = workbook.createCellStyle();
+            style.setFillBackgroundColor(IndexedColors.RED.index);
+            Iterator<Row> rowIterator = sheet.iterator();
+            while (rowIterator.hasNext()) {
+                Row row = rowIterator.next();
+                if (row.getRowNum() == 0) {
+                    Cell rs = row.createCell(6);
+                    rs.setCellValue("Result");
+                    continue; // Skip header row
+                }
+                String subjectId = row.getCell(0).getStringCellValue();
+                String difficult = row.getCell(1).getStringCellValue();
+                String questionContent = row.getCell(2).getStringCellValue();
+                String correctAnswer = row.getCell(3).getStringCellValue();
+                String wrongAnswer1 = row.getCell(4).getStringCellValue();
+                String wrongAnswer2 = row.getCell(5).getStringCellValue();
+                String wrongAnswer3 = row.getCell(6).getStringCellValue();
+                Cell rs = row.createCell(7);
+                // get question data (0: subjectId, 1: difficulty, 2: content)
+                int sjId = -1;
+                try {
+                    sjId = Integer.parseInt(subjectId);
+                } catch (Exception e) {
+                    rs.setCellValue("Invalid subjectId type");
+                    style.setFillBackgroundColor(IndexedColors.RED.index);
+                    rs.setCellStyle(style);
+                    continue;
+                }
+                int difficultInt = -1;
+                try {
+                    difficultInt = Integer.parseInt(difficult);
+                    if (difficultInt < 1 || difficultInt > 3) {
+                        rs.setCellValue("Out of range difficult");
+                        style.setFillBackgroundColor(IndexedColors.RED.index);
+                        rs.setCellStyle(style);
+                        continue;
+                    }
+                } catch (Exception e) {
+                    rs.setCellValue("Invalid difficulty type");
+                    style.setFillBackgroundColor(IndexedColors.RED.index);
+                    rs.setCellStyle(style);
+                    continue;
+                }
+
+                Subject subject = subjectRepository.findById(sjId).orElse(null);
+                if (subject == null) {
+                    rs.setCellValue("Wrong subject Id");
+                    style.setFillBackgroundColor(IndexedColors.RED.index);
+                    continue;
+                }
+                List<String> questionContentList = questionRepository.findAll().stream().map(q -> q.getContent())
+                        .toList();
+                if (questionContentList.contains(questionContent)) {
+                    rs.setCellValue("Duplicated question");
+                    style.setFillBackgroundColor(IndexedColors.RED.index);
+                    continue;
+                }
+                Question question = new Question();
+                question.setSubject(subject);
+                question.setDifficulty(difficultInt);
+                question.setDateCreate(new Date(System.currentTimeMillis()));
+                questionRepository.save(question);
+
+                List<Answer> answerList = new ArrayList<>();
+
+                String[] answerContents = { correctAnswer, wrongAnswer1, wrongAnswer2, wrongAnswer3 };
+
+                for (int i = 0; i < answerContents.length; i++) {
+                    Answer answer = new Answer();
+                    answer.setQuestion(question);
+                    answer.setContent(answerContents[i]);
+                    answer.setCorrect(i == 0);
+                    answerList.add(answer);
+                }
+                answerRepository.saveAll(answerList);
+                style.setFillBackgroundColor(IndexedColors.LIGHT_GREEN.index);
+                rs.setCellValue("Success");
+            }
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            byte[] data = outputStream.toByteArray();
+            return data;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     @Override
