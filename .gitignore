@@ -38,4 +38,5 @@ LOG_PATH_IS_UNDEFINED/
 release/
 bin/
 uploads/
+imported/
 .DS_Store
