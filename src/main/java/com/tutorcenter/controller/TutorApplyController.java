@@ -217,18 +217,20 @@ public class TutorApplyController {
     }
 
     @PreAuthorize("hasAnyAuthority('tutor:delete')")
-    @PutMapping("/disable/{id}")
-    public ResponseEntity<?> disable(@PathVariable int id) {
+    @PutMapping("/delete/{id}")
+    public ApiResponseDto<String> disable(@PathVariable int id) {
         try {
 
             TutorApply tutorApply = tutorApplyService.getTutorApplyById(id).orElseThrow();
-            tutorApply.setDeleted(true);
+            if (tutorApply.getStatus() == 0) {
+                tutorApply.setDeleted(true);
 
-            tutorApplyService.save(tutorApply);
+                tutorApplyService.save(tutorApply);
 
-            return ResponseEntity.ok("Disable thành công.");
+            }
+            return ApiResponseDto.<String>builder().data("Xóa yêu cầu apply thành công.").build();
         } catch (Exception e) {
-            return ResponseEntity.ok("Disable không thành công.");
+            return ApiResponseDto.<String>builder().responseCode("500").message(e.getMessage()).build();
         }
     }
 }
