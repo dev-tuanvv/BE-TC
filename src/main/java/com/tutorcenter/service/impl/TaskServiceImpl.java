@@ -182,7 +182,7 @@ public class TaskServiceImpl implements TaskService {
                     .parseInt(systemVariableService.getSysVarByVarKey("task_work_time").getValue());
             Date now = new Date(System.currentTimeMillis());
             if ((now.getTime() - task.getDateCreate().getTime()) > task_work_time * 24 * 60 * 60 * 1000) {
-                task.setStatus(3); // finish after deadlin
+                task.setStatus(3); // finish after deadline
                 task.setDateFinished(now);
             } else {
                 task.setStatus(2); // finish on time
