@@ -23,6 +23,7 @@ public class TutorDetailResDto {
     private String imgAvatar;
     private String imgCert;
     private float rating;
+    private boolean isPremium;
 
     public void fromTutor(Tutor tutor) {
         this.tutorName = tutor.getFullname();
@@ -36,5 +37,6 @@ public class TutorDetailResDto {
         this.major = tutor.getMajor();
         this.imgAvatar = tutor.getImgAvatar();
         this.imgCert = tutor.getImgCertificate();
+        this.isPremium = tutor.isPremium();
     }
 }

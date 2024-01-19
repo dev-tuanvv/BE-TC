@@ -25,6 +25,7 @@ public class TutorProfileResDto {
     private String imgId;
     private List<SubjectLevelResDto> subjects;
     private int status;
+    private boolean isPremium;
 
     public void fromTutor(Tutor tutor) {
         this.fullName = tutor.getFullname();
@@ -43,5 +44,6 @@ public class TutorProfileResDto {
         this.major = tutor.getMajor();
         this.imgCertificate = tutor.getImgCertificate();
         this.status = tutor.getStatus();
+        this.isPremium = tutor.isPremium();
     }
 }

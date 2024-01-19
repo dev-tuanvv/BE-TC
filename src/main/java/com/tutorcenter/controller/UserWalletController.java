@@ -169,4 +169,10 @@ public class UserWalletController {
 
     }
 
+    @GetMapping("/premium-price")
+    public ApiResponseDto<Integer> getPremiumPrice() {
+        return ApiResponseDto.<Integer>builder()
+                .data(Integer.parseInt(systemVariableService.getSysVarByVarKey("premium_price").getValue())).build();
+    }
+
 }

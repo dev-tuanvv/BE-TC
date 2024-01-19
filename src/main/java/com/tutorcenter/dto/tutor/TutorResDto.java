@@ -26,6 +26,7 @@ public class TutorResDto {
     private int status;
     private float avgRating;
     private int noClass;
+    private boolean isPremium;
 
     public void fromTutor(Tutor tutor) {
         this.id = tutor.getId();
@@ -41,5 +42,6 @@ public class TutorResDto {
         this.imgCert = tutor.getImgCertificate();
         this.imgAvatar = tutor.getImgAvatar();
         this.status = tutor.getStatus();
+        this.isPremium = tutor.isPremium();
     }
 }
