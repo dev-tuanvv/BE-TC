@@ -239,7 +239,7 @@ public class RequestController {
             task.setManager(manager);
             task.setName("Request");
             task.setType(1);
-            task.setStatus(0);
+            task.setStatus(1);
             task.setDateCreate(new Date(System.currentTimeMillis()));
             task.setRequestId(response.getId());
             taskService.save(task);

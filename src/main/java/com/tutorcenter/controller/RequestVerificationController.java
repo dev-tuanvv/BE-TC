@@ -172,7 +172,7 @@ public class RequestVerificationController {
             task.setName("VerifyRequest");
             task.setType(2);
             task.setRequestId(rvId);
-            task.setStatus(0);
+            task.setStatus(1);
             task.setDateCreate(new Date(System.currentTimeMillis()));
             taskService.save(task);
             notificationService.add(tutor, "Gửi yêu cầu xác thực thông tin cá nhân thành công");
