@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.tutorcenter.cache.ClazzRedisCache;
 import com.tutorcenter.dto.clazz.SearchReqDto;
 import com.tutorcenter.dto.clazz.SearchResDto;
 import com.tutorcenter.model.Clazz;
@@ -29,6 +30,8 @@ public class ClazzServiceImpl implements ClazzService {
     private TutorService tutorService;
     @Autowired
     TutorDistrictRepository tutorDistrictRepository;
+    @Autowired
+    private ClazzRedisCache clazzRedisCache;
 
     @Override
     public List<Clazz> findAll() {
@@ -49,6 +52,7 @@ public class ClazzServiceImpl implements ClazzService {
 
     @Override
     public Clazz save(Clazz clazz) {
+        clazzRedisCache.save(clazz);
         return clazzRepository.save(clazz);
     }
 
