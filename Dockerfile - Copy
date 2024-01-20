@@ -1,0 +1,17 @@
+#
+# Build stage
+#
+FROM maven:latest AS build
+WORKDIR /app
+COPY . /app
+RUN mvn clean package -DskipTests
+
+#
+# Package stage
+#
+FROM openjdk:22-slim
+COPY --from=build /app/target/tutorcenter-0.0.1-SNAPSHOT.jar /app/tutorcenter.jar
+# ENV PORT=8080
+ENV TZ="Asia/Ho_Chi_Minh"
+EXPOSE 8080
+ENTRYPOINT ["java","-jar","/app/tutorcenter.jar"]
