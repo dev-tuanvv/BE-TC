@@ -244,7 +244,8 @@ public class RequestController {
             task.setRequestId(response.getId());
             taskService.save(task);
             notificationService.add(request.getParent(), "Tạo yêu cầu tìm gia sư thành công");
-            emailService.sendEmail(manager.getEmail(), "Task mới đã được assign", "Bạn đã được assign các task: "+ task.getId());
+            emailService.sendEmail(manager.getEmail(), "Task mới đã được assign",
+                    "Bạn đã được assign  task: " + task.getId());
             return ApiResponseDto.<Integer>builder().message(null).data(response.getId()).build();
         } catch (Exception e) {
             return ApiResponseDto.<Integer>builder().responseCode("500").message(e.getMessage()).build();
